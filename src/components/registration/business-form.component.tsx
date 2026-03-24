@@ -8,14 +8,18 @@ import { cn } from '@/lib/utils';
 import {
   businessRegistrationSchema,
   type BusinessRegistrationFormData,
-} from '@/utils/validations-registration/registration/business-registration.utils';
+} from '@/utils/validations-registration/business-registration.utils';
 import { useRegisterEstablishmentMutation } from '@/queries/auth.queries';
 import { useAuthStore } from '@/store/auth.store';
 import { ApiError } from '@/api/client';
+import { useTranslation } from 'react-i18next';
+import { StringKey } from '@/consts/string-key.consts';
 
 export const BusinessForm = () => {
-  const [showPassword, setShowPassword] = useState(false);
+  const { t } = useTranslation();
   const navigate = useNavigate();
+
+  const [showPassword, setShowPassword] = useState(false);
   const setPendingVerificationEmail = useAuthStore(s => s.setPendingVerificationEmail);
   const { mutate: registerEstablishment, isPending } = useRegisterEstablishmentMutation();
 
@@ -43,14 +47,14 @@ export const BusinessForm = () => {
         },
         onError: error => {
           if (error instanceof ApiError && error.status === 409) {
-            toast.error('Email already in use.', {
+            toast.error(t(StringKey.EMAIL_ALREADY_IN_USE), {
               id: 'registration-conflict',
-              description: 'An account with this email already exists.',
+              description: t(StringKey.EMAIL_ALREADY_IN_USE_DESCRIPTION),
             });
           } else {
-            toast.error('Registration failed.', {
+            toast.error(t(StringKey.REGISTRATION_FAILED), {
               id: 'registration-error',
-              description: 'Something went wrong. Please try again.',
+              description: t(StringKey.REGISTRATION_FAILED_DESCRIPTION),
             });
           }
         },
@@ -60,15 +64,15 @@ export const BusinessForm = () => {
 
   const handleInvalidSubmit = (fieldErrors: FieldErrors<BusinessRegistrationFormData>) => {
     if (fieldErrors.agreeToTerms) {
-      toast.error('Agreement required.', {
+      toast.error(t(StringKey.AGREEMENT_REQUIRED), {
         id: 'terms-error',
-        description: 'You must agree to the Terms of Service and Privacy Policy to continue.',
+        description: t(StringKey.AGREEMENT_REQUIRED_DESCRIPTION),
       });
     }
     if (Object.keys(fieldErrors).some(key => key !== 'agreeToTerms')) {
-      toast.error('Registration failed.', {
+      toast.error(t(StringKey.REGISTRATION_FAILED), {
         id: 'registration-error',
-        description: 'Please check the form fields.',
+        description: t(StringKey.REGISTRATION_FIELDS_ERROR),
       });
     }
   };
@@ -78,7 +82,6 @@ export const BusinessForm = () => {
       onSubmit={e => void handleSubmit(handleFormSubmit, handleInvalidSubmit)(e)}
       className='flex flex-col gap-6'
     >
-      {/* Business Name */}
       <div className='flex flex-col gap-2'>
         <label
           htmlFor='business-name'
@@ -87,12 +90,12 @@ export const BusinessForm = () => {
             errors.establishmentName ? 'text-destructive' : 'text-foreground'
           )}
         >
-          Business Name
+          {t(StringKey.BUSINESS_NAME)}
         </label>
         <input
           id='business-name'
           type='text'
-          placeholder='Nom Nom Store'
+          placeholder={t(StringKey.BUSINESS_NAME_PLACEHOLDER)}
           {...register('establishmentName')}
           className={cn(
             'w-full rounded-xl border px-4 py-4 text-base outline-none transition-colors placeholder:text-muted-foreground',
@@ -107,7 +110,6 @@ export const BusinessForm = () => {
         )}
       </div>
 
-      {/* Email Address */}
       <div className='flex flex-col gap-2'>
         <label
           htmlFor='business-email'
@@ -116,13 +118,13 @@ export const BusinessForm = () => {
             errors.email ? 'text-destructive' : 'text-foreground'
           )}
         >
-          Email Address
+          {t(StringKey.EMAIL_ADDRESS)}
         </label>
         <div className='relative'>
           <input
             id='business-email'
             type='email'
-            placeholder='cafe@example.com'
+            placeholder={t(StringKey.BUSINESS_EMAIL_PLACEHOLDER)}
             {...register('email')}
             className={cn(
               'w-full rounded-xl border px-4 py-4 text-base outline-none transition-colors placeholder:text-muted-foreground',
@@ -142,7 +144,6 @@ export const BusinessForm = () => {
         {errors.email && <p className='text-destructive text-xs'>{errors.email.message}</p>}
       </div>
 
-      {/* Address */}
       <div className='flex flex-col gap-2'>
         <label
           htmlFor='business-address'
@@ -151,13 +152,13 @@ export const BusinessForm = () => {
             errors.address ? 'text-destructive' : 'text-foreground'
           )}
         >
-          Store Address
+          {t(StringKey.STORE_ADDRESS)}
         </label>
         <div className='relative'>
           <input
             id='business-address'
             type='text'
-            placeholder='123 Main St, Kyiv, Ukraine'
+            placeholder={t(StringKey.STORE_ADDRESS_PLACEHOLDER)}
             {...register('address')}
             className={cn(
               'w-full rounded-xl border px-4 py-4 text-base outline-none transition-colors placeholder:text-muted-foreground',
@@ -177,7 +178,6 @@ export const BusinessForm = () => {
         {errors.address && <p className='text-destructive text-xs'>{errors.address.message}</p>}
       </div>
 
-      {/* Password */}
       <div className='flex flex-col gap-2'>
         <label
           htmlFor='business-password'
@@ -186,13 +186,13 @@ export const BusinessForm = () => {
             errors.password ? 'text-destructive' : 'text-foreground'
           )}
         >
-          Password
+          {t(StringKey.PASSWORD)}
         </label>
         <div className='relative'>
           <input
             id='business-password'
             type={showPassword ? 'text' : 'password'}
-            placeholder='••••••••'
+            placeholder={t(StringKey.PASSWORD_PLACEHOLDER)}
             {...register('password')}
             className={cn(
               'w-full rounded-xl border px-4 py-4 pr-11 text-base outline-none transition-colors placeholder:text-muted-foreground',
@@ -206,7 +206,7 @@ export const BusinessForm = () => {
             type='button'
             onClick={() => setShowPassword(prev => !prev)}
             className='absolute right-4 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground transition-colors'
-            aria-label={showPassword ? 'Hide password' : 'Show password'}
+            aria-label={showPassword ? t(StringKey.HIDE_PASSWORD) : t(StringKey.SHOW_PASSWORD)}
           >
             {showPassword ? <Eye size={18} /> : <EyeOff size={18} />}
           </button>
@@ -214,14 +214,13 @@ export const BusinessForm = () => {
         {errors.password && <p className='text-destructive text-xs'>{errors.password.message}</p>}
       </div>
 
-      {/* Terms checkbox */}
       <div className='flex flex-col gap-1.5'>
         <div className='flex items-start gap-3'>
           <input
             id='business-agreeToTerms'
             type='checkbox'
             {...register('agreeToTerms')}
-            className='mt-0.5 h-4 w-4 shrink-0 cursor-pointer accent-(--brand-green)'
+            className='mt-0.5 h-4 w-4 shrink-0 cursor-pointer accent-brand-green'
           />
           <label
             htmlFor='business-agreeToTerms'
@@ -230,19 +229,19 @@ export const BusinessForm = () => {
               errors.agreeToTerms ? 'text-destructive' : 'text-muted-foreground'
             )}
           >
-            By joining, you agree to our{' '}
+            {t(StringKey.BY_JOINING_AGREE)}{' '}
             <a
               href='#'
-              className='font-semibold text-(--brand-green) hover:text-(--brand-green-hover) transition-colors'
+              className='font-semibold text-brand-green hover:text-brand-green-hover transition-colors'
             >
-              Terms of Service
+              {t(StringKey.TERMS_OF_SERVICE)}
             </a>{' '}
-            and{' '}
+            {t(StringKey.AND)}{' '}
             <a
               href='#'
-              className='font-semibold text-(--brand-green) hover:text-(--brand-green-hover) transition-colors'
+              className='font-semibold text-brand-green hover:text-brand-green-hover transition-colors'
             >
-              Privacy Policy
+              {t(StringKey.PRIVACY_POLICY)}
             </a>
             .
           </label>
@@ -255,9 +254,9 @@ export const BusinessForm = () => {
       <button
         type='submit'
         disabled={isPending}
-        className='w-full rounded-xl py-4.5 text-lg font-semibold text-white transition-colors cursor-pointer mt-1 bg-(--brand-green) hover:bg-(--brand-green-hover) disabled:opacity-60 disabled:cursor-not-allowed'
+        className='w-full rounded-xl py-4.5 text-lg font-semibold text-white transition-colors cursor-pointer mt-1 bg-brand-green hover:bg-brand-green-hover disabled:opacity-60 disabled:cursor-not-allowed'
       >
-        {isPending ? 'Creating account…' : 'Create Account'}
+        {isPending ? t(StringKey.CREATING_ACCOUNT) : t(StringKey.CREATE_ACCOUNT)}
       </button>
     </form>
   );

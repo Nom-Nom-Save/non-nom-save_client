@@ -12,21 +12,23 @@ import {
 import { useVerifyCodeMutation, useResetPasswordMutation } from '@/queries/auth.queries';
 import { useAuthStore } from '@/store/auth.store';
 import { ApiError } from '@/api/client';
-
-type Step = 'code' | 'password';
+import { ResetPasswordStep } from '@/consts/auth.consts';
+import { StringKey } from '@/consts/string-key.consts';
+import { useTranslation } from 'react-i18next';
 
 interface ResetPasswordFormProps {
   email: string;
-  onStepChange: (step: Step) => void;
+  onStepChange: (step: ResetPasswordStep) => void;
 }
 
 export const ResetPasswordForm = ({ email, onStepChange }: ResetPasswordFormProps) => {
+  const { t } = useTranslation();
   const navigate = useNavigate();
   const clearPendingResetEmail = useAuthStore(s => s.clearPendingResetEmail);
   const { mutate: verifyCode, isPending: isVerifying } = useVerifyCodeMutation();
   const { mutate: resetPassword, isPending: isResetting } = useResetPasswordMutation();
 
-  const [step, setStep] = useState<Step>('code');
+  const [step, setStep] = useState<ResetPasswordStep>(ResetPasswordStep.CODE);
   const [digits, setDigits] = useState(['', '', '', '']);
   const [codeError, setCodeError] = useState(false);
   const [showNewPassword, setShowNewPassword] = useState(false);
@@ -42,12 +44,10 @@ export const ResetPasswordForm = ({ email, onStepChange }: ResetPasswordFormProp
     resolver: zodResolver(resetPasswordSchema),
   });
 
-  const changeStep = (newStep: Step) => {
+  const changeStep = (newStep: ResetPasswordStep) => {
     setStep(newStep);
     onStepChange(newStep);
   };
-
-  // --- OTP handlers ---
 
   const handleDigitChange = (index: number, value: string) => {
     if (!/^\d?$/.test(value)) return;
@@ -77,15 +77,13 @@ export const ResetPasswordForm = ({ email, onStepChange }: ResetPasswordFormProp
     inputRefs.current[Math.min(pasted.length, 3)]?.focus();
   };
 
-  // --- Step 1: Verify code ---
-
   const handleVerifyCode = () => {
     const code = digits.join('');
     if (code.length < 4) {
       setCodeError(true);
-      toast.error('Invalid code.', {
+      toast.error(t(StringKey.INVALID_CODE), {
         id: 'verify-code-error',
-        description: 'Please enter the full 4-digit code from your email.',
+        description: t(StringKey.INVALID_CODE_DESCRIPTION),
       });
       return;
     }
@@ -94,34 +92,32 @@ export const ResetPasswordForm = ({ email, onStepChange }: ResetPasswordFormProp
       { email, code },
       {
         onSuccess: () => {
-          changeStep('password');
+          changeStep(ResetPasswordStep.PASSWORD);
         },
         onError: error => {
           setCodeError(true);
           setDigits(['', '', '', '']);
           inputRefs.current[0]?.focus();
           if (error instanceof ApiError && error.status === 400) {
-            toast.error('Invalid or expired code.', {
+            toast.error(t(StringKey.INVALID_OR_EXPIRED_CODE), {
               id: 'verify-code-error',
-              description: 'Please check the code and try again.',
+              description: t(StringKey.INVALID_OR_EXPIRED_CODE_DESCRIPTION),
             });
           } else if (error instanceof ApiError && error.status === 404) {
-            toast.error('Account not found.', {
+            toast.error(t(StringKey.ACCOUNT_NOT_FOUND), {
               id: 'verify-code-error',
-              description: 'No account found for this email address.',
+              description: t(StringKey.ACCOUNT_NOT_FOUND_DESCRIPTION),
             });
           } else {
-            toast.error('Verification failed.', {
+            toast.error(t(StringKey.VERIFICATION_FAILED), {
               id: 'verify-code-error',
-              description: 'Something went wrong. Please try again.',
+              description: t(StringKey.VERIFICATION_FAILED_DESCRIPTION),
             });
           }
         },
       }
     );
   };
-
-  // --- Step 2: Reset password ---
 
   const handleResetPassword = (data: ResetPasswordFormData) => {
     resetPassword(
@@ -129,21 +125,21 @@ export const ResetPasswordForm = ({ email, onStepChange }: ResetPasswordFormProp
       {
         onSuccess: () => {
           clearPendingResetEmail();
-          toast.success('Password reset!', {
-            description: 'Your password has been changed. Please sign in.',
+          toast.success(t(StringKey.PASSWORD_RESET_SUCCESS), {
+            description: t(StringKey.PASSWORD_RESET_SUCCESS_DESCRIPTION),
           });
           void navigate({ to: '/login' });
         },
         onError: error => {
           if (error instanceof ApiError && error.status === 404) {
-            toast.error('Account not found.', {
+            toast.error(t(StringKey.ACCOUNT_NOT_FOUND), {
               id: 'reset-error',
-              description: 'No account found for this email address.',
+              description: t(StringKey.ACCOUNT_NOT_FOUND_DESCRIPTION),
             });
           } else {
-            toast.error('Reset failed.', {
+            toast.error(t(StringKey.RESET_FAILED), {
               id: 'reset-error',
-              description: 'Something went wrong. Please try again.',
+              description: t(StringKey.RESET_FAILED_DESCRIPTION),
             });
           }
         },
@@ -151,8 +147,7 @@ export const ResetPasswordForm = ({ email, onStepChange }: ResetPasswordFormProp
     );
   };
 
-  // --- Step 1: Code verification UI ---
-  if (step === 'code') {
+  if (step === ResetPasswordStep.CODE) {
     return (
       <div className='flex flex-col gap-6'>
         <div className='flex flex-col gap-3'>
@@ -162,7 +157,7 @@ export const ResetPasswordForm = ({ email, onStepChange }: ResetPasswordFormProp
               codeError ? 'text-destructive' : 'text-foreground'
             )}
           >
-            Reset Code
+            {t(StringKey.RESET_CODE)}
           </label>
           <div className='flex gap-4' onPaste={handlePaste}>
             {digits.map((digit, index) => (
@@ -186,36 +181,30 @@ export const ResetPasswordForm = ({ email, onStepChange }: ResetPasswordFormProp
               />
             ))}
           </div>
-          {codeError && (
-            <p className='text-destructive text-xs'>
-              Please enter the correct 4-digit code from your email.
-            </p>
-          )}
+          {codeError && <p className='text-destructive text-xs'>{t(StringKey.RESET_CODE_ERROR)}</p>}
         </div>
 
         <button
           type='button'
           onClick={handleVerifyCode}
           disabled={isVerifying}
-          className='w-full rounded-xl py-4.5 text-lg font-semibold text-white transition-colors cursor-pointer mt-1 bg-(--brand-green) hover:bg-(--brand-green-hover) disabled:opacity-60 disabled:cursor-not-allowed'
+          className='w-full rounded-xl py-4.5 text-lg font-semibold text-white transition-colors cursor-pointer mt-1 bg-brand-green hover:bg-brand-green-hover disabled:opacity-60 disabled:cursor-not-allowed'
         >
-          {isVerifying ? 'Verifying…' : 'Verify Code'}
+          {isVerifying ? t(StringKey.VERIFYING) : t(StringKey.VERIFY_CODE)}
         </button>
 
         <Link
           to='/login'
-          className='flex items-center justify-center gap-1.5 text-sm font-semibold text-foreground hover:text-(--brand-green) transition-colors'
+          className='flex items-center justify-center gap-1.5 text-sm font-semibold text-foreground hover:text-brand-green transition-colors'
         >
-          ← Back to Login
+          {t(StringKey.BACK_TO_LOGIN)}
         </Link>
       </div>
     );
   }
 
-  // --- Step 2: New password UI ---
   return (
     <form onSubmit={e => void handleSubmit(handleResetPassword)(e)} className='flex flex-col gap-6'>
-      {/* New password */}
       <div className='flex flex-col gap-2'>
         <label
           htmlFor='reset-newPassword'
@@ -224,13 +213,13 @@ export const ResetPasswordForm = ({ email, onStepChange }: ResetPasswordFormProp
             errors.newPassword ? 'text-destructive' : 'text-foreground'
           )}
         >
-          New Password
+          {t(StringKey.NEW_PASSWORD)}
         </label>
         <div className='relative'>
           <input
             id='reset-newPassword'
             type={showNewPassword ? 'text' : 'password'}
-            placeholder='••••••••'
+            placeholder={t(StringKey.PASSWORD_PLACEHOLDER)}
             {...register('newPassword')}
             className={cn(
               'w-full rounded-xl border px-4 py-4 pr-11 text-base outline-none transition-colors placeholder:text-muted-foreground',
@@ -244,7 +233,7 @@ export const ResetPasswordForm = ({ email, onStepChange }: ResetPasswordFormProp
             type='button'
             onClick={() => setShowNewPassword(p => !p)}
             className='absolute right-4 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground transition-colors'
-            aria-label={showNewPassword ? 'Hide password' : 'Show password'}
+            aria-label={showNewPassword ? t(StringKey.HIDE_PASSWORD) : t(StringKey.SHOW_PASSWORD)}
           >
             {showNewPassword ? <Eye size={18} /> : <EyeOff size={18} />}
           </button>
@@ -254,7 +243,6 @@ export const ResetPasswordForm = ({ email, onStepChange }: ResetPasswordFormProp
         )}
       </div>
 
-      {/* Confirm password */}
       <div className='flex flex-col gap-2'>
         <label
           htmlFor='reset-confirmPassword'
@@ -263,13 +251,13 @@ export const ResetPasswordForm = ({ email, onStepChange }: ResetPasswordFormProp
             errors.confirmPassword ? 'text-destructive' : 'text-foreground'
           )}
         >
-          Confirm Password
+          {t(StringKey.CONFIRM_PASSWORD)}
         </label>
         <div className='relative'>
           <input
             id='reset-confirmPassword'
             type={showConfirmPassword ? 'text' : 'password'}
-            placeholder='••••••••'
+            placeholder={t(StringKey.PASSWORD_PLACEHOLDER)}
             {...register('confirmPassword')}
             className={cn(
               'w-full rounded-xl border px-4 py-4 pr-11 text-base outline-none transition-colors placeholder:text-muted-foreground',
@@ -283,7 +271,9 @@ export const ResetPasswordForm = ({ email, onStepChange }: ResetPasswordFormProp
             type='button'
             onClick={() => setShowConfirmPassword(p => !p)}
             className='absolute right-4 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground transition-colors'
-            aria-label={showConfirmPassword ? 'Hide password' : 'Show password'}
+            aria-label={
+              showConfirmPassword ? t(StringKey.HIDE_PASSWORD) : t(StringKey.SHOW_PASSWORD)
+            }
           >
             {showConfirmPassword ? <Eye size={18} /> : <EyeOff size={18} />}
           </button>
@@ -296,16 +286,16 @@ export const ResetPasswordForm = ({ email, onStepChange }: ResetPasswordFormProp
       <button
         type='submit'
         disabled={isResetting}
-        className='w-full rounded-xl py-4.5 text-lg font-semibold text-white transition-colors cursor-pointer mt-1 bg-(--brand-green) hover:bg-(--brand-green-hover) disabled:opacity-60 disabled:cursor-not-allowed'
+        className='w-full rounded-xl py-4.5 text-lg font-semibold text-white transition-colors cursor-pointer mt-1 bg-brand-green hover:bg-brand-green-hover disabled:opacity-60 disabled:cursor-not-allowed'
       >
-        {isResetting ? 'Resetting…' : 'Reset Password'}
+        {isResetting ? t(StringKey.RESETTING) : t(StringKey.RESET_PASSWORD)}
       </button>
 
       <Link
         to='/login'
-        className='flex items-center justify-center gap-1.5 text-sm font-semibold text-foreground hover:text-(--brand-green) transition-colors'
+        className='flex items-center justify-center gap-1.5 text-sm font-semibold text-foreground hover:text-brand-green transition-colors'
       >
-        ← Back to Login
+        {t(StringKey.BACK_TO_LOGIN)}
       </Link>
     </form>
   );

@@ -5,68 +5,47 @@ import { RegistrationLeftPanel } from '@/components/registration/registration-le
 import { BuyerForm } from '@/components/registration/buyer-form.component';
 import { BusinessForm } from '@/components/registration/business-form.component';
 import { cn } from '@/lib/utils';
+import { useTranslation } from 'react-i18next';
+import { StringKey } from '@/consts/string-key.consts';
+import googleIcon from '@/assets/google-icon.svg';
 
-type AccountType = 'buyer' | 'business';
-
-const GoogleIcon = () => (
-  <svg
-    width='20'
-    height='20'
-    viewBox='0 0 18 18'
-    xmlns='http://www.w3.org/2000/svg'
-    aria-hidden='true'
-  >
-    <path
-      d='M17.64 9.2c0-.637-.057-1.251-.164-1.84H9v3.481h4.844c-.209 1.125-.843 2.078-1.796 2.717v2.258h2.908C16.658 14.013 17.64 11.705 17.64 9.2z'
-      fill='#4285F4'
-    />
-    <path
-      d='M9 18c2.43 0 4.467-.806 5.956-2.18l-2.908-2.259c-.806.54-1.837.86-3.048.86-2.344 0-4.328-1.584-5.036-3.711H.957v2.332C2.438 15.983 5.482 18 9 18z'
-      fill='#34A853'
-    />
-    <path
-      d='M3.964 10.71c-.18-.54-.282-1.117-.282-1.71s.102-1.17.282-1.71V4.958H.957C.347 6.173 0 7.548 0 9s.348 2.827.957 4.042l3.007-2.332z'
-      fill='#FBBC05'
-    />
-    <path
-      d='M9 3.58c1.321 0 2.508.454 3.44 1.345l2.582-2.58C13.463.891 11.426 0 9 0 5.482 0 2.438 2.017.957 4.958L3.964 7.29C4.672 5.163 6.656 3.58 9 3.58z'
-      fill='#EA4335'
-    />
-  </svg>
-);
+enum AccountType {
+  BUYER = 'buyer',
+  BUSINESS = 'business',
+}
 
 const RegisterPage = () => {
-  const [accountType, setAccountType] = useState<AccountType>('buyer');
+  const { t } = useTranslation();
+  const [accountType, setAccountType] = useState<AccountType>(AccountType.BUYER);
 
   return (
-    <div className='flex min-h-screen bg-(--brand-cream)'>
+    <div className='flex min-h-screen bg-brand-cream'>
       <RegistrationLeftPanel accountType={accountType} />
 
-      {/* Right panel — scrollable, content centered vertically */}
       <div className='flex-1 overflow-y-auto'>
         <div className='min-h-full flex flex-col justify-center py-12 px-10'>
           <div className='max-w-[640px] mx-auto w-full'>
-            {/* Back */}
             <Link
               to='/'
               className='inline-flex items-center gap-2 text-sm font-medium text-muted-foreground hover:text-foreground transition-colors mb-10'
             >
               <ArrowLeft size={16} />
-              Back
+              {t(StringKey.BACK)}
             </Link>
 
-            <h1 className='text-[2.5rem] font-bold text-foreground mb-8'>Create your account</h1>
+            <h1 className='text-[2.5rem] font-bold text-foreground mb-8'>
+              {t(StringKey.CREATE_YOUR_ACCOUNT)}
+            </h1>
 
-            {/* Tab switcher — fixed width, left-aligned */}
             <div className='flex gap-3 mb-8'>
               <button
                 type='button'
-                onClick={() => setAccountType('buyer')}
+                onClick={() => setAccountType(AccountType.BUYER)}
                 className={cn(
                   'flex items-center justify-center gap-2.5 w-52 py-4 rounded-xl text-base font-semibold transition-all cursor-pointer',
-                  accountType === 'buyer'
-                    ? 'border-2 border-(--brand-green) bg-(--brand-green-muted) text-(--brand-green)'
-                    : 'border border-border bg-white text-foreground hover:border-(--brand-green)'
+                  accountType === AccountType.BUYER
+                    ? 'border-2 border-brand-green bg-brand-green-muted text-brand-green'
+                    : 'border border-border bg-white text-foreground hover:border-brand-green'
                 )}
               >
                 <User size={17} />
@@ -74,51 +53,47 @@ const RegisterPage = () => {
               </button>
               <button
                 type='button'
-                onClick={() => setAccountType('business')}
+                onClick={() => setAccountType(AccountType.BUSINESS)}
                 className={cn(
                   'flex items-center justify-center gap-2.5 w-52 py-4 rounded-xl text-base font-semibold transition-all cursor-pointer',
-                  accountType === 'business'
-                    ? 'border-2 border-(--brand-green) bg-(--brand-green-muted) text-(--brand-green)'
-                    : 'border border-border bg-white text-foreground hover:border-(--brand-green)'
+                  accountType === AccountType.BUSINESS
+                    ? 'border-2 border-brand-green bg-brand-green-muted text-brand-green'
+                    : 'border border-border bg-white text-foreground hover:border-brand-green'
                 )}
               >
                 <Store size={17} />
-                Business
+                {t(StringKey.BUSINESS)}
               </button>
             </div>
 
-            {/* Forms — both rendered, toggled via display to preserve state */}
-            <div className={accountType === 'buyer' ? 'block' : 'hidden'}>
+            <div className={accountType === AccountType.BUYER ? 'block' : 'hidden'}>
               <BuyerForm />
             </div>
-            <div className={accountType === 'business' ? 'block' : 'hidden'}>
+            <div className={accountType === AccountType.BUSINESS ? 'block' : 'hidden'}>
               <BusinessForm />
             </div>
 
-            {/* Divider */}
             <div className='flex items-center gap-4 my-7'>
               <div className='flex-1 h-px bg-border' />
-              <span className='text-xs text-muted-foreground'>or</span>
+              <span className='text-xs text-muted-foreground'>{t(StringKey.OR)}</span>
               <div className='flex-1 h-px bg-border' />
             </div>
 
-            {/* Continue with Google */}
             <button
               type='button'
               className='w-full flex items-center justify-center gap-3 rounded-xl border border-border bg-white py-4.5 text-lg font-semibold text-foreground hover:bg-muted transition-colors cursor-pointer'
             >
-              <GoogleIcon />
-              Continue with Google
+              <img src={googleIcon} alt='Google' />
+              {t(StringKey.CONTINUE_WITH_GOOGLE)}
             </button>
 
-            {/* Sign In */}
             <p className='text-center text-sm text-muted-foreground mt-7'>
-              Already have an account?{' '}
+              {t(StringKey.ALREADY_HAVE_AN_ACCOUNT)}{' '}
               <Link
                 to='/login'
-                className='font-bold text-(--brand-green) hover:text-(--brand-green-hover) transition-colors'
+                className='font-bold text-brand-green hover:text-brand-green-hover transition-colors'
               >
-                Sign In
+                {t(StringKey.SIGN_IN)}
               </Link>
             </p>
           </div>

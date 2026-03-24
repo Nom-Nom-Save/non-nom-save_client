@@ -1,5 +1,3 @@
-// --- Registration ---
-
 export interface RegisterUserRequest {
   fullName: string;
   email: string;
@@ -18,8 +16,6 @@ export interface RegisterResponse {
   email: string;
 }
 
-// --- Login ---
-
 export type LoginType = 'user' | 'establishment';
 
 export interface LoginRequest {
@@ -32,8 +28,6 @@ export interface LoginResponse {
   message: string;
   accessToken: string;
 }
-
-// --- Forgot / Reset Password ---
 
 export interface ForgotPasswordRequest {
   email: string;
@@ -62,14 +56,10 @@ export interface ResetPasswordResponse {
   message: string;
 }
 
-// --- Token Refresh ---
-
 export interface RefreshResponse {
   message: string;
   accessToken: string;
 }
-
-// --- Email Verification ---
 
 export interface VerifyEmailRequest {
   email: string;

@@ -1,6 +1,10 @@
 import logoUrl from '@/assets/NomNomSave-Logo.svg';
+import { useTranslation } from 'react-i18next';
+import { StringKey } from '@/consts/string-key.consts';
 
 export const VerifyEmailLeftPanel = () => {
+  const { t } = useTranslation();
+
   return (
     <div
       className='hidden md:flex flex-col w-2/5 min-w-[400px] min-h-screen relative overflow-hidden'
@@ -8,7 +12,6 @@ export const VerifyEmailLeftPanel = () => {
         background: 'linear-gradient(165deg, var(--brand-green) 0%, oklch(0.30 0.08 154) 100%)',
       }}
     >
-      {/* Decorative circles */}
       <div className='absolute inset-0 pointer-events-none' aria-hidden='true'>
         <div
           className='absolute rounded-full'
@@ -33,17 +36,16 @@ export const VerifyEmailLeftPanel = () => {
           }}
         />
       </div>
-
       <div className='flex-1 flex flex-col justify-center px-14 py-16 relative z-10'>
         <div className='flex flex-col gap-10'>
           <img src={logoUrl} alt='NomNomSave' className='w-72 h-auto -ml-15' />
           <h2 className='text-white font-bold text-[3.25rem] leading-[1.15]'>
-            Almost
+            {t(StringKey.ALMOST_THERE_LINE1)}
             <br />
-            there!
+            {t(StringKey.ALMOST_THERE_LINE2)}
           </h2>
           <p className='text-white/80 text-lg leading-relaxed max-w-[280px]'>
-            Check your inbox — we&apos;ve sent a 4-digit code to confirm your email address.
+            {t(StringKey.VERIFY_EMAIL_LEFT_PANEL_DESCRIPTION)}
           </p>
         </div>
       </div>

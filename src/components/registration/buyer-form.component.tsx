@@ -8,14 +8,18 @@ import { cn } from '@/lib/utils';
 import {
   buyerRegistrationSchema,
   type BuyerRegistrationFormData,
-} from '@/utils/validations-registration/registration/buyer-registration.utils';
+} from '@/utils/validations-registration/buyer-registration.utils';
 import { useRegisterUserMutation } from '@/queries/auth.queries';
 import { useAuthStore } from '@/store/auth.store';
 import { ApiError } from '@/api/client';
+import { useTranslation } from 'react-i18next';
+import { StringKey } from '@/consts/string-key.consts';
 
 export const BuyerForm = () => {
-  const [showPassword, setShowPassword] = useState(false);
+  const { t } = useTranslation();
   const navigate = useNavigate();
+
+  const [showPassword, setShowPassword] = useState(false);
   const setPendingVerificationEmail = useAuthStore(s => s.setPendingVerificationEmail);
   const { mutate: registerUser, isPending } = useRegisterUserMutation();
 
@@ -42,14 +46,14 @@ export const BuyerForm = () => {
         },
         onError: error => {
           if (error instanceof ApiError && error.status === 409) {
-            toast.error('Email already in use.', {
+            toast.error(t(StringKey.EMAIL_ALREADY_IN_USE), {
               id: 'registration-conflict',
-              description: 'An account with this email already exists.',
+              description: t(StringKey.EMAIL_ALREADY_IN_USE_DESCRIPTION),
             });
           } else {
-            toast.error('Registration failed.', {
+            toast.error(t(StringKey.REGISTRATION_FAILED), {
               id: 'registration-error',
-              description: 'Something went wrong. Please try again.',
+              description: t(StringKey.REGISTRATION_FAILED_DESCRIPTION),
             });
           }
         },
@@ -59,15 +63,15 @@ export const BuyerForm = () => {
 
   const handleInvalidSubmit = (fieldErrors: FieldErrors<BuyerRegistrationFormData>) => {
     if (fieldErrors.agreeToTerms) {
-      toast.error('Agreement required.', {
+      toast.error(t(StringKey.AGREEMENT_REQUIRED), {
         id: 'terms-error',
-        description: 'You must agree to the Terms of Service and Privacy Policy to continue.',
+        description: t(StringKey.AGREEMENT_REQUIRED_DESCRIPTION),
       });
     }
     if (Object.keys(fieldErrors).some(key => key !== 'agreeToTerms')) {
-      toast.error('Registration failed.', {
+      toast.error(t(StringKey.REGISTRATION_FAILED), {
         id: 'registration-error',
-        description: 'Please check the form fields.',
+        description: t(StringKey.REGISTRATION_FIELDS_ERROR),
       });
     }
   };
@@ -77,7 +81,6 @@ export const BuyerForm = () => {
       onSubmit={e => void handleSubmit(handleFormSubmit, handleInvalidSubmit)(e)}
       className='flex flex-col gap-6'
     >
-      {/* Full Name */}
       <div className='flex flex-col gap-2'>
         <label
           htmlFor='buyer-fullName'
@@ -86,12 +89,12 @@ export const BuyerForm = () => {
             errors.fullName ? 'text-destructive' : 'text-foreground'
           )}
         >
-          Full Name
+          {t(StringKey.FULL_NAME)}
         </label>
         <input
           id='buyer-fullName'
           type='text'
-          placeholder='Boss Molokosos'
+          placeholder={t(StringKey.FULL_NAME_PLACEHOLDER)}
           {...register('fullName')}
           className={cn(
             'w-full rounded-xl border px-4 py-4 text-base outline-none transition-colors placeholder:text-muted-foreground',
@@ -104,7 +107,6 @@ export const BuyerForm = () => {
         {errors.fullName && <p className='text-destructive text-xs'>{errors.fullName.message}</p>}
       </div>
 
-      {/* Email Address */}
       <div className='flex flex-col gap-2'>
         <label
           htmlFor='buyer-email'
@@ -113,13 +115,13 @@ export const BuyerForm = () => {
             errors.email ? 'text-destructive' : 'text-foreground'
           )}
         >
-          Email Address
+          {t(StringKey.EMAIL_ADDRESS)}
         </label>
         <div className='relative'>
           <input
             id='buyer-email'
             type='email'
-            placeholder='john@example.com'
+            placeholder={t(StringKey.BUYER_EMAIL_PLACEHOLDER)}
             {...register('email')}
             className={cn(
               'w-full rounded-xl border px-4 py-4 text-base outline-none transition-colors placeholder:text-muted-foreground',
@@ -139,7 +141,6 @@ export const BuyerForm = () => {
         {errors.email && <p className='text-destructive text-xs'>{errors.email.message}</p>}
       </div>
 
-      {/* Password */}
       <div className='flex flex-col gap-2'>
         <label
           htmlFor='buyer-password'
@@ -148,13 +149,13 @@ export const BuyerForm = () => {
             errors.password ? 'text-destructive' : 'text-foreground'
           )}
         >
-          Password
+          {t(StringKey.PASSWORD)}
         </label>
         <div className='relative'>
           <input
             id='buyer-password'
             type={showPassword ? 'text' : 'password'}
-            placeholder='••••••••'
+            placeholder={t(StringKey.PASSWORD_PLACEHOLDER)}
             {...register('password')}
             className={cn(
               'w-full rounded-xl border px-4 py-4 pr-11 text-base outline-none transition-colors placeholder:text-muted-foreground',
@@ -168,7 +169,7 @@ export const BuyerForm = () => {
             type='button'
             onClick={() => setShowPassword(prev => !prev)}
             className='absolute right-4 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground transition-colors'
-            aria-label={showPassword ? 'Hide password' : 'Show password'}
+            aria-label={showPassword ? t(StringKey.HIDE_PASSWORD) : t(StringKey.SHOW_PASSWORD)}
           >
             {showPassword ? <Eye size={18} /> : <EyeOff size={18} />}
           </button>
@@ -176,14 +177,13 @@ export const BuyerForm = () => {
         {errors.password && <p className='text-destructive text-xs'>{errors.password.message}</p>}
       </div>
 
-      {/* Terms checkbox */}
       <div className='flex flex-col gap-1.5'>
         <div className='flex items-start gap-3'>
           <input
             id='buyer-agreeToTerms'
             type='checkbox'
             {...register('agreeToTerms')}
-            className='mt-0.5 h-4 w-4 shrink-0 cursor-pointer accent-(--brand-green)'
+            className='mt-0.5 h-4 w-4 shrink-0 cursor-pointer accent-brand-green'
           />
           <label
             htmlFor='buyer-agreeToTerms'
@@ -192,19 +192,19 @@ export const BuyerForm = () => {
               errors.agreeToTerms ? 'text-destructive' : 'text-muted-foreground'
             )}
           >
-            By joining, you agree to our{' '}
+            {t(StringKey.BY_JOINING_AGREE)}{' '}
             <a
               href='#'
-              className='font-semibold text-(--brand-green) hover:text-(--brand-green-hover) transition-colors'
+              className='font-semibold text-brand-green hover:text-brand-green-hover transition-colors'
             >
-              Terms of Service
+              {t(StringKey.TERMS_OF_SERVICE)}
             </a>{' '}
-            and{' '}
+            {t(StringKey.AND)}{' '}
             <a
               href='#'
-              className='font-semibold text-(--brand-green) hover:text-(--brand-green-hover) transition-colors'
+              className='font-semibold text-brand-green hover:text-brand-green-hover transition-colors'
             >
-              Privacy Policy
+              {t(StringKey.PRIVACY_POLICY)}
             </a>
             .
           </label>
@@ -217,9 +217,9 @@ export const BuyerForm = () => {
       <button
         type='submit'
         disabled={isPending}
-        className='w-full rounded-xl py-4.5 text-lg font-semibold text-white transition-colors cursor-pointer mt-1 bg-(--brand-green) hover:bg-(--brand-green-hover) disabled:opacity-60 disabled:cursor-not-allowed'
+        className='w-full rounded-xl py-4.5 text-lg font-semibold text-white transition-colors cursor-pointer mt-1 bg-brand-green hover:bg-brand-green-hover disabled:opacity-60 disabled:cursor-not-allowed'
       >
-        {isPending ? 'Creating account…' : 'Create Account'}
+        {isPending ? t(StringKey.CREATING_ACCOUNT) : t(StringKey.CREATE_ACCOUNT)}
       </button>
     </form>
   );
