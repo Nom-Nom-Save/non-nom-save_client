@@ -5,12 +5,15 @@ import { cn } from '@/lib/utils';
 import { useAuthStore } from '@/store/auth.store';
 import { useVerifyEmailMutation } from '@/queries/auth.queries';
 import { ApiError } from '@/api/client';
+import { useTranslation } from 'react-i18next';
+import { StringKey } from '@/consts/string-key.consts';
 
 interface VerifyEmailFormProps {
   email: string;
 }
 
 export const VerifyEmailForm = ({ email }: VerifyEmailFormProps) => {
+  const { t } = useTranslation();
   const navigate = useNavigate();
   const clearEmail = useAuthStore(s => s.clearPendingVerificationEmail);
   const { mutate: verifyEmail, isPending } = useVerifyEmailMutation();
@@ -60,9 +63,9 @@ export const VerifyEmailForm = ({ email }: VerifyEmailFormProps) => {
     const code = digits.join('');
     if (code.length < 4) {
       setHasError(true);
-      toast.error('Invalid code.', {
+      toast.error(t(StringKey.INVALID_CODE_SHORT), {
         id: 'verify-error',
-        description: 'Please enter the full 4-digit code.',
+        description: t(StringKey.INVALID_CODE_SHORT_DESCRIPTION),
       });
       return;
     }
@@ -72,8 +75,8 @@ export const VerifyEmailForm = ({ email }: VerifyEmailFormProps) => {
       {
         onSuccess: () => {
           clearEmail();
-          toast.success('Email verified!', {
-            description: 'Your account is ready. Please sign in.',
+          toast.success(t(StringKey.EMAIL_VERIFIED), {
+            description: t(StringKey.ACCOUNT_IS_READY),
           });
           void navigate({ to: '/' });
         },
@@ -82,14 +85,14 @@ export const VerifyEmailForm = ({ email }: VerifyEmailFormProps) => {
           setDigits(['', '', '', '']);
           inputRefs[0].current?.focus();
           if (error instanceof ApiError && error.status === 400) {
-            toast.error('Invalid or expired code.', {
+            toast.error(t(StringKey.INVALID_OR_EXPIRED_CODE), {
               id: 'verify-error',
-              description: 'Please check the code and try again.',
+              description: t(StringKey.INVALID_OR_EXPIRED_CODE_DESCRIPTION),
             });
           } else {
-            toast.error('Verification failed.', {
+            toast.error(t(StringKey.VERIFICATION_FAILED), {
               id: 'verify-error',
-              description: 'Something went wrong. Please try again.',
+              description: t(StringKey.VERIFICATION_FAILED_DESCRIPTION),
             });
           }
         },
@@ -99,7 +102,6 @@ export const VerifyEmailForm = ({ email }: VerifyEmailFormProps) => {
 
   return (
     <form onSubmit={handleSubmit} className='flex flex-col gap-8'>
-      {/* OTP inputs */}
       <div className='flex flex-col gap-3'>
         <label
           className={cn(
@@ -107,7 +109,7 @@ export const VerifyEmailForm = ({ email }: VerifyEmailFormProps) => {
             hasError ? 'text-destructive' : 'text-foreground'
           )}
         >
-          Verification Code
+          {t(StringKey.VERIFICATION_CODE)}
         </label>
         <div className='flex gap-4' onPaste={handlePaste}>
           {digits.map((digit, index) => (
@@ -131,18 +133,16 @@ export const VerifyEmailForm = ({ email }: VerifyEmailFormProps) => {
           ))}
         </div>
         {hasError && (
-          <p className='text-destructive text-xs'>
-            Please enter the correct 4-digit code from your email.
-          </p>
+          <p className='text-destructive text-xs'>{t(StringKey.VERIFY_EMAIL_CODE_ERROR)}</p>
         )}
       </div>
 
       <button
         type='submit'
         disabled={isPending}
-        className='w-full rounded-xl py-4.5 text-lg font-semibold text-white transition-colors cursor-pointer bg-(--brand-green) hover:bg-(--brand-green-hover) disabled:opacity-60 disabled:cursor-not-allowed'
+        className='w-full rounded-xl py-4.5 text-lg font-semibold text-white transition-colors cursor-pointer bg-brand-green hover:bg-brand-green-hover disabled:opacity-60 disabled:cursor-not-allowed'
       >
-        {isPending ? 'Verifying…' : 'Verify Email'}
+        {isPending ? t(StringKey.VERIFYING_EMAIL) : t(StringKey.VERIFY_EMAIL)}
       </button>
     </form>
   );

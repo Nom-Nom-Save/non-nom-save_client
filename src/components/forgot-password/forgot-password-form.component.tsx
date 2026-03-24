@@ -11,12 +11,14 @@ import {
 import { useForgotPasswordMutation } from '@/queries/auth.queries';
 import { useAuthStore } from '@/store/auth.store';
 import { ApiError } from '@/api/client';
+import { StringKey } from '@/consts/string-key.consts';
+import { useTranslation } from 'react-i18next';
 
 export const ForgotPasswordForm = () => {
+  const { t } = useTranslation();
   const navigate = useNavigate();
   const setPendingResetEmail = useAuthStore(s => s.setPendingResetEmail);
   const { mutate: sendResetLink, isPending } = useForgotPasswordMutation();
-
   const {
     register,
     handleSubmit,
@@ -35,14 +37,14 @@ export const ForgotPasswordForm = () => {
         },
         onError: error => {
           if (error instanceof ApiError && error.status === 404) {
-            toast.error('Account not found.', {
+            toast.error(t(StringKey.ACCOUNT_NOT_FOUND), {
               id: 'forgot-password-error',
-              description: 'No account found for this email address.',
+              description: t(StringKey.ACCOUNT_NOT_FOUND_DESCRIPTION),
             });
           } else {
-            toast.error('Failed to send reset code.', {
+            toast.error(t(StringKey.FAILED_TO_SEND_RESET_CODE), {
               id: 'forgot-password-error',
-              description: 'Please check your email address and try again.',
+              description: t(StringKey.FAILED_TO_SEND_RESET_CODE_DESCRIPTION),
             });
           }
         },
@@ -52,7 +54,6 @@ export const ForgotPasswordForm = () => {
 
   return (
     <form onSubmit={e => void handleSubmit(handleFormSubmit)(e)} className='flex flex-col gap-6'>
-      {/* Email */}
       <div className='flex flex-col gap-2'>
         <label
           htmlFor='forgot-email'
@@ -61,13 +62,13 @@ export const ForgotPasswordForm = () => {
             errors.email ? 'text-destructive' : 'text-foreground'
           )}
         >
-          Email Address
+          {t(StringKey.EMAIL_ADDRESS)}
         </label>
         <div className='relative'>
           <input
             id='forgot-email'
             type='email'
-            placeholder='hello@nomnomsave.com'
+            placeholder={t(StringKey.EMAIL_PLACEHOLDER)}
             {...register('email')}
             className={cn(
               'w-full rounded-xl border px-4 py-4 text-base outline-none transition-colors placeholder:text-muted-foreground',
@@ -90,13 +91,13 @@ export const ForgotPasswordForm = () => {
       <button
         type='submit'
         disabled={isPending}
-        className='w-full flex items-center justify-center gap-2 rounded-xl py-4.5 text-lg font-semibold text-white transition-colors cursor-pointer bg-(--brand-green) hover:bg-(--brand-green-hover) disabled:opacity-60 disabled:cursor-not-allowed'
+        className='w-full flex items-center justify-center gap-2 rounded-xl py-4.5 text-lg font-semibold text-white transition-colors cursor-pointer bg-brand-green hover:bg-brand-green-hover disabled:opacity-60 disabled:cursor-not-allowed'
       >
         {isPending ? (
-          'Sending…'
+          t(StringKey.SENDING)
         ) : (
           <>
-            Send Reset Code
+            {t(StringKey.SEND_RESET_CODE)}
             <ArrowRight size={20} />
           </>
         )}
@@ -104,9 +105,9 @@ export const ForgotPasswordForm = () => {
 
       <Link
         to='/login'
-        className='flex items-center justify-center gap-1.5 text-sm font-semibold text-foreground hover:text-(--brand-green) transition-colors'
+        className='flex items-center justify-center gap-1.5 text-sm font-semibold text-foreground hover:text-brand-green transition-colors'
       >
-        ← Back to Login
+        {t(StringKey.BACK_TO_LOGIN)}
       </Link>
     </form>
   );

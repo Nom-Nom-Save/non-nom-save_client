@@ -2,17 +2,14 @@ import { create } from 'zustand';
 import type { LoginType } from '@/types/auth.types';
 
 interface AuthState {
-  /** Email сохраняется после регистрации и передаётся на страницу верификации */
   pendingVerificationEmail: string | null;
   setPendingVerificationEmail: (email: string) => void;
   clearPendingVerificationEmail: () => void;
 
-  /** Email сохраняется после forgot-password и передаётся на страницу reset-password */
   pendingResetEmail: string | null;
   setPendingResetEmail: (email: string) => void;
   clearPendingResetEmail: () => void;
 
-  /** accessToken хранится в памяти; в localStorage только для persistence между вкладками */
   accessToken: string | null;
   loginType: LoginType | null;
   setAuth: (accessToken: string, loginType: LoginType) => void;

@@ -17,7 +17,7 @@ export const apiRequest = async <T>(path: string, options: RequestInit = {}): Pr
       'Content-Type': 'application/json',
       ...options.headers,
     },
-    credentials: 'include', // needed for httpOnly refresh token cookie
+    credentials: 'include',
     ...options,
   });
 

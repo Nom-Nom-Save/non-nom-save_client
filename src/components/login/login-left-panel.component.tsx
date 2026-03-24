@@ -1,13 +1,17 @@
 import { Tag, Zap, Map } from 'lucide-react';
 import logoUrl from '@/assets/NomNomSave-Logo.svg';
-
-const features = [
-  { icon: Tag, label: '70% Discounts on Surplus' },
-  { icon: Zap, label: 'Real-time Local Offers' },
-  { icon: Map, label: 'Premium Map Access' },
-];
+import { StringKey } from '@/consts/string-key.consts';
+import { useTranslation } from 'react-i18next';
 
 export const LoginLeftPanel = () => {
+  const { t } = useTranslation();
+
+  const features = [
+    { icon: Tag, label: t(StringKey.FEATURE_DISCOUNTS) },
+    { icon: Zap, label: t(StringKey.FEATURE_REAL_TIME) },
+    { icon: Map, label: t(StringKey.FEATURE_MAP) },
+  ];
+
   return (
     <div
       className='hidden md:flex flex-col w-2/5 min-w-[400px] min-h-screen relative overflow-hidden'
@@ -15,7 +19,6 @@ export const LoginLeftPanel = () => {
         background: 'linear-gradient(165deg, var(--brand-green) 0%, oklch(0.30 0.08 154) 100%)',
       }}
     >
-      {/* Decorative circles */}
       <div className='absolute inset-0 pointer-events-none' aria-hidden='true'>
         <div
           className='absolute rounded-full'
@@ -40,17 +43,21 @@ export const LoginLeftPanel = () => {
           }}
         />
       </div>
-
       <div className='flex-1 flex flex-col justify-center px-14 py-16 relative z-10'>
         <div className='flex flex-col gap-10'>
           <img src={logoUrl} alt='NomNomSave' className='w-72 h-auto -ml-15' />
-
           <h2 className='text-white font-bold text-[3.25rem] leading-[1.15]'>
-            Welcome
-            <br />
-            Back
+            {t(StringKey.WELCOME_BACK)
+              .split(' ')
+              .join('\n')
+              .split('\n')
+              .map((word, i) => (
+                <span key={i}>
+                  {word}
+                  <br />
+                </span>
+              ))}
           </h2>
-
           <ul className='flex flex-col gap-5'>
             {features.map(({ icon: Icon, label }) => (
               <li key={label} className='flex items-center gap-4 text-white text-base'>
@@ -64,10 +71,7 @@ export const LoginLeftPanel = () => {
               </li>
             ))}
           </ul>
-
-          <p className='text-white/50 text-sm italic'>
-            &ldquo;Saving the planet, one delicious bite at a time.&rdquo;
-          </p>
+          <p className='text-white/50 text-sm italic'>&ldquo;{t(StringKey.LOGIN_TAGLINE)}&rdquo;</p>
         </div>
       </div>
     </div>
