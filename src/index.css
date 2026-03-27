@@ -1,6 +1,30 @@
 @import 'tailwindcss';
 @import "tw-animate-css";
 
+@font-face {
+  font-family: 'Playfair Display';
+  src: url('./assets/fonts/PlayfairDisplay/PlayfairDisplayRegular/PlayfairDisplayRegular.ttf') format('truetype');
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Playfair Display';
+  src: url('./assets/fonts/PlayfairDisplay/PlayfairDisplayBold/PlayfairDisplayBold.ttf') format('truetype');
+  font-weight: 700;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Playfair Display';
+  src: url('./assets/fonts/PlayfairDisplay/PlayfairDisplayBold/PlayfairDisplayBold.ttf') format('truetype');
+  font-weight: 500;
+  font-style: normal;
+  font-display: swap;
+}
+
 @custom-variant dark (&:is(.dark *));
 
 @theme inline {
@@ -43,6 +67,7 @@
   --color-brand-green-hover: var(--brand-green-hover);
   --color-brand-green-muted: var(--brand-green-muted);
   --color-brand-cream: var(--brand-cream);
+  --font-playfair: 'Playfair Display', serif;
 }
 
 :root {

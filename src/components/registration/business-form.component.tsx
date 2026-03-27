@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useForm, type FieldErrors } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { AlertCircle, Eye, EyeOff } from 'lucide-react';
@@ -14,18 +14,42 @@ import { useAuthStore } from '@/store/auth.store';
 import { ApiError } from '@/api/client';
 import { useTranslation } from 'react-i18next';
 import { StringKey } from '@/consts/string-key.consts';
+import { searchCityOrCountry, type NominatimFeature } from '@/api/nominatim.api';
 
 export const BusinessForm = () => {
   const { t } = useTranslation();
   const navigate = useNavigate();
 
+  const [search, setSearch] = useState<string>('');
+
+  const [addressResults, setAddressResults] = useState<NominatimFeature[]>([]);
+  const [showDropdown, setShowDropdown] = useState(false);
+  const [isAddressSelected, setIsAddressSelected] = useState(false);
+
   const [showPassword, setShowPassword] = useState(false);
   const setPendingVerificationEmail = useAuthStore(s => s.setPendingVerificationEmail);
   const { mutate: registerEstablishment, isPending } = useRegisterEstablishmentMutation();
 
+  useEffect(() => {
+    if (!search) {
+      setAddressResults([]);
+      return;
+    }
+
+    const fetchAddress = async () => {
+      const response = await searchCityOrCountry(search);
+      setAddressResults(response);
+      setShowDropdown(true);
+    };
+
+    const debounce = setTimeout(fetchAddress, 300);
+    return () => clearTimeout(debounce);
+  }, [search]);
+
   const {
     register,
     handleSubmit,
+    setValue,
     formState: { errors },
   } = useForm<BusinessRegistrationFormData>({
     resolver: zodResolver(businessRegistrationSchema),
@@ -160,6 +184,14 @@ export const BusinessForm = () => {
             type='text'
             placeholder={t(StringKey.STORE_ADDRESS_PLACEHOLDER)}
             {...register('address')}
+            value={search}
+            onChange={e => {
+              setSearch(e.target.value);
+              if (isAddressSelected) {
+                setValue('address', '');
+                setIsAddressSelected(false);
+              }
+            }}
             className={cn(
               'w-full rounded-xl border px-4 py-4 text-base outline-none transition-colors placeholder:text-muted-foreground',
               'bg-white focus:ring-2 focus:ring-(--brand-green)/30',
@@ -167,12 +199,39 @@ export const BusinessForm = () => {
                 ? 'border-destructive bg-destructive/5 pr-11 focus:ring-destructive/20'
                 : 'border-border'
             )}
+            onFocus={() => addressResults.length > 0 && setShowDropdown(true)}
+            onBlur={() => {
+              setTimeout(() => {
+                setShowDropdown(false);
+                if (!isAddressSelected && search) {
+                  setSearch('');
+                }
+              }, 150);
+            }}
           />
           {errors.address && (
             <AlertCircle
               size={18}
               className='absolute right-4 top-1/2 -translate-y-1/2 text-destructive'
             />
+          )}
+          {showDropdown && addressResults.length > 0 && (
+            <ul className='absolute z-50 mt-1 w-full rounded-xl border border-border bg-white shadow-lg max-h-60 overflow-y-auto'>
+              {addressResults.map((result, index) => (
+                <li
+                  key={index}
+                  onMouseDown={() => {
+                    setSearch(result.properties.displayName);
+                    setValue('address', result.properties.displayName);
+                    setIsAddressSelected(true);
+                    setShowDropdown(false);
+                  }}
+                  className='px-4 py-3 text-sm cursor-pointer hover:bg-muted transition-colors first:rounded-t-xl last:rounded-b-xl'
+                >
+                  {result.properties.displayName}
+                </li>
+              ))}
+            </ul>
           )}
         </div>
         {errors.address && <p className='text-destructive text-xs'>{errors.address.message}</p>}

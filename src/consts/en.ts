@@ -146,4 +146,37 @@ export const enMessages: Record<StringKey, string> = {
   [StringKey.FULL_NAME_MAX]: 'Full name must be less than 100 characters',
   [StringKey.CODE_LENGTH]: 'Code must be 4 digits',
   [StringKey.CODE_DIGITS_ONLY]: 'Code must contain digits only',
+
+  // Header
+  [StringKey.NOM_NOM_SAVE]: 'Nom Nom Save',
+  [StringKey.LOG_IN]: 'Log In',
+  [StringKey.SING_IN]: 'Sing In',
+
+  // Landing
+  [StringKey.GOOD_FOOD]: 'Good Food',
+  [StringKey.GREAT_PRICES]: 'Great Prices',
+  [StringKey.RESCUE_FOOD_DESCRIPTION]:
+    "Rescue delicious unsold food from local favorites. It's an easy way to eat well, save money, and help the planet.",
+  [StringKey.NOM_NOM]: 'Nom Nom',
+  [StringKey.SAVE]: 'Save',
+  [StringKey.ON_THE_GO]: 'on the go',
+  [StringKey.MOBILE_PROMO_DESCRIPTION]:
+    'Get real-time alerts for local food drops and claim your bags in seconds.',
+  [StringKey.GOOGLE_PLAY]: 'Google Play',
+  [StringKey.GET_IN_ON]: 'GET IT ON',
+  [StringKey.HOW_IT_WORKS]: 'How It Works',
+  [StringKey.SUSTAINABLE_EATING]: 'Sustainable eating, simplified.',
+  [StringKey.BROWSE_OFFERS]: 'Browse Offers',
+  [StringKey.BROWSE_OFFERS_DESCRIPTION]:
+    'Find local shops near you with surplus food ready to be rescued at up to 70% off.',
+  [StringKey.RESERVE_BAG]: 'Reserve Bag',
+  [StringKey.RESERVE_BAG_DESCRIPTION]:
+    'Select a "Magic Bag" filled with delicious mystery treats and confirm your pickup.',
+  [StringKey.PICK_UP_AND_SAVE]: 'Pick up & Save',
+  [StringKey.PICK_UP_AND_SAVE_DESCRIPTION]:
+    'Stop by at the designated time, show your receipt, and enjoy your amazing food.',
+  [StringKey.AVAILABLE_NOW]: 'Available Now',
+  [StringKey.FRESHLY_LISTED]: 'Freshly listed surplus near you.',
+  [StringKey.NO_ESTABLISHMENTS_NEARBY]: 'No establishments nearby',
+  [StringKey.EXPLORE_ALL]: 'Explore All',
 };
