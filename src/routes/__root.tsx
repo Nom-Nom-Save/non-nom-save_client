@@ -13,12 +13,7 @@ const RootLayout = () => {
 
   return (
     <QueryClientProvider client={queryClient}>
-      {!isAuthRoute && (
-        <>
-          <Header />
-          <hr />
-        </>
-      )}
+      {!isAuthRoute && <Header />}
       <Outlet />
       <TanStackRouterDevtools />
     </QueryClientProvider>

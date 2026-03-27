@@ -46,7 +46,7 @@ export const LoginLeftPanel = () => {
       <div className='flex-1 flex flex-col justify-center px-14 py-16 relative z-10'>
         <div className='flex flex-col gap-10'>
           <img src={logoUrl} alt='NomNomSave' className='w-72 h-auto -ml-15' />
-          <h2 className='text-white font-bold text-[3.25rem] leading-[1.15]'>
+          <h2 className='text-white font-bold text-[3.25rem] leading-[1.15] font-playfair'>
             {t(StringKey.WELCOME_BACK)
               .split(' ')
               .join('\n')

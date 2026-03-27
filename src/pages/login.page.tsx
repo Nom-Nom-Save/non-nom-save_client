@@ -14,7 +14,7 @@ const LoginPage = () => {
       <div className='flex-1 overflow-y-auto'>
         <div className='min-h-full flex flex-col justify-center py-12 px-10'>
           <div className='max-w-[640px] mx-auto w-full'>
-            <h1 className='text-[2.5rem] font-bold text-foreground mb-10'>
+            <h1 className='text-[2.5rem] font-bold text-foreground mb-10 font-playfair'>
               {t(StringKey.LOGIN_TO_YOUR_ACCOUNT)}
             </h1>
 
