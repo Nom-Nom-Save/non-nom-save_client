@@ -14,7 +14,7 @@ const AvailableNow = () => {
   const [isLoading, setIsLoading] = useState<boolean>(true);
 
   useEffect(() => {
-    getVisitiorIp();
+    void getVisitiorIp();
   }, [ipAddress]);
 
   const getVisitiorIp = async () => {
@@ -25,7 +25,7 @@ const AvailableNow = () => {
       setIpAddress(ip);
 
       const geoResponse = await fetch(`http://ip-api.com/json/${ip}`);
-      const geoData = await geoResponse.json();
+      const geoData = (await geoResponse.json()) as { lon: number; lat: number };
 
       const { lon, lat } = geoData;
       const nearbyEstablishmentsResponse = await getNearbyEstablishments(lon, lat, 5);

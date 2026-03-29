@@ -31,18 +31,19 @@ export const BusinessForm = () => {
   const { mutate: registerEstablishment, isPending } = useRegisterEstablishmentMutation();
 
   useEffect(() => {
-    if (!search) {
-      setAddressResults([]);
-      return;
-    }
+    const debounce = setTimeout(
+      async () => {
+        if (!search) {
+          setAddressResults([]);
+          return;
+        }
+        const response = await searchCityOrCountry(search);
+        setAddressResults(response);
+        setShowDropdown(true);
+      },
+      search ? 300 : 0
+    );
 
-    const fetchAddress = async () => {
-      const response = await searchCityOrCountry(search);
-      setAddressResults(response);
-      setShowDropdown(true);
-    };
-
-    const debounce = setTimeout(fetchAddress, 300);
     return () => clearTimeout(debounce);
   }, [search]);
 

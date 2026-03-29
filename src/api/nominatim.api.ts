@@ -22,6 +22,6 @@ export const searchCityOrCountry = async (query: string) => {
     throw new Error(`Search API error: ${response.status} ${response.statusText}`);
   }
 
-  const data = await response.json();
+  const data: unknown = await response.json();
   return data as NominatimFeature[];
 };

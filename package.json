@@ -25,6 +25,7 @@
     "embla-carousel-react": "^8.6.0",
     "i18next": "^25.10.5",
     "lucide-react": "^0.548.0",
+    "radix-ui": "^1.4.3",
     "react": "^19.1.1",
     "react-dom": "^19.1.1",
     "react-hook-form": "^7.71.2",

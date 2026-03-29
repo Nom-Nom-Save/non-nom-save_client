@@ -1,9 +1,8 @@
 import Header from '@/components/header.component';
 import { createRootRoute, Outlet, useRouterState } from '@tanstack/react-router';
 import { TanStackRouterDevtools } from '@tanstack/react-router-devtools';
-import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
-
-const queryClient = new QueryClient();
+import { QueryClientProvider } from '@tanstack/react-query';
+import { queryClient } from '@/lib/query-client';
 
 const AUTH_ROUTES = ['/register', '/login', '/verify-email', '/forgot-password', '/reset-password'];
 

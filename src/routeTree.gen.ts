@@ -10,8 +10,13 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as AboutRouteImport } from './routes/about'
+import { Route as EstablishmentRouteImport } from './routes/_establishment'
 import { Route as AuthRouteImport } from './routes/_auth'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as EstablishmentTemplatesRouteImport } from './routes/_establishment.templates'
+import { Route as EstablishmentSettingsRouteImport } from './routes/_establishment.settings'
+import { Route as EstablishmentMenuRouteImport } from './routes/_establishment.menu'
+import { Route as EstablishmentAnalyticsRouteImport } from './routes/_establishment.analytics'
 import { Route as AuthVerifyEmailRouteImport } from './routes/_auth.verify-email'
 import { Route as AuthResetPasswordRouteImport } from './routes/_auth.reset-password'
 import { Route as AuthRegisterRouteImport } from './routes/_auth.register'
@@ -23,6 +28,10 @@ const AboutRoute = AboutRouteImport.update({
   path: '/about',
   getParentRoute: () => rootRouteImport,
 } as any)
+const EstablishmentRoute = EstablishmentRouteImport.update({
+  id: '/_establishment',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const AuthRoute = AuthRouteImport.update({
   id: '/_auth',
   getParentRoute: () => rootRouteImport,
@@ -31,6 +40,26 @@ const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
   getParentRoute: () => rootRouteImport,
+} as any)
+const EstablishmentTemplatesRoute = EstablishmentTemplatesRouteImport.update({
+  id: '/templates',
+  path: '/templates',
+  getParentRoute: () => EstablishmentRoute,
+} as any)
+const EstablishmentSettingsRoute = EstablishmentSettingsRouteImport.update({
+  id: '/settings',
+  path: '/settings',
+  getParentRoute: () => EstablishmentRoute,
+} as any)
+const EstablishmentMenuRoute = EstablishmentMenuRouteImport.update({
+  id: '/menu',
+  path: '/menu',
+  getParentRoute: () => EstablishmentRoute,
+} as any)
+const EstablishmentAnalyticsRoute = EstablishmentAnalyticsRouteImport.update({
+  id: '/analytics',
+  path: '/analytics',
+  getParentRoute: () => EstablishmentRoute,
 } as any)
 const AuthVerifyEmailRoute = AuthVerifyEmailRouteImport.update({
   id: '/verify-email',
@@ -66,6 +95,10 @@ export interface FileRoutesByFullPath {
   '/register': typeof AuthRegisterRoute
   '/reset-password': typeof AuthResetPasswordRoute
   '/verify-email': typeof AuthVerifyEmailRoute
+  '/analytics': typeof EstablishmentAnalyticsRoute
+  '/menu': typeof EstablishmentMenuRoute
+  '/settings': typeof EstablishmentSettingsRoute
+  '/templates': typeof EstablishmentTemplatesRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
@@ -75,17 +108,26 @@ export interface FileRoutesByTo {
   '/register': typeof AuthRegisterRoute
   '/reset-password': typeof AuthResetPasswordRoute
   '/verify-email': typeof AuthVerifyEmailRoute
+  '/analytics': typeof EstablishmentAnalyticsRoute
+  '/menu': typeof EstablishmentMenuRoute
+  '/settings': typeof EstablishmentSettingsRoute
+  '/templates': typeof EstablishmentTemplatesRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
   '/_auth': typeof AuthRouteWithChildren
+  '/_establishment': typeof EstablishmentRouteWithChildren
   '/about': typeof AboutRoute
   '/_auth/forgot-password': typeof AuthForgotPasswordRoute
   '/_auth/login': typeof AuthLoginRoute
   '/_auth/register': typeof AuthRegisterRoute
   '/_auth/reset-password': typeof AuthResetPasswordRoute
   '/_auth/verify-email': typeof AuthVerifyEmailRoute
+  '/_establishment/analytics': typeof EstablishmentAnalyticsRoute
+  '/_establishment/menu': typeof EstablishmentMenuRoute
+  '/_establishment/settings': typeof EstablishmentSettingsRoute
+  '/_establishment/templates': typeof EstablishmentTemplatesRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -97,6 +139,10 @@ export interface FileRouteTypes {
     | '/register'
     | '/reset-password'
     | '/verify-email'
+    | '/analytics'
+    | '/menu'
+    | '/settings'
+    | '/templates'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
@@ -106,21 +152,31 @@ export interface FileRouteTypes {
     | '/register'
     | '/reset-password'
     | '/verify-email'
+    | '/analytics'
+    | '/menu'
+    | '/settings'
+    | '/templates'
   id:
     | '__root__'
     | '/'
     | '/_auth'
+    | '/_establishment'
     | '/about'
     | '/_auth/forgot-password'
     | '/_auth/login'
     | '/_auth/register'
     | '/_auth/reset-password'
     | '/_auth/verify-email'
+    | '/_establishment/analytics'
+    | '/_establishment/menu'
+    | '/_establishment/settings'
+    | '/_establishment/templates'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   AuthRoute: typeof AuthRouteWithChildren
+  EstablishmentRoute: typeof EstablishmentRouteWithChildren
   AboutRoute: typeof AboutRoute
 }
 
@@ -131,6 +187,13 @@ declare module '@tanstack/react-router' {
       path: '/about'
       fullPath: '/about'
       preLoaderRoute: typeof AboutRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/_establishment': {
+      id: '/_establishment'
+      path: ''
+      fullPath: ''
+      preLoaderRoute: typeof EstablishmentRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/_auth': {
@@ -146,6 +209,34 @@ declare module '@tanstack/react-router' {
       fullPath: '/'
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
+    }
+    '/_establishment/templates': {
+      id: '/_establishment/templates'
+      path: '/templates'
+      fullPath: '/templates'
+      preLoaderRoute: typeof EstablishmentTemplatesRouteImport
+      parentRoute: typeof EstablishmentRoute
+    }
+    '/_establishment/settings': {
+      id: '/_establishment/settings'
+      path: '/settings'
+      fullPath: '/settings'
+      preLoaderRoute: typeof EstablishmentSettingsRouteImport
+      parentRoute: typeof EstablishmentRoute
+    }
+    '/_establishment/menu': {
+      id: '/_establishment/menu'
+      path: '/menu'
+      fullPath: '/menu'
+      preLoaderRoute: typeof EstablishmentMenuRouteImport
+      parentRoute: typeof EstablishmentRoute
+    }
+    '/_establishment/analytics': {
+      id: '/_establishment/analytics'
+      path: '/analytics'
+      fullPath: '/analytics'
+      preLoaderRoute: typeof EstablishmentAnalyticsRouteImport
+      parentRoute: typeof EstablishmentRoute
     }
     '/_auth/verify-email': {
       id: '/_auth/verify-email'
@@ -203,9 +294,28 @@ const AuthRouteChildren: AuthRouteChildren = {
 
 const AuthRouteWithChildren = AuthRoute._addFileChildren(AuthRouteChildren)
 
+interface EstablishmentRouteChildren {
+  EstablishmentAnalyticsRoute: typeof EstablishmentAnalyticsRoute
+  EstablishmentMenuRoute: typeof EstablishmentMenuRoute
+  EstablishmentSettingsRoute: typeof EstablishmentSettingsRoute
+  EstablishmentTemplatesRoute: typeof EstablishmentTemplatesRoute
+}
+
+const EstablishmentRouteChildren: EstablishmentRouteChildren = {
+  EstablishmentAnalyticsRoute: EstablishmentAnalyticsRoute,
+  EstablishmentMenuRoute: EstablishmentMenuRoute,
+  EstablishmentSettingsRoute: EstablishmentSettingsRoute,
+  EstablishmentTemplatesRoute: EstablishmentTemplatesRoute,
+}
+
+const EstablishmentRouteWithChildren = EstablishmentRoute._addFileChildren(
+  EstablishmentRouteChildren,
+)
+
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AuthRoute: AuthRouteWithChildren,
+  EstablishmentRoute: EstablishmentRouteWithChildren,
   AboutRoute: AboutRoute,
 }
 export const routeTree = rootRouteImport

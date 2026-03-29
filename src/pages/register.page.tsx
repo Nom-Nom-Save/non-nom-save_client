@@ -25,13 +25,13 @@ const RegisterPage = () => {
       <div className='flex-1 overflow-y-auto'>
         <div className='min-h-full flex flex-col justify-center py-12 px-10'>
           <div className='max-w-[640px] mx-auto w-full'>
-            <Link
-              to='/'
-              className='inline-flex items-center gap-2 text-sm font-medium text-muted-foreground hover:text-foreground transition-colors mb-10'
+            <button
+              onClick={() => window.history.back()}
+              className='inline-flex items-center gap-2 ...'
             >
               <ArrowLeft size={16} />
               {t(StringKey.BACK)}
-            </Link>
+            </button>
 
             <h1 className='text-[2.5rem] font-bold text-foreground mb-8'>
               {t(StringKey.CREATE_YOUR_ACCOUNT)}

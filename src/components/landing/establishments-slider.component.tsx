@@ -66,10 +66,12 @@ const EstablishmentsSlider: FC<EstablishmentsSliderProps> = ({ establishments })
       return;
     }
 
-    handleSelect();
+    const frame = requestAnimationFrame(handleSelect);
 
     emblaApi.on('select', handleSelect);
     emblaApi.on('reInit', handleSelect);
+
+    return () => cancelAnimationFrame(frame);
   }, [emblaApi, handleSelect]);
 
   const scrollTo = useCallback(

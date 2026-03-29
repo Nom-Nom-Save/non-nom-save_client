@@ -12,13 +12,17 @@ export class ApiError extends Error {
 }
 
 export const apiRequest = async <T>(path: string, options: RequestInit = {}): Promise<T> => {
+  const { headers, ...rest } = options;
+  const token = localStorage.getItem('token');
+
   const response = await fetch(`${BASE_URL}${path}`, {
+    ...rest,
+    credentials: 'include',
     headers: {
       'Content-Type': 'application/json',
-      ...options.headers,
+      ...(token ? { Authorization: `Bearer ${token}` } : {}),
+      ...(headers as Record<string, string>),
     },
-    credentials: 'include',
-    ...options,
   });
 
   const data: unknown = await response.json().catch(() => null);

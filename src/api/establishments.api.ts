@@ -1,6 +1,15 @@
 import { BASE_URL } from './client';
+import type { EstablishmentResponse } from '@/types/establishments.types';
 
-export const getNearbyEstablishments = async (lon: number, lat: number, radius: number) => {
+export interface NearbyEstablishmentsResponse {
+  establishments: EstablishmentResponse[];
+}
+
+export const getNearbyEstablishments = async (
+  lon: number,
+  lat: number,
+  radius: number
+): Promise<NearbyEstablishmentsResponse> => {
   const response = await fetch(
     `${BASE_URL}/establishments/nearby?lat=${lat}&lon=${lon}&radius=${radius}`
   );
@@ -11,6 +20,6 @@ export const getNearbyEstablishments = async (lon: number, lat: number, radius: 
     );
   }
 
-  const data = await response.json();
-  return data;
+  const data: unknown = await response.json();
+  return data as NearbyEstablishmentsResponse;
 };
