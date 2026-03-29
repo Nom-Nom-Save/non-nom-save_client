@@ -9,28 +9,37 @@ import { MoveRight } from 'lucide-react';
 
 const AvailableNow = () => {
   const { t } = useTranslation();
-  const [ipAddress, setIpAddress] = useState<string>('');
   const [nearbyEstablishments, setNearbyEstablishments] = useState<EstablishmentResponse[]>([]);
   const [isLoading, setIsLoading] = useState<boolean>(true);
 
   useEffect(() => {
-    void getVisitiorIp();
-  }, [ipAddress]);
+    getVisitiorIp();
+  }, []);
 
   const getVisitiorIp = async () => {
     try {
       setIsLoading(true);
-      const ipResponse = await fetch('https://api.ipify.org');
-      const ip = await ipResponse.text();
-      setIpAddress(ip);
 
-      const geoResponse = await fetch(`http://ip-api.com/json/${ip}`);
-      const geoData = (await geoResponse.json()) as { lon: number; lat: number };
+      await new Promise<void>((resolve, reject) => {
+        if (!navigator.geolocation) {
+          return reject(new Error('Geolocation not supported'));
+        }
 
-      const { lon, lat } = geoData;
-      const nearbyEstablishmentsResponse = await getNearbyEstablishments(lon, lat, 5);
-
-      setNearbyEstablishments(nearbyEstablishmentsResponse.establishments);
+        navigator.geolocation.getCurrentPosition(async ({ coords }) => {
+          try {
+            const { latitude, longitude } = coords;
+            const nearbyEstablishmentsResponse = await getNearbyEstablishments(
+              longitude,
+              latitude,
+              50
+            );
+            setNearbyEstablishments(nearbyEstablishmentsResponse.establishments);
+            resolve();
+          } catch (error) {
+            reject(error);
+          }
+        });
+      });
     } catch (error) {
       console.error('Failer to fetch IP: ', error);
     } finally {
