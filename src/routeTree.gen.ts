@@ -10,9 +10,14 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as AboutRouteImport } from './routes/about'
+import { Route as UserRouteImport } from './routes/_user'
 import { Route as EstablishmentRouteImport } from './routes/_establishment'
 import { Route as AuthRouteImport } from './routes/_auth'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as UserProfileRouteImport } from './routes/_user.profile'
+import { Route as UserMapRouteImport } from './routes/_user.map'
+import { Route as UserHowItWorksRouteImport } from './routes/_user.how-it-works'
+import { Route as UserDashboardRouteImport } from './routes/_user.dashboard'
 import { Route as EstablishmentTemplatesRouteImport } from './routes/_establishment.templates'
 import { Route as EstablishmentSettingsRouteImport } from './routes/_establishment.settings'
 import { Route as EstablishmentMenuRouteImport } from './routes/_establishment.menu'
@@ -22,10 +27,18 @@ import { Route as AuthResetPasswordRouteImport } from './routes/_auth.reset-pass
 import { Route as AuthRegisterRouteImport } from './routes/_auth.register'
 import { Route as AuthLoginRouteImport } from './routes/_auth.login'
 import { Route as AuthForgotPasswordRouteImport } from './routes/_auth.forgot-password'
+import { Route as UserProfileSettingsRouteImport } from './routes/_user.profile.settings'
+import { Route as UserProfilePaymentMethodsRouteImport } from './routes/_user.profile.payment-methods'
+import { Route as UserProfileOrdersRouteImport } from './routes/_user.profile.orders'
+import { Route as UserProfileFavoritesRouteImport } from './routes/_user.profile.favorites'
 
 const AboutRoute = AboutRouteImport.update({
   id: '/about',
   path: '/about',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const UserRoute = UserRouteImport.update({
+  id: '/_user',
   getParentRoute: () => rootRouteImport,
 } as any)
 const EstablishmentRoute = EstablishmentRouteImport.update({
@@ -40,6 +53,26 @@ const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
   getParentRoute: () => rootRouteImport,
+} as any)
+const UserProfileRoute = UserProfileRouteImport.update({
+  id: '/profile',
+  path: '/profile',
+  getParentRoute: () => UserRoute,
+} as any)
+const UserMapRoute = UserMapRouteImport.update({
+  id: '/map',
+  path: '/map',
+  getParentRoute: () => UserRoute,
+} as any)
+const UserHowItWorksRoute = UserHowItWorksRouteImport.update({
+  id: '/how-it-works',
+  path: '/how-it-works',
+  getParentRoute: () => UserRoute,
+} as any)
+const UserDashboardRoute = UserDashboardRouteImport.update({
+  id: '/dashboard',
+  path: '/dashboard',
+  getParentRoute: () => UserRoute,
 } as any)
 const EstablishmentTemplatesRoute = EstablishmentTemplatesRouteImport.update({
   id: '/templates',
@@ -86,6 +119,27 @@ const AuthForgotPasswordRoute = AuthForgotPasswordRouteImport.update({
   path: '/forgot-password',
   getParentRoute: () => AuthRoute,
 } as any)
+const UserProfileSettingsRoute = UserProfileSettingsRouteImport.update({
+  id: '/settings',
+  path: '/settings',
+  getParentRoute: () => UserProfileRoute,
+} as any)
+const UserProfilePaymentMethodsRoute =
+  UserProfilePaymentMethodsRouteImport.update({
+    id: '/payment-methods',
+    path: '/payment-methods',
+    getParentRoute: () => UserProfileRoute,
+  } as any)
+const UserProfileOrdersRoute = UserProfileOrdersRouteImport.update({
+  id: '/orders',
+  path: '/orders',
+  getParentRoute: () => UserProfileRoute,
+} as any)
+const UserProfileFavoritesRoute = UserProfileFavoritesRouteImport.update({
+  id: '/favorites',
+  path: '/favorites',
+  getParentRoute: () => UserProfileRoute,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
@@ -99,6 +153,14 @@ export interface FileRoutesByFullPath {
   '/menu': typeof EstablishmentMenuRoute
   '/settings': typeof EstablishmentSettingsRoute
   '/templates': typeof EstablishmentTemplatesRoute
+  '/dashboard': typeof UserDashboardRoute
+  '/how-it-works': typeof UserHowItWorksRoute
+  '/map': typeof UserMapRoute
+  '/profile': typeof UserProfileRouteWithChildren
+  '/profile/favorites': typeof UserProfileFavoritesRoute
+  '/profile/orders': typeof UserProfileOrdersRoute
+  '/profile/payment-methods': typeof UserProfilePaymentMethodsRoute
+  '/profile/settings': typeof UserProfileSettingsRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
@@ -112,12 +174,21 @@ export interface FileRoutesByTo {
   '/menu': typeof EstablishmentMenuRoute
   '/settings': typeof EstablishmentSettingsRoute
   '/templates': typeof EstablishmentTemplatesRoute
+  '/dashboard': typeof UserDashboardRoute
+  '/how-it-works': typeof UserHowItWorksRoute
+  '/map': typeof UserMapRoute
+  '/profile': typeof UserProfileRouteWithChildren
+  '/profile/favorites': typeof UserProfileFavoritesRoute
+  '/profile/orders': typeof UserProfileOrdersRoute
+  '/profile/payment-methods': typeof UserProfilePaymentMethodsRoute
+  '/profile/settings': typeof UserProfileSettingsRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
   '/_auth': typeof AuthRouteWithChildren
   '/_establishment': typeof EstablishmentRouteWithChildren
+  '/_user': typeof UserRouteWithChildren
   '/about': typeof AboutRoute
   '/_auth/forgot-password': typeof AuthForgotPasswordRoute
   '/_auth/login': typeof AuthLoginRoute
@@ -128,6 +199,14 @@ export interface FileRoutesById {
   '/_establishment/menu': typeof EstablishmentMenuRoute
   '/_establishment/settings': typeof EstablishmentSettingsRoute
   '/_establishment/templates': typeof EstablishmentTemplatesRoute
+  '/_user/dashboard': typeof UserDashboardRoute
+  '/_user/how-it-works': typeof UserHowItWorksRoute
+  '/_user/map': typeof UserMapRoute
+  '/_user/profile': typeof UserProfileRouteWithChildren
+  '/_user/profile/favorites': typeof UserProfileFavoritesRoute
+  '/_user/profile/orders': typeof UserProfileOrdersRoute
+  '/_user/profile/payment-methods': typeof UserProfilePaymentMethodsRoute
+  '/_user/profile/settings': typeof UserProfileSettingsRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -143,6 +222,14 @@ export interface FileRouteTypes {
     | '/menu'
     | '/settings'
     | '/templates'
+    | '/dashboard'
+    | '/how-it-works'
+    | '/map'
+    | '/profile'
+    | '/profile/favorites'
+    | '/profile/orders'
+    | '/profile/payment-methods'
+    | '/profile/settings'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
@@ -156,11 +243,20 @@ export interface FileRouteTypes {
     | '/menu'
     | '/settings'
     | '/templates'
+    | '/dashboard'
+    | '/how-it-works'
+    | '/map'
+    | '/profile'
+    | '/profile/favorites'
+    | '/profile/orders'
+    | '/profile/payment-methods'
+    | '/profile/settings'
   id:
     | '__root__'
     | '/'
     | '/_auth'
     | '/_establishment'
+    | '/_user'
     | '/about'
     | '/_auth/forgot-password'
     | '/_auth/login'
@@ -171,12 +267,21 @@ export interface FileRouteTypes {
     | '/_establishment/menu'
     | '/_establishment/settings'
     | '/_establishment/templates'
+    | '/_user/dashboard'
+    | '/_user/how-it-works'
+    | '/_user/map'
+    | '/_user/profile'
+    | '/_user/profile/favorites'
+    | '/_user/profile/orders'
+    | '/_user/profile/payment-methods'
+    | '/_user/profile/settings'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   AuthRoute: typeof AuthRouteWithChildren
   EstablishmentRoute: typeof EstablishmentRouteWithChildren
+  UserRoute: typeof UserRouteWithChildren
   AboutRoute: typeof AboutRoute
 }
 
@@ -187,6 +292,13 @@ declare module '@tanstack/react-router' {
       path: '/about'
       fullPath: '/about'
       preLoaderRoute: typeof AboutRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/_user': {
+      id: '/_user'
+      path: ''
+      fullPath: ''
+      preLoaderRoute: typeof UserRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/_establishment': {
@@ -209,6 +321,34 @@ declare module '@tanstack/react-router' {
       fullPath: '/'
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
+    }
+    '/_user/profile': {
+      id: '/_user/profile'
+      path: '/profile'
+      fullPath: '/profile'
+      preLoaderRoute: typeof UserProfileRouteImport
+      parentRoute: typeof UserRoute
+    }
+    '/_user/map': {
+      id: '/_user/map'
+      path: '/map'
+      fullPath: '/map'
+      preLoaderRoute: typeof UserMapRouteImport
+      parentRoute: typeof UserRoute
+    }
+    '/_user/how-it-works': {
+      id: '/_user/how-it-works'
+      path: '/how-it-works'
+      fullPath: '/how-it-works'
+      preLoaderRoute: typeof UserHowItWorksRouteImport
+      parentRoute: typeof UserRoute
+    }
+    '/_user/dashboard': {
+      id: '/_user/dashboard'
+      path: '/dashboard'
+      fullPath: '/dashboard'
+      preLoaderRoute: typeof UserDashboardRouteImport
+      parentRoute: typeof UserRoute
     }
     '/_establishment/templates': {
       id: '/_establishment/templates'
@@ -273,6 +413,34 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthForgotPasswordRouteImport
       parentRoute: typeof AuthRoute
     }
+    '/_user/profile/settings': {
+      id: '/_user/profile/settings'
+      path: '/settings'
+      fullPath: '/profile/settings'
+      preLoaderRoute: typeof UserProfileSettingsRouteImport
+      parentRoute: typeof UserProfileRoute
+    }
+    '/_user/profile/payment-methods': {
+      id: '/_user/profile/payment-methods'
+      path: '/payment-methods'
+      fullPath: '/profile/payment-methods'
+      preLoaderRoute: typeof UserProfilePaymentMethodsRouteImport
+      parentRoute: typeof UserProfileRoute
+    }
+    '/_user/profile/orders': {
+      id: '/_user/profile/orders'
+      path: '/orders'
+      fullPath: '/profile/orders'
+      preLoaderRoute: typeof UserProfileOrdersRouteImport
+      parentRoute: typeof UserProfileRoute
+    }
+    '/_user/profile/favorites': {
+      id: '/_user/profile/favorites'
+      path: '/favorites'
+      fullPath: '/profile/favorites'
+      preLoaderRoute: typeof UserProfileFavoritesRouteImport
+      parentRoute: typeof UserProfileRoute
+    }
   }
 }
 
@@ -312,10 +480,45 @@ const EstablishmentRouteWithChildren = EstablishmentRoute._addFileChildren(
   EstablishmentRouteChildren,
 )
 
+interface UserProfileRouteChildren {
+  UserProfileFavoritesRoute: typeof UserProfileFavoritesRoute
+  UserProfileOrdersRoute: typeof UserProfileOrdersRoute
+  UserProfilePaymentMethodsRoute: typeof UserProfilePaymentMethodsRoute
+  UserProfileSettingsRoute: typeof UserProfileSettingsRoute
+}
+
+const UserProfileRouteChildren: UserProfileRouteChildren = {
+  UserProfileFavoritesRoute: UserProfileFavoritesRoute,
+  UserProfileOrdersRoute: UserProfileOrdersRoute,
+  UserProfilePaymentMethodsRoute: UserProfilePaymentMethodsRoute,
+  UserProfileSettingsRoute: UserProfileSettingsRoute,
+}
+
+const UserProfileRouteWithChildren = UserProfileRoute._addFileChildren(
+  UserProfileRouteChildren,
+)
+
+interface UserRouteChildren {
+  UserDashboardRoute: typeof UserDashboardRoute
+  UserHowItWorksRoute: typeof UserHowItWorksRoute
+  UserMapRoute: typeof UserMapRoute
+  UserProfileRoute: typeof UserProfileRouteWithChildren
+}
+
+const UserRouteChildren: UserRouteChildren = {
+  UserDashboardRoute: UserDashboardRoute,
+  UserHowItWorksRoute: UserHowItWorksRoute,
+  UserMapRoute: UserMapRoute,
+  UserProfileRoute: UserProfileRouteWithChildren,
+}
+
+const UserRouteWithChildren = UserRoute._addFileChildren(UserRouteChildren)
+
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AuthRoute: AuthRouteWithChildren,
   EstablishmentRoute: EstablishmentRouteWithChildren,
+  UserRoute: UserRouteWithChildren,
   AboutRoute: AboutRoute,
 }
 export const routeTree = rootRouteImport

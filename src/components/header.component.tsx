@@ -6,13 +6,11 @@ import { cn } from '@/lib/utils';
 import { useAuthStore } from '@/store/auth.store';
 import { useEstablishmentProfileQuery } from '@/queries/establishment.queries';
 import logoUrl from '@/assets/NomNomSave-Logo.svg';
-
-const ESTABLISHMENT_NAV = [
-  { to: '/templates' as const, labelKey: StringKey.TEMPLATES },
-  { to: '/menu' as const, labelKey: StringKey.MENU },
-  { to: '/analytics' as const, labelKey: StringKey.ANALYTICS },
-  { to: '/settings' as const, labelKey: StringKey.SETTINGS },
-];
+import { useUserStore } from '@/store/user.store';
+import type { FC } from 'react';
+import { USER_NAV } from '@/types/user.types';
+import { ESTABLISHMENT_NAV } from '@/types/establishments.types';
+import { useUserProfileQuery } from '@/queries/user.queries';
 
 const Header = () => {
   const { t } = useTranslation();
@@ -20,9 +18,14 @@ const Header = () => {
   const loginType = useAuthStore(s => s.loginType);
   const clearAuth = useAuthStore(s => s.clearAuth);
   const isEstablishment = loginType === 'establishment';
+  const isUser = loginType === 'user';
 
   if (isEstablishment) {
     return <EstablishmentHeader t={t} location={location} clearAuth={clearAuth} />;
+  }
+
+  if (isUser) {
+    return <UserHeader t={t} location={location} clearAuth={clearAuth} />;
   }
 
   return (
@@ -50,6 +53,68 @@ const Header = () => {
             {t(StringKey.SING_IN)}
           </button>
         </Link>
+      </div>
+    </header>
+  );
+};
+
+interface UserHeaderProps {
+  t: (key: string) => string;
+  location: { pathname: string };
+  clearAuth: () => void;
+}
+
+const UserHeader: FC<UserHeaderProps> = ({ t, location, clearAuth }) => {
+  useUserProfileQuery();
+  const { user } = useUserStore();
+
+  return (
+    <header className='sticky top-0 z-50 h-[72px] bg-brand-cream/92 backdrop-blur-sm border-b border-border'>
+      <div className='max-w-[1320px] mx-auto px-8 h-full flex items-center justify-between'>
+        <div className='flex items-center gap-10'>
+          <Link to='/' className='flex items-center gap-2'>
+            <img src={logoUrl} alt='NomNomSave' className='h-9' />
+          </Link>
+
+          <nav className='flex gap-10'>
+            {USER_NAV.map(item => {
+              const isActive = location.pathname === item.to;
+
+              return (
+                <Link
+                  key={item.to}
+                  to={item.to}
+                  className={cn(
+                    'text-sm font-semibold transition-colors pb-0.5',
+                    isActive
+                      ? 'text-brand-green font-bold border-b-2 border-brand-green'
+                      : 'text-foreground/50 hover:text-foreground'
+                  )}
+                >
+                  {t(item.labelKey)}
+                </Link>
+              );
+            })}
+          </nav>
+        </div>
+
+        <div className='flex items-center gap-4'>
+          <button
+            type='button'
+            onClick={clearAuth}
+            className='w-9 h-9 rounded-full bg-brand-cream border border-border flex items-center justify-center cursor-pointer hover:bg-destructive/10 transition-colors'
+            title={t(StringKey.LOGOUT)}
+          >
+            <LogOut size={18} className='text-foreground/50' />
+          </button>
+          <Link to='/profile/settings' className='flex items-center gap-2'>
+            <div className='w-[38px] h-[38px] rounded-full bg-brand-green-muted border-2 border-brand-green flex items-center justify-center'>
+              <span className='text-sm font-bold text-brand-green'>
+                {user?.fullName?.charAt(0)?.toUpperCase() ?? 'E'}
+              </span>
+            </div>
+          </Link>
+        </div>
       </div>
     </header>
   );
@@ -94,21 +159,6 @@ const EstablishmentHeader = ({ t, location, clearAuth }: EstablishmentHeaderProp
         </div>
 
         <div className='flex items-center gap-4'>
-          {/* <div className='flex items-center gap-2 px-4 py-2 bg-white border border-border rounded-full'>
-            <Search size={16} className='text-foreground/40' />
-            <input
-              placeholder={t(StringKey.QUICK_SEARCH)}
-              className='border-none outline-none bg-transparent text-sm text-foreground w-40'
-            />
-          </div> */}
-
-          {/* <button
-            type='button'
-            className='w-9 h-9 rounded-full bg-brand-cream border border-border flex items-center justify-center cursor-pointer hover:bg-border transition-colors'
-          >
-            <Bell size={18} className='text-foreground/50' />
-          </button> */}
-
           <button
             type='button'
             onClick={clearAuth}
