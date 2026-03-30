@@ -20,7 +20,11 @@ export const apiRequest = async <T>(path: string, options: RequestInit = {}): Pr
     credentials: 'include',
     headers: {
       'Content-Type': 'application/json',
+<<<<<<< Updated upstream
       ...(token ? { Authorization: `Bearer ${token}` } : {}),
+=======
+      ...(token ? { Authorization: `Bearer ${token} ` } : {}),
+>>>>>>> Stashed changes
       ...(headers as Record<string, string>),
     },
   });

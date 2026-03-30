@@ -4,7 +4,7 @@ import LandingPromo from '@/components/landing/landing-promo.component';
 
 const HomePage = () => {
   return (
-    <div className='bg-brand-cream px-6'>
+    <div className='px-6 min-h-screen bg-brand-cream'>
       <LandingPromo />
       <HowItWorks />
       <AvailableNow />

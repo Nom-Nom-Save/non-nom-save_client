@@ -14,11 +14,12 @@ import { ApiError } from '@/api/client';
 import { useTranslation } from 'react-i18next';
 import { StringKey } from '@/consts/string-key.consts';
 
-const inputClass = (hasError: boolean) =>
+export const inputClass = (hasError: boolean) =>
   cn(
     'w-full px-4 py-3 border-[1.5px] rounded-xl bg-brand-cream text-sm font-medium outline-none transition-colors',
     'focus:border-brand-green focus:bg-white',
-    hasError ? 'border-destructive' : 'border-border'
+    hasError ? 'border-destructive' : 'border-border',
+    'disabled:opacity-50 disabled:cursor-not-allowed disabled:bg-brand-cream'
   );
 
 export const ProfileForm = () => {
