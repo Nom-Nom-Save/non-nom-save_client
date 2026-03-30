@@ -12,8 +12,12 @@ const RootLayout = () => {
 
   return (
     <QueryClientProvider client={queryClient}>
-      {!isAuthRoute && <Header />}
-      <Outlet />
+      <div className='flex flex-col min-h-screen'>
+        {!isAuthRoute && <Header />}
+        <div className='flex-1 flex flex-col'>
+          <Outlet />
+        </div>
+      </div>
       <TanStackRouterDevtools />
     </QueryClientProvider>
   );

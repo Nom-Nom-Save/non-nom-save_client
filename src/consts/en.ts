@@ -370,6 +370,8 @@ export const enMessages: Record<StringKey, string> = {
   [StringKey.NOM_NOM_SAVE]: 'Nom Nom Save',
   [StringKey.LOG_IN]: 'Log In',
   [StringKey.SING_IN]: 'Sing In',
+  [StringKey.DASHBOARD]: 'Dashboard',
+  [StringKey.MAP]: 'Map',
 
   // Landing
   [StringKey.GOOD_FOOD]: 'Good Food',
@@ -398,4 +400,20 @@ export const enMessages: Record<StringKey, string> = {
   [StringKey.FRESHLY_LISTED]: 'Freshly listed surplus near you.',
   [StringKey.NO_ESTABLISHMENTS_NEARBY]: 'No establishments nearby',
   [StringKey.EXPLORE_ALL]: 'Explore All',
+
+  // User Profile
+  [StringKey.MEMBER_SINCE]: 'Member since',
+  [StringKey.ORDERS]: 'Orders',
+  [StringKey.SAVED]: 'Saved',
+  [StringKey.PROFILE_SETTINGS]: 'Profile Settings',
+  [StringKey.PROFILE_SETTINGS_DESCRIPTION]:
+    'Manage your personal information, address, and account preferences to keep your Nom Nom Sav experience running smoothly.',
+  [StringKey.PERSONAL_DETAILS]: 'Personal Details',
+  [StringKey.NOTIFY_NEARBY]: 'Notify me about nearby establishments',
+  [StringKey.NOTIFY_CLOSING_SOON]: 'Notify me when establishments are closing soon',
+  [StringKey.NOTIFY_NEW_ITEMS]: 'Notify me about new items',
+  [StringKey.MY_ORDERS]: 'My Orders',
+  [StringKey.FAVORITES]: 'Favorites',
+  [StringKey.PAYMENT_METHODS]: 'Payment Methods',
+  [StringKey.PROFILE]: 'Profile',
 };
