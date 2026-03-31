@@ -226,6 +226,8 @@ export const enMessages: Record<StringKey, string> = {
   [StringKey.QUANTITY_MIN]: 'Quantity must be at least 1',
   [StringKey.START_TIME_REQUIRED]: 'Start time is required',
   [StringKey.END_TIME_REQUIRED]: 'End time is required',
+  [StringKey.END_TIME_AFTER_START]: 'End time must be after start time',
+  [StringKey.CLOSE_TIME_AFTER_OPEN]: 'Closing time must be after opening time',
 
   // Menu Page
   [StringKey.STATUS_ACTIVE]: 'Active',

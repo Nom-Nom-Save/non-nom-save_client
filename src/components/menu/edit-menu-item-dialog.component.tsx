@@ -1,5 +1,5 @@
 import { useEffect } from 'react';
-import { useForm } from 'react-hook-form';
+import { useForm, useWatch, Controller } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { toast } from 'sonner';
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
@@ -14,11 +14,12 @@ import type { MenuItemResponse } from '@/types/menu.types';
 import { ApiError } from '@/api/client';
 import { useTranslation } from 'react-i18next';
 import { StringKey } from '@/consts/string-key.consts';
+import { DateTimePicker } from '@/components/date-time-picker.component';
 
 const toLocalDatetime = (iso: string) => {
   const date = new Date(iso);
-  const offset = date.getTimezoneOffset() * 60000;
-  return new Date(date.getTime() - offset).toISOString().slice(0, 16);
+  const pad = (n: number) => String(n).padStart(2, '0');
+  return `${date.getFullYear()}-${pad(date.getMonth() + 1)}-${pad(date.getDate())}T${pad(date.getHours())}:${pad(date.getMinutes())}`;
 };
 
 interface EditMenuItemDialogProps {
@@ -33,14 +34,24 @@ export const EditMenuItemDialog = ({ open, onOpenChange, menuItem }: EditMenuIte
 
   const isProduct = menuItem?.itemType === ItemType.PRODUCT;
 
+  const fieldClass = (hasError: boolean) =>
+    cn(
+      'w-full rounded-xl border px-3 py-2.5 text-sm outline-none transition-colors bg-white',
+      'focus:ring-2 focus:ring-brand-green/30',
+      hasError ? 'border-destructive' : 'border-border'
+    );
+
   const {
     register,
     handleSubmit,
     reset,
+    control,
     formState: { errors },
   } = useForm<PublishMenuFormData>({
     resolver: zodResolver(publishMenuSchema),
   });
+
+  const startTime = useWatch({ control, name: 'startTime' });
 
   useEffect(() => {
     if (!menuItem) return;
@@ -79,13 +90,6 @@ export const EditMenuItemDialog = ({ open, onOpenChange, menuItem }: EditMenuIte
       }
     );
   };
-
-  const fieldClass = (hasError: boolean) =>
-    cn(
-      'w-full rounded-xl border px-3 py-2.5 text-sm outline-none transition-colors bg-white',
-      'focus:ring-2 focus:ring-brand-green/30',
-      hasError ? 'border-destructive' : 'border-border'
-    );
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
@@ -153,36 +157,41 @@ export const EditMenuItemDialog = ({ open, onOpenChange, menuItem }: EditMenuIte
             )}
           </div>
 
-          <div className='grid grid-cols-2 gap-3'>
-            <div className='flex flex-col gap-1.5'>
-              <label htmlFor='edit-start' className='text-sm font-medium'>
-                {t(StringKey.START_TIME)}
-              </label>
-              <input
-                id='edit-start'
-                type='datetime-local'
-                {...register('startTime')}
-                className={fieldClass(!!errors.startTime)}
-              />
-              {errors.startTime && (
-                <p className='text-destructive text-xs'>{errors.startTime.message}</p>
+          <div className='flex flex-col gap-1.5'>
+            <label className='text-sm font-medium'>{t(StringKey.START_TIME)}</label>
+            <Controller
+              name='startTime'
+              control={control}
+              render={({ field }) => (
+                <DateTimePicker
+                  value={field.value}
+                  onChange={field.onChange}
+                  hasError={!!errors.startTime}
+                />
               )}
-            </div>
+            />
+            {errors.startTime && (
+              <p className='text-destructive text-xs'>{errors.startTime.message}</p>
+            )}
+          </div>
 
-            <div className='flex flex-col gap-1.5'>
-              <label htmlFor='edit-end' className='text-sm font-medium'>
-                {t(StringKey.END_TIME)}
-              </label>
-              <input
-                id='edit-end'
-                type='datetime-local'
-                {...register('endTime')}
-                className={fieldClass(!!errors.endTime)}
-              />
-              {errors.endTime && (
-                <p className='text-destructive text-xs'>{errors.endTime.message}</p>
+          <div className='flex flex-col gap-1.5'>
+            <label className='text-sm font-medium'>{t(StringKey.END_TIME)}</label>
+            <Controller
+              name='endTime'
+              control={control}
+              render={({ field }) => (
+                <DateTimePicker
+                  value={field.value}
+                  onChange={field.onChange}
+                  hasError={!!errors.endTime}
+                  min={startTime}
+                />
               )}
-            </div>
+            />
+            {errors.endTime && (
+              <p className='text-destructive text-xs'>{errors.endTime.message}</p>
+            )}
           </div>
 
           <div className='border-t border-border pt-4 flex flex-col gap-3'>

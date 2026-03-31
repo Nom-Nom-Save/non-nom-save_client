@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { toast } from 'sonner';
 import { Switch } from '@/components/ui/switch';
+import { TimePicker } from '@/components/time-picker.component';
 import { useUpdateEstablishmentProfileMutation } from '@/queries/establishment.queries';
 import { useEstablishmentStore } from '@/store/establishment.store';
 import { serializeWorkingHours } from '@/utils/working-hours.utils';
@@ -59,6 +60,15 @@ export const WorkingHoursEditor = ({ initialHours }: WorkingHoursEditorProps) =>
   const handleSave = () => {
     if (!profile) return;
 
+    const hasInvalidHours = DAYS.some(
+      day => hours[day].isOpen && hours[day].close <= hours[day].open
+    );
+
+    if (hasInvalidHours) {
+      toast.error(t(StringKey.CLOSE_TIME_AFTER_OPEN), { id: 'hours-invalid' });
+      return;
+    }
+
     updateProfile(
       {
         establishmentId: profile.id,
@@ -74,12 +84,6 @@ export const WorkingHoursEditor = ({ initialHours }: WorkingHoursEditorProps) =>
       }
     );
   };
-
-  const timeInputClass = (isToday: boolean) =>
-    cn(
-      'px-3 py-2 border-[1.5px] rounded-xl bg-brand-cream text-sm font-medium outline-none transition-colors focus:border-brand-green focus:bg-white',
-      isToday ? 'border-brand-green' : 'border-border'
-    );
 
   return (
     <div className='flex flex-col gap-4'>
@@ -122,27 +126,20 @@ export const WorkingHoursEditor = ({ initialHours }: WorkingHoursEditorProps) =>
               )}
             </div>
 
-            {hours[day].isOpen ? (
-              <>
-                <input
-                  type='time'
-                  value={hours[day].open}
-                  onChange={e => updateDay(day, 'open', e.target.value)}
-                  className={timeInputClass(isToday)}
-                />
-                <input
-                  type='time'
-                  value={hours[day].close}
-                  onChange={e => updateDay(day, 'close', e.target.value)}
-                  className={timeInputClass(isToday)}
-                />
-              </>
-            ) : (
-              <>
-                <input type='time' disabled className={cn(timeInputClass(false), 'opacity-30')} />
-                <input type='time' disabled className={cn(timeInputClass(false), 'opacity-30')} />
-              </>
-            )}
+            <TimePicker
+              value={hours[day].open}
+              onChange={v => updateDay(day, 'open', v)}
+              disabled={!hours[day].isOpen}
+              isHighlighted={isToday}
+            />
+
+            <TimePicker
+              value={hours[day].close}
+              onChange={v => updateDay(day, 'close', v)}
+              min={hours[day].open || undefined}
+              disabled={!hours[day].isOpen}
+              isHighlighted={isToday}
+            />
 
             <Switch
               checked={hours[day].isOpen}
