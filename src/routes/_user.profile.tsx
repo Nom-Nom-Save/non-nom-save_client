@@ -9,7 +9,9 @@ function RouteComponent() {
   return (
     <div className='bg-brand-cream px-6 flex flex-col md:flex-row gap-8 pt-4 flex-1'>
       <UserSidebar />
-      <Outlet />
+      <div className='flex-1 min-w-0'>
+        <Outlet />
+      </div>
     </div>
   );
 }
