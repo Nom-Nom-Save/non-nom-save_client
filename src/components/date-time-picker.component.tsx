@@ -3,8 +3,18 @@ import { ChevronLeft, ChevronRight, Calendar, Clock } from 'lucide-react';
 import { cn } from '@/lib/utils';
 
 const MONTHS = [
-  'January', 'February', 'March', 'April', 'May', 'June',
-  'July', 'August', 'September', 'October', 'November', 'December',
+  'January',
+  'February',
+  'March',
+  'April',
+  'May',
+  'June',
+  'July',
+  'August',
+  'September',
+  'October',
+  'November',
+  'December',
 ];
 const DAYS_OF_WEEK = ['Mo', 'Tu', 'We', 'Th', 'Fr', 'Sa', 'Su'];
 const HOURS = Array.from({ length: 24 }, (_, i) => i);
@@ -57,11 +67,16 @@ export const DateTimePicker = ({ value, onChange, hasError, min }: DateTimePicke
   useEffect(() => {
     const p = parseValue(value);
     if (p.date) {
-      setSelDate(p.date);
-      setViewMonth(p.date.getMonth());
-      setViewYear(p.date.getFullYear());
-      setSelH(p.h);
-      setSelM(p.m);
+      const date = p.date;
+      const h = p.h;
+      const m = p.m;
+      requestAnimationFrame(() => {
+        setSelDate(date);
+        setViewMonth(date.getMonth());
+        setViewYear(date.getFullYear());
+        setSelH(h);
+        setSelM(m);
+      });
     }
   }, [value]);
 
@@ -125,12 +140,16 @@ export const DateTimePicker = ({ value, onChange, hasError, min }: DateTimePicke
   };
 
   const prevMonth = () => {
-    if (viewMonth === 0) { setViewMonth(11); setViewYear(y => y - 1); }
-    else setViewMonth(m => m - 1);
+    if (viewMonth === 0) {
+      setViewMonth(11);
+      setViewYear(y => y - 1);
+    } else setViewMonth(m => m - 1);
   };
   const nextMonth = () => {
-    if (viewMonth === 11) { setViewMonth(0); setViewYear(y => y + 1); }
-    else setViewMonth(m => m + 1);
+    if (viewMonth === 11) {
+      setViewMonth(0);
+      setViewYear(y => y + 1);
+    } else setViewMonth(m => m + 1);
   };
 
   const today = new Date();
@@ -148,9 +167,7 @@ export const DateTimePicker = ({ value, onChange, hasError, min }: DateTimePicke
         )}
       >
         <Calendar size={15} className='text-foreground/40 shrink-0' />
-        <span className='flex-1 truncate'>
-          {value ? formatDisplay(value) : '— — —'}
-        </span>
+        <span className='flex-1 truncate'>{value ? formatDisplay(value) : '— — —'}</span>
       </button>
 
       {isOpen && (
@@ -178,7 +195,10 @@ export const DateTimePicker = ({ value, onChange, hasError, min }: DateTimePicke
 
             <div className='grid grid-cols-7 mb-1'>
               {DAYS_OF_WEEK.map(d => (
-                <div key={d} className='text-center text-[10px] font-bold text-foreground/35 py-0.5'>
+                <div
+                  key={d}
+                  className='text-center text-[10px] font-bold text-foreground/35 py-0.5'
+                >
                   {d}
                 </div>
               ))}

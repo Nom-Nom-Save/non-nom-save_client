@@ -190,9 +190,7 @@ export const PublishDialog = ({
                 />
               )}
             />
-            {errors.endTime && (
-              <p className='text-destructive text-xs'>{errors.endTime.message}</p>
-            )}
+            {errors.endTime && <p className='text-destructive text-xs'>{errors.endTime.message}</p>}
           </div>
 
           <button

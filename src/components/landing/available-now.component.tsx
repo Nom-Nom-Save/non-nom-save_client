@@ -13,7 +13,7 @@ const AvailableNow = () => {
   const [isLoading, setIsLoading] = useState<boolean>(true);
 
   useEffect(() => {
-    getVisitiorIp();
+    void getVisitiorIp();
   }, []);
 
   const getVisitiorIp = async () => {
@@ -25,19 +25,16 @@ const AvailableNow = () => {
           return reject(new Error('Geolocation not supported'));
         }
 
-        navigator.geolocation.getCurrentPosition(async ({ coords }) => {
-          try {
-            const { latitude, longitude } = coords;
-            const nearbyEstablishmentsResponse = await getNearbyEstablishments(
-              longitude,
-              latitude,
-              50
-            );
-            setNearbyEstablishments(nearbyEstablishmentsResponse.establishments);
-            resolve();
-          } catch (error) {
-            reject(error);
-          }
+        navigator.geolocation.getCurrentPosition(({ coords }) => {
+          const { latitude, longitude } = coords;
+          getNearbyEstablishments(longitude, latitude, 50)
+            .then(res => {
+              setNearbyEstablishments(res.establishments);
+              resolve();
+            })
+            .catch((error: unknown) => {
+              reject(error instanceof Error ? error : new Error(String(error)));
+            });
         });
       });
     } catch (error) {

@@ -93,7 +93,7 @@ const ProfileSettings = () => {
 
         <form
           className='bg-white rounded-3xl border-[1.5px] border-border p-4 md:p-8 shadow-sm flex flex-col gap-6'
-          onSubmit={e => handleSubmit(handleFormSubmit)(e)}
+          onSubmit={e => void handleSubmit(handleFormSubmit)(e)}
         >
           <div className='flex flex-col gap-2'>
             <label

@@ -1,5 +1,5 @@
 import { StringKey } from '@/consts/string-key.consts';
-import { Link, useRouterState } from '@tanstack/react-router';
+import { Link, useNavigate, useRouterState } from '@tanstack/react-router';
 import { useTranslation } from 'react-i18next';
 import { LogOut } from 'lucide-react';
 import { cn } from '@/lib/utils';
@@ -15,17 +15,24 @@ import { useUserProfileQuery } from '@/queries/user.queries';
 const Header = () => {
   const { t } = useTranslation();
   const { location } = useRouterState();
+  const navigate = useNavigate();
+
   const loginType = useAuthStore(s => s.loginType);
   const clearAuth = useAuthStore(s => s.clearAuth);
   const isEstablishment = loginType === 'establishment';
   const isUser = loginType === 'user';
 
+  const handleLogout = () => {
+    clearAuth();
+    void navigate({ to: '/login' });
+  };
+
   if (isEstablishment) {
-    return <EstablishmentHeader t={t} location={location} clearAuth={clearAuth} />;
+    return <EstablishmentHeader t={t} location={location} handleLogout={handleLogout} />;
   }
 
   if (isUser) {
-    return <UserHeader t={t} location={location} clearAuth={clearAuth} />;
+    return <UserHeader t={t} location={location} handleLogout={handleLogout} />;
   }
 
   return (
@@ -61,10 +68,10 @@ const Header = () => {
 interface UserHeaderProps {
   t: (key: string) => string;
   location: { pathname: string };
-  clearAuth: () => void;
+  handleLogout: () => void;
 }
 
-const UserHeader: FC<UserHeaderProps> = ({ t, location, clearAuth }) => {
+const UserHeader: FC<UserHeaderProps> = ({ t, location, handleLogout }) => {
   useUserProfileQuery();
   const { user } = useUserStore();
 
@@ -101,7 +108,7 @@ const UserHeader: FC<UserHeaderProps> = ({ t, location, clearAuth }) => {
         <div className='flex items-center gap-4'>
           <button
             type='button'
-            onClick={clearAuth}
+            onClick={handleLogout}
             className='w-9 h-9 rounded-full bg-brand-cream border border-border flex items-center justify-center cursor-pointer hover:bg-destructive/10 transition-colors'
             title={t(StringKey.LOGOUT)}
           >
@@ -123,10 +130,10 @@ const UserHeader: FC<UserHeaderProps> = ({ t, location, clearAuth }) => {
 interface EstablishmentHeaderProps {
   t: (key: string) => string;
   location: { pathname: string };
-  clearAuth: () => void;
+  handleLogout: () => void;
 }
 
-const EstablishmentHeader = ({ t, location, clearAuth }: EstablishmentHeaderProps) => {
+const EstablishmentHeader = ({ t, location, handleLogout }: EstablishmentHeaderProps) => {
   const { data: profile } = useEstablishmentProfileQuery();
 
   return (
@@ -161,7 +168,7 @@ const EstablishmentHeader = ({ t, location, clearAuth }: EstablishmentHeaderProp
         <div className='flex items-center gap-4'>
           <button
             type='button'
-            onClick={clearAuth}
+            onClick={handleLogout}
             className='w-9 h-9 rounded-full bg-brand-cream border border-border flex items-center justify-center cursor-pointer hover:bg-destructive/10 transition-colors'
             title={t(StringKey.LOGOUT)}
           >

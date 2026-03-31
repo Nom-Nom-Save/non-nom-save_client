@@ -13,9 +13,12 @@ export const publishMenuSchema = z
     startTime: z.string().min(1, { error: i18next.t(StringKey.START_TIME_REQUIRED) }),
     endTime: z.string().min(1, { error: i18next.t(StringKey.END_TIME_REQUIRED) }),
   })
-  .refine(data => !data.startTime || !data.endTime || new Date(data.endTime) > new Date(data.startTime), {
-    message: i18next.t(StringKey.END_TIME_AFTER_START),
-    path: ['endTime'],
-  });
+  .refine(
+    data => !data.startTime || !data.endTime || new Date(data.endTime) > new Date(data.startTime),
+    {
+      message: i18next.t(StringKey.END_TIME_AFTER_START),
+      path: ['endTime'],
+    }
+  );
 
 export type PublishMenuFormData = z.infer<typeof publishMenuSchema>;

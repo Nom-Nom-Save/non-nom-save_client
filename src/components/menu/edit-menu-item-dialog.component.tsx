@@ -189,9 +189,7 @@ export const EditMenuItemDialog = ({ open, onOpenChange, menuItem }: EditMenuIte
                 />
               )}
             />
-            {errors.endTime && (
-              <p className='text-destructive text-xs'>{errors.endTime.message}</p>
-            )}
+            {errors.endTime && <p className='text-destructive text-xs'>{errors.endTime.message}</p>}
           </div>
 
           <div className='border-t border-border pt-4 flex flex-col gap-3'>
