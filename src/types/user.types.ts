@@ -10,6 +10,7 @@ export interface User {
   createdAt: string;
   successfulOrdersCount: number;
   totalSavings: number;
+  totalOrderedItems: number;
 }
 
 export const USER_NAV = [
