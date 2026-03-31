@@ -8,7 +8,7 @@ const AUTH_ROUTES = ['/register', '/login', '/verify-email', '/forgot-password',
 
 const RootLayout = () => {
   const { location } = useRouterState();
-  const isAuthRoute = AUTH_ROUTES.some(r => location.pathname.startsWith(r));
+  const isAuthRoute = AUTH_ROUTES.some(route => location.pathname.startsWith(route));
 
   return (
     <QueryClientProvider client={queryClient}>

@@ -15,6 +15,11 @@ import { cn } from '@/lib/utils';
 
 const UserSidebarNavigationItems = [
   {
+    lable: StringKey.PROFILE,
+    icon: CircleUserRound,
+    to: '/profile/settings',
+  },
+  {
     lable: StringKey.MY_ORDERS,
     icon: ScrollText,
     to: '/profile/orders',
@@ -28,11 +33,6 @@ const UserSidebarNavigationItems = [
     lable: StringKey.PAYMENT_METHODS,
     icon: CreditCard,
     to: '/profile/payment-methods',
-  },
-  {
-    lable: StringKey.PROFILE,
-    icon: CircleUserRound,
-    to: '/profile/settings',
   },
 ];
 
