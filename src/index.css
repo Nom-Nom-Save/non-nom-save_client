@@ -67,16 +67,42 @@
   --color-brand-green-hover: var(--brand-green-hover);
   --color-brand-green-muted: var(--brand-green-muted);
   --color-brand-cream: var(--brand-cream);
+  --color-brand-orange: var(--brand-orange);
+  --color-brand-orange-light: var(--brand-orange-light);
+  --color-brand-orange-border: var(--brand-orange-border);
+  --color-brand-blue: var(--brand-blue);
+  --color-brand-blue-light: var(--brand-blue-light);
+  --color-brand-status-success-bg: var(--brand-status-success-bg);
+  --color-brand-status-success-border: var(--brand-status-success-border);
+  --color-brand-status-success-text: var(--brand-status-success-text);
+  --color-brand-avatar-bg: var(--brand-avatar-bg);
   --font-playfair: 'Playfair Display', serif;
 }
 
 :root {
   --radius: 0.625rem;
-  /* Brand colors */
-  --brand-green: #0a502b;
-  --brand-green-hover: #00421e;
-  --brand-green-muted: #dff0e4;
-  --brand-cream: #fdf9e6;
+  /* Brand colors — main palette, used throughout the app */
+  --brand-green: #0a502b;           /* Primary brand color: buttons, headings, accents */
+  --brand-green-hover: #00421e;     /* Button hover state */
+  --brand-green-muted: #dff0e4;     /* Subtle green bg: status badges, card borders */
+  --brand-cream: #fdf9e6;           /* Page/section bg, input bg, card sections */
+
+  /* Orange accent — timer, expired/pending status badges */
+  --brand-orange: #f4a261;
+  --brand-orange-light: #fff7ed;    /* Bg for orange badges and stat cards */
+  --brand-orange-border: #ffedd5;   /* Border for orange badges */
+
+  /* Blue accent — savings indicator in user sidebar/orders */
+  --brand-blue: #8ecae6;
+  --brand-blue-light: #f0f9ff;      /* Bg for savings stat card */
+
+  /* Success status — completed order badges, icon backgrounds */
+  --brand-status-success-bg: #eef8f3;
+  --brand-status-success-border: #a7d7be;
+  --brand-status-success-text: #1b6b3a;
+
+  /* Misc */
+  --brand-avatar-bg: #f2c4a0;       /* User avatar background */
   --background: #ffffff;
   --foreground: #0a0a0a;
   --card: #ffffff;

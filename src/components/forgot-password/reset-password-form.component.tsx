@@ -15,6 +15,8 @@ import { ApiError } from '@/api/client';
 import { ResetPasswordStep } from '@/consts/auth.consts';
 import { StringKey } from '@/consts/string-key.consts';
 import { useTranslation } from 'react-i18next';
+import { Button } from '@/components/ui/button';
+import { FormInput } from '@/components/ui/form-input';
 
 interface ResetPasswordFormProps {
   email: string;
@@ -176,7 +178,7 @@ export const ResetPasswordForm = ({ email, onStepChange }: ResetPasswordFormProp
                   'w-full aspect-square text-center text-2xl font-bold rounded-xl border outline-none transition-colors bg-white focus:ring-2',
                   codeError
                     ? 'border-destructive bg-destructive/5 focus:ring-destructive/20 text-destructive'
-                    : 'border-border focus:ring-(--brand-green)/30'
+                    : 'border-border focus:ring-brand-green/30'
                 )}
               />
             ))}
@@ -184,14 +186,9 @@ export const ResetPasswordForm = ({ email, onStepChange }: ResetPasswordFormProp
           {codeError && <p className='text-destructive text-xs'>{t(StringKey.RESET_CODE_ERROR)}</p>}
         </div>
 
-        <button
-          type='button'
-          onClick={handleVerifyCode}
-          disabled={isVerifying}
-          className='w-full rounded-xl py-4.5 text-lg font-semibold text-white transition-colors cursor-pointer mt-1 bg-brand-green hover:bg-brand-green-hover disabled:opacity-60 disabled:cursor-not-allowed'
-        >
+        <Button type='button' variant='brand' size='auth' onClick={handleVerifyCode} disabled={isVerifying} className='mt-1'>
           {isVerifying ? t(StringKey.VERIFYING) : t(StringKey.VERIFY_CODE)}
-        </button>
+        </Button>
 
         <Link
           to='/login'
@@ -216,18 +213,14 @@ export const ResetPasswordForm = ({ email, onStepChange }: ResetPasswordFormProp
           {t(StringKey.NEW_PASSWORD)}
         </label>
         <div className='relative'>
-          <input
+          <FormInput
             id='reset-newPassword'
             type={showNewPassword ? 'text' : 'password'}
+            variant='auth'
             placeholder={t(StringKey.PASSWORD_PLACEHOLDER)}
             {...register('newPassword')}
-            className={cn(
-              'w-full rounded-xl border px-4 py-4 pr-11 text-base outline-none transition-colors placeholder:text-muted-foreground',
-              'bg-white focus:ring-2 focus:ring-(--brand-green)/30',
-              errors.newPassword
-                ? 'border-destructive bg-destructive/5 focus:ring-destructive/20'
-                : 'border-border'
-            )}
+            hasError={!!errors.newPassword}
+            className='pr-11'
           />
           <button
             type='button'
@@ -254,18 +247,14 @@ export const ResetPasswordForm = ({ email, onStepChange }: ResetPasswordFormProp
           {t(StringKey.CONFIRM_PASSWORD)}
         </label>
         <div className='relative'>
-          <input
+          <FormInput
             id='reset-confirmPassword'
             type={showConfirmPassword ? 'text' : 'password'}
+            variant='auth'
             placeholder={t(StringKey.PASSWORD_PLACEHOLDER)}
             {...register('confirmPassword')}
-            className={cn(
-              'w-full rounded-xl border px-4 py-4 pr-11 text-base outline-none transition-colors placeholder:text-muted-foreground',
-              'bg-white focus:ring-2 focus:ring-(--brand-green)/30',
-              errors.confirmPassword
-                ? 'border-destructive bg-destructive/5 focus:ring-destructive/20'
-                : 'border-border'
-            )}
+            hasError={!!errors.confirmPassword}
+            className='pr-11'
           />
           <button
             type='button'
@@ -283,13 +272,9 @@ export const ResetPasswordForm = ({ email, onStepChange }: ResetPasswordFormProp
         )}
       </div>
 
-      <button
-        type='submit'
-        disabled={isResetting}
-        className='w-full rounded-xl py-4.5 text-lg font-semibold text-white transition-colors cursor-pointer mt-1 bg-brand-green hover:bg-brand-green-hover disabled:opacity-60 disabled:cursor-not-allowed'
-      >
+      <Button type='submit' variant='brand' size='auth' disabled={isResetting} className='mt-1'>
         {isResetting ? t(StringKey.RESETTING) : t(StringKey.RESET_PASSWORD)}
-      </button>
+      </Button>
 
       <Link
         to='/login'

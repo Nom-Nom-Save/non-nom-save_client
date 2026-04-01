@@ -1,6 +1,7 @@
 import { Trash2 } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
 import { StringKey } from '@/consts/string-key.consts';
+import { Button } from '@/components/ui/button';
 
 export const DeleteAccountSection = () => {
   const { t } = useTranslation();
@@ -14,14 +15,10 @@ export const DeleteAccountSection = () => {
       <p className='text-sm text-foreground/55 leading-relaxed mb-5'>
         {t(StringKey.DELETE_ESTABLISHMENT_WARNING)}
       </p>
-      <button
-        type='button'
-        disabled
-        className='flex items-center gap-2 px-6 py-[11px] rounded-full bg-white border-[1.5px] border-destructive/30 text-destructive text-sm font-bold cursor-not-allowed opacity-60 transition-colors'
-      >
+      <Button type='button' variant='danger-outline' size='pill-sm' disabled className='self-start'>
         <Trash2 size={18} />
         {t(StringKey.DELETE_ESTABLISHMENT)}
-      </button>
+      </Button>
     </div>
   );
 };

@@ -16,6 +16,7 @@ import { ApiError } from '@/api/client';
 import { useTranslation } from 'react-i18next';
 import { StringKey } from '@/consts/string-key.consts';
 import { cn } from '@/lib/utils';
+import { Button } from '@/components/ui/button';
 
 enum TemplateTab {
   PRODUCTS = 'products',
@@ -85,22 +86,14 @@ const TemplatesPage = () => {
           <p className='text-sm text-foreground/50'>{t(StringKey.TEMPLATES_LIBRARY_DESCRIPTION)}</p>
         </div>
         <div className='flex gap-2 flex-wrap sm:flex-nowrap'>
-          <button
-            type='button'
-            onClick={() => setCreateProductOpen(true)}
-            className='flex flex-1 sm:flex-none items-center justify-center gap-2 px-[22px] py-[11px] rounded-full bg-white border-2 border-brand-green text-brand-green text-sm font-bold cursor-pointer transition-colors hover:bg-brand-green hover:text-white'
-          >
+          <Button type='button' variant='brand-outline' size='pill-sm' onClick={() => setCreateProductOpen(true)} className='flex-1 sm:flex-none'>
             <Plus size={18} />
             {t(StringKey.NEW_PRODUCT)}
-          </button>
-          <button
-            type='button'
-            onClick={() => setCreateBoxOpen(true)}
-            className='flex flex-1 sm:flex-none items-center justify-center gap-2 px-[22px] py-[11px] rounded-full bg-white border-2 border-brand-green text-brand-green text-sm font-bold cursor-pointer transition-colors hover:bg-brand-green hover:text-white'
-          >
+          </Button>
+          <Button type='button' variant='brand-outline' size='pill-sm' onClick={() => setCreateBoxOpen(true)} className='flex-1 sm:flex-none'>
             <Sparkles size={18} />
             {t(StringKey.NEW_BOX)}
-          </button>
+          </Button>
         </div>
       </div>
 

@@ -45,39 +45,39 @@ const UserSidebar = () => {
 
   return (
     <aside className='w-full md:w-[300px]'>
-      <section className='bg-white p-8 rounded-4xl h-fit mb-6'>
+      <section className='bg-white p-8 rounded-[1.25rem] h-fit mb-6'>
         <div className='flex flex-col items-center justify-center mb-6'>
           <div className='relative mb-3'>
             <img
               src={userAvatar}
               alt='User Avatar'
-              className='w-24 h-24 rounded-full border-4 border-border bg-[#F2C4A0]'
+              className='w-24 h-24 rounded-full border-4 border-border bg-brand-avatar-bg'
             />
           </div>
 
           <p className='font-playfair text-brand-green text-lg font-semibold'>{user?.fullName}</p>
-          <p className='text-[#6B7280] text-sm'>
+          <p className='text-foreground/50 text-sm'>
             {t(StringKey.MEMBER_SINCE)} {memberSinceYear}
           </p>
         </div>
 
         <div className='flex flex-col gap-3 w-full'>
-          <div className='flex items-center justify-between bg-[#FEF6EF] rounded-2xl px-4 py-3'>
-            <div className='flex items-center gap-2 text-[#6B7280] text-sm'>
-              <ShoppingBag size={16} className='text-orange-400' />
+          <div className='flex items-center justify-between bg-brand-orange-light rounded-[1.25rem] px-4 py-3'>
+            <div className='flex items-center gap-2 text-foreground/50 text-sm'>
+              <ShoppingBag size={16} className='text-brand-orange' />
               {t(StringKey.ORDERS)}
             </div>
-            <span className='text-orange-400 font-semibold'>
+            <span className='text-brand-orange font-semibold'>
               {user?.successfulOrdersCount ?? 0}
             </span>
           </div>
 
-          <div className='flex items-center justify-between bg-[#F0F9FF] rounded-2xl px-4 py-3'>
-            <div className='flex items-center gap-2 text-[#6B7280] text-sm'>
-              <PiggyBank size={16} className='text-[#8ECAE6]' />
+          <div className='flex items-center justify-between bg-brand-blue-light rounded-[1.25rem] px-4 py-3'>
+            <div className='flex items-center gap-2 text-foreground/50 text-sm'>
+              <PiggyBank size={16} className='text-brand-blue' />
               {t(StringKey.SAVED)}
             </div>
-            <span className='text-[#8ECAE6] font-semibold'>${user?.totalSavings ?? 0}</span>
+            <span className='text-brand-blue font-semibold'>${user?.totalSavings ?? 0}</span>
           </div>
         </div>
       </section>
@@ -96,7 +96,7 @@ const UserSidebar = () => {
                   activeRoute && 'bg-brand-green text-white rounded-4xl'
                 )}
               >
-                <Icon className={cn('w-5 h-5', activeRoute ? 'text-white' : 'text-[#4B5563]')} />
+                <Icon className={cn('w-5 h-5', activeRoute ? 'text-white' : 'text-foreground/50')} />
                 {t(navigationItem.lable)}
               </Link>
             );
@@ -117,7 +117,7 @@ const UserSidebar = () => {
                   activeRoute && 'bg-brand-green text-white rounded-4xl'
                 )}
               >
-                <Icon className={cn('w-5 h-5', activeRoute ? 'text-white' : 'text-[#4B5563]')} />
+                <Icon className={cn('w-5 h-5', activeRoute ? 'text-white' : 'text-foreground/50')} />
                 <span className='whitespace-nowrap'>{t(navigationItem.lable)}</span>
               </Link>
             );

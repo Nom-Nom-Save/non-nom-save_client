@@ -17,6 +17,19 @@ const buttonVariants = cva(
         secondary: 'bg-secondary text-secondary-foreground hover:bg-secondary/80',
         ghost: 'hover:bg-accent hover:text-accent-foreground dark:hover:bg-accent/50',
         link: 'text-primary underline-offset-4 hover:underline',
+        // Brand variants
+        brand:
+          'bg-brand-green text-white hover:bg-brand-green-hover cursor-pointer disabled:opacity-60',
+        'ghost-circle':
+          'bg-brand-cream border border-border hover:bg-border cursor-pointer',
+        'ghost-circle-destructive':
+          'bg-brand-cream border border-border hover:bg-destructive/10 cursor-pointer',
+        'outline-pill':
+          'border-[1.5px] border-border bg-white text-foreground hover:border-brand-green cursor-pointer',
+        'brand-outline':
+          'border-2 border-brand-green text-brand-green bg-white hover:bg-brand-green hover:text-white cursor-pointer',
+        'danger-outline':
+          'border-[1.5px] border-destructive/30 bg-white text-destructive cursor-pointer',
       },
       size: {
         default: 'h-9 px-4 py-2 has-[>svg]:px-3',
@@ -27,6 +40,13 @@ const buttonVariants = cva(
         'icon-xs': "size-6 rounded-md [&_svg:not([class*='size-'])]:size-3",
         'icon-sm': 'size-8',
         'icon-lg': 'size-10',
+        // Brand sizes
+        auth: 'w-full rounded-xl py-4.5 text-lg font-semibold',
+        dialog: 'w-full rounded-xl py-4 text-base font-semibold',
+        settings: 'self-start rounded-full px-7 py-3 text-sm font-bold shadow-md',
+        pill: 'rounded-full px-4 py-2 text-[13px] font-semibold',
+        'pill-sm': 'rounded-full px-6 py-2.5 text-[13px] font-bold',
+        'icon-circle': 'size-[34px] rounded-full',
       },
     },
     defaultVariants: {

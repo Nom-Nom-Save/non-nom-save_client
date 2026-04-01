@@ -14,6 +14,8 @@ import type { BoxResponse } from '@/types/box.types';
 import { ApiError } from '@/api/client';
 import { useTranslation } from 'react-i18next';
 import { StringKey } from '@/consts/string-key.consts';
+import { Button } from '@/components/ui/button';
+import { FormInput, formInputVariants } from '@/components/ui/form-input';
 
 interface CreateBoxDialogProps {
   open: boolean;
@@ -123,13 +125,6 @@ export const CreateBoxDialog = ({ open, onOpenChange, editingBox }: CreateBoxDia
     }
   };
 
-  const inputClass = (hasError: boolean) =>
-    cn(
-      'w-full rounded-xl border px-3 py-2.5 text-sm outline-none transition-colors bg-white',
-      'focus:ring-2 focus:ring-brand-green/30',
-      hasError ? 'border-destructive' : 'border-border'
-    );
-
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent className='sm:max-w-[520px] max-h-[90vh] overflow-y-auto bg-brand-cream'>
@@ -146,7 +141,7 @@ export const CreateBoxDialog = ({ open, onOpenChange, editingBox }: CreateBoxDia
               {t(StringKey.NAME)}
             </label>
             <div className='relative'>
-              <input id='box-name' {...register('name')} className={inputClass(!!errors.name)} />
+              <FormInput id='box-name' {...register('name')} hasError={!!errors.name} />
               {errors.name && (
                 <AlertCircle
                   size={16}
@@ -162,11 +157,11 @@ export const CreateBoxDialog = ({ open, onOpenChange, editingBox }: CreateBoxDia
               {t(StringKey.PICTURE_URL)}
             </label>
             <div className='flex gap-3 items-start'>
-              <input
+              <FormInput
                 id='box-picture'
                 type='url'
                 {...register('picture')}
-                className={cn(inputClass(false), 'flex-1')}
+                className='flex-1'
                 placeholder='https://'
               />
               {pictureUrl && (
@@ -190,7 +185,7 @@ export const CreateBoxDialog = ({ open, onOpenChange, editingBox }: CreateBoxDia
               id='box-description'
               rows={3}
               {...register('description')}
-              className={cn(inputClass(!!errors.description), 'resize-none')}
+              className={cn(formInputVariants({ hasError: !!errors.description }), 'resize-none')}
             />
             {errors.description && (
               <p className='text-destructive text-xs'>{errors.description.message}</p>
@@ -202,12 +197,12 @@ export const CreateBoxDialog = ({ open, onOpenChange, editingBox }: CreateBoxDia
               <label htmlFor='box-price' className='text-sm font-medium'>
                 {t(StringKey.ORIGINAL_PRICE)}
               </label>
-              <input
+              <FormInput
                 id='box-price'
                 type='number'
                 step='0.01'
                 {...register('recommendedPrice', { valueAsNumber: true })}
-                className={inputClass(!!errors.recommendedPrice)}
+                hasError={!!errors.recommendedPrice}
               />
               {errors.recommendedPrice && (
                 <p className='text-destructive text-xs'>{errors.recommendedPrice.message}</p>
@@ -218,11 +213,10 @@ export const CreateBoxDialog = ({ open, onOpenChange, editingBox }: CreateBoxDia
               <label htmlFor='box-quantity' className='text-sm font-medium'>
                 {t(StringKey.QUANTITY_OF_ITEMS)}
               </label>
-              <input
+              <FormInput
                 id='box-quantity'
                 type='number'
                 {...register('quantityOfItems', { valueAsNumber: true })}
-                className={inputClass(false)}
               />
             </div>
           </div>
@@ -279,17 +273,13 @@ export const CreateBoxDialog = ({ open, onOpenChange, editingBox }: CreateBoxDia
             </div>
           )}
 
-          <button
-            type='submit'
-            disabled={isPending}
-            className='w-full rounded-xl py-3 text-sm font-semibold text-white transition-colors cursor-pointer mt-2 bg-brand-green hover:bg-brand-green-hover disabled:opacity-60 disabled:cursor-not-allowed'
-          >
+          <Button type='submit' variant='brand' size='dialog' disabled={isPending} className='mt-2'>
             {isPending
               ? t(StringKey.SAVING)
               : isEditing
                 ? t(StringKey.SAVE_CHANGES)
                 : t(StringKey.CREATE_BOX)}
-          </button>
+          </Button>
         </form>
       </DialogContent>
     </Dialog>

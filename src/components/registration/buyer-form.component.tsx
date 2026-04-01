@@ -14,6 +14,8 @@ import { useAuthStore } from '@/store/auth.store';
 import { ApiError } from '@/api/client';
 import { useTranslation } from 'react-i18next';
 import { StringKey } from '@/consts/string-key.consts';
+import { Button } from '@/components/ui/button';
+import { FormInput } from '@/components/ui/form-input';
 
 export const BuyerForm = () => {
   const { t } = useTranslation();
@@ -91,18 +93,13 @@ export const BuyerForm = () => {
         >
           {t(StringKey.FULL_NAME)}
         </label>
-        <input
+        <FormInput
           id='buyer-fullName'
           type='text'
+          variant='auth'
           placeholder={t(StringKey.FULL_NAME_PLACEHOLDER)}
           {...register('fullName')}
-          className={cn(
-            'w-full rounded-xl border px-4 py-4 text-base outline-none transition-colors placeholder:text-muted-foreground',
-            'bg-white focus:ring-2 focus:ring-(--brand-green)/30',
-            errors.fullName
-              ? 'border-destructive bg-destructive/5 focus:ring-destructive/20'
-              : 'border-border'
-          )}
+          hasError={!!errors.fullName}
         />
         {errors.fullName && <p className='text-destructive text-xs'>{errors.fullName.message}</p>}
       </div>
@@ -118,18 +115,14 @@ export const BuyerForm = () => {
           {t(StringKey.EMAIL_ADDRESS)}
         </label>
         <div className='relative'>
-          <input
+          <FormInput
             id='buyer-email'
             type='email'
+            variant='auth'
             placeholder={t(StringKey.BUYER_EMAIL_PLACEHOLDER)}
             {...register('email')}
-            className={cn(
-              'w-full rounded-xl border px-4 py-4 text-base outline-none transition-colors placeholder:text-muted-foreground',
-              'bg-white focus:ring-2 focus:ring-(--brand-green)/30',
-              errors.email
-                ? 'border-destructive bg-destructive/5 pr-11 focus:ring-destructive/20'
-                : 'border-border'
-            )}
+            hasError={!!errors.email}
+            className={errors.email ? 'pr-11' : undefined}
           />
           {errors.email && (
             <AlertCircle
@@ -152,18 +145,14 @@ export const BuyerForm = () => {
           {t(StringKey.PASSWORD)}
         </label>
         <div className='relative'>
-          <input
+          <FormInput
             id='buyer-password'
             type={showPassword ? 'text' : 'password'}
+            variant='auth'
             placeholder={t(StringKey.PASSWORD_PLACEHOLDER)}
             {...register('password')}
-            className={cn(
-              'w-full rounded-xl border px-4 py-4 pr-11 text-base outline-none transition-colors placeholder:text-muted-foreground',
-              'bg-white focus:ring-2 focus:ring-(--brand-green)/30',
-              errors.password
-                ? 'border-destructive bg-destructive/5 focus:ring-destructive/20'
-                : 'border-border'
-            )}
+            hasError={!!errors.password}
+            className='pr-11'
           />
           <button
             type='button'
@@ -214,13 +203,9 @@ export const BuyerForm = () => {
         )}
       </div>
 
-      <button
-        type='submit'
-        disabled={isPending}
-        className='w-full rounded-xl py-4.5 text-lg font-semibold text-white transition-colors cursor-pointer mt-1 bg-brand-green hover:bg-brand-green-hover disabled:opacity-60 disabled:cursor-not-allowed'
-      >
+      <Button type='submit' variant='brand' size='auth' disabled={isPending} className='mt-1'>
         {isPending ? t(StringKey.CREATING_ACCOUNT) : t(StringKey.CREATE_ACCOUNT)}
-      </button>
+      </Button>
     </form>
   );
 };

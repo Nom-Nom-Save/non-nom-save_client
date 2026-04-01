@@ -2,6 +2,7 @@ import { MoreVertical, Pencil, Upload, Trash2 } from 'lucide-react';
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { StringKey } from '@/consts/string-key.consts';
+import { Button } from '@/components/ui/button';
 
 interface TemplateCardProps {
   id: string;
@@ -46,46 +47,34 @@ export const TemplateCard = ({
           <h3 className='text-[17px] font-bold font-playfair text-foreground mb-0.5 truncate'>
             {name}
           </h3>
-          <p className='text-[13px] text-foreground/45 truncate'>{description}</p>
+          <p className='text-[13px] text-foreground/50 truncate'>{description}</p>
           {weight != null && weight > 0 && (
-            <p className='text-[11px] text-foreground/40 mt-0.5'>{weight}g</p>
+            <p className='text-[11px] text-foreground/50 mt-0.5'>{weight}g</p>
           )}
         </div>
       </div>
 
       <div className='flex items-center justify-between sm:contents'>
         <div className='text-right min-w-[90px] sm:min-w-[100px] shrink-0'>
-          <p className='text-[11px] text-foreground/40 mb-0.5'>{t(StringKey.REC_PRICE)}</p>
+          <p className='text-[11px] text-foreground/50 mb-0.5'>{t(StringKey.REC_PRICE)}</p>
           <p className='text-[15px] font-bold text-foreground/60'>€{recommendedPrice.toFixed(2)}</p>
         </div>
 
         <div className='flex items-center gap-2 shrink-0'>
-          <button
-            type='button'
-            onClick={() => onEdit(id)}
-            className='flex items-center gap-1.5 px-3 sm:px-[18px] py-2 rounded-full border-[1.5px] border-border bg-white text-[13px] font-semibold text-foreground cursor-pointer transition-colors hover:border-brand-green'
-          >
+          <Button type='button' variant='outline-pill' size='pill' onClick={() => onEdit(id)}>
             <Pencil size={14} />
             <span className='hidden sm:inline'>{t(StringKey.EDIT)}</span>
-          </button>
+          </Button>
 
-          <button
-            type='button'
-            onClick={() => onPublish(id)}
-            className='flex items-center gap-1.5 px-3 sm:px-5 py-2 rounded-full text-[13px] font-bold cursor-pointer transition-colors shadow-sm bg-brand-green text-white hover:bg-brand-green-hover'
-          >
+          <Button type='button' variant='brand' size='pill' onClick={() => onPublish(id)} className='shadow-sm'>
             <Upload size={14} />
             <span className='hidden sm:inline'>{t(StringKey.PUBLISH_TO_MENU_BTN)}</span>
-          </button>
+          </Button>
 
           <div className='relative'>
-            <button
-              type='button'
-              onClick={() => setMenuOpen(!menuOpen)}
-              className='w-[34px] h-[34px] rounded-full bg-brand-cream border border-border flex items-center justify-center cursor-pointer transition-colors hover:bg-destructive/10 shrink-0'
-            >
-              <MoreVertical size={16} className='text-foreground/40' />
-            </button>
+            <Button type='button' variant='ghost-circle' size='icon-circle' onClick={() => setMenuOpen(!menuOpen)}>
+              <MoreVertical size={16} className='text-foreground/50' />
+            </Button>
             {menuOpen && (
               <>
                 <div className='fixed inset-0 z-10' onClick={() => setMenuOpen(false)} />

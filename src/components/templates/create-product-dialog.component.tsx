@@ -16,6 +16,8 @@ import type { ProductResponse } from '@/types/product.types';
 import { ApiError } from '@/api/client';
 import { useTranslation } from 'react-i18next';
 import { StringKey } from '@/consts/string-key.consts';
+import { Button } from '@/components/ui/button';
+import { FormInput, formInputVariants } from '@/components/ui/form-input';
 
 interface CreateProductDialogProps {
   open: boolean;
@@ -116,13 +118,6 @@ export const CreateProductDialog = ({
     }
   };
 
-  const inputClass = (hasError: boolean) =>
-    cn(
-      'w-full rounded-xl border px-3 py-2.5 text-sm outline-none transition-colors bg-white',
-      'focus:ring-2 focus:ring-brand-green/30',
-      hasError ? 'border-destructive' : 'border-border'
-    );
-
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent className='sm:max-w-[520px] max-h-[90vh] overflow-y-auto bg-brand-cream'>
@@ -141,10 +136,10 @@ export const CreateProductDialog = ({
               {t(StringKey.NAME)}
             </label>
             <div className='relative'>
-              <input
+              <FormInput
                 id='product-name'
                 {...register('name')}
-                className={inputClass(!!errors.name)}
+                hasError={!!errors.name}
               />
               {errors.name && (
                 <AlertCircle
@@ -161,11 +156,11 @@ export const CreateProductDialog = ({
               {t(StringKey.PICTURE_URL)}
             </label>
             <div className='flex gap-3 items-start'>
-              <input
+              <FormInput
                 id='product-picture'
                 type='url'
                 {...register('picture')}
-                className={cn(inputClass(false), 'flex-1')}
+                className='flex-1'
                 placeholder='https://'
               />
               {pictureUrl && (
@@ -189,7 +184,7 @@ export const CreateProductDialog = ({
               id='product-description'
               rows={3}
               {...register('description')}
-              className={cn(inputClass(!!errors.description), 'resize-none')}
+              className={cn(formInputVariants({ hasError: !!errors.description }), 'resize-none')}
             />
             {errors.description && (
               <p className='text-destructive text-xs'>{errors.description.message}</p>
@@ -201,12 +196,12 @@ export const CreateProductDialog = ({
               <label htmlFor='product-price' className='text-sm font-medium'>
                 {t(StringKey.ORIGINAL_PRICE)}
               </label>
-              <input
+              <FormInput
                 id='product-price'
                 type='number'
                 step='0.01'
                 {...register('recommendedPrice', { valueAsNumber: true })}
-                className={inputClass(!!errors.recommendedPrice)}
+                hasError={!!errors.recommendedPrice}
               />
               {errors.recommendedPrice && (
                 <p className='text-destructive text-xs'>{errors.recommendedPrice.message}</p>
@@ -217,12 +212,11 @@ export const CreateProductDialog = ({
               <label htmlFor='product-weight' className='text-sm font-medium'>
                 {t(StringKey.WEIGHT)}
               </label>
-              <input
+              <FormInput
                 id='product-weight'
                 type='number'
                 step='0.01'
                 {...register('weight', { valueAsNumber: true })}
-                className={inputClass(false)}
               />
             </div>
           </div>
@@ -262,17 +256,13 @@ export const CreateProductDialog = ({
             />
           </div>
 
-          <button
-            type='submit'
-            disabled={isPending}
-            className='w-full rounded-xl py-3 text-sm font-semibold text-white transition-colors cursor-pointer mt-2 bg-brand-green hover:bg-brand-green-hover disabled:opacity-60 disabled:cursor-not-allowed'
-          >
+          <Button type='submit' variant='brand' size='dialog' disabled={isPending} className='mt-2'>
             {isPending
               ? t(StringKey.SAVING)
               : isEditing
                 ? t(StringKey.SAVE_CHANGES)
                 : t(StringKey.CREATE_PRODUCT)}
-          </button>
+          </Button>
         </form>
       </DialogContent>
     </Dialog>

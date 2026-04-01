@@ -48,7 +48,7 @@ const AvailableNow = () => {
     <section className='py-10'>
       <div className='flex justify-between items-center'>
         <div>
-          <h2 className='text-[3.25rem] text-start font-bold font-playfair'>
+          <h2 className='text-3xl text-start font-bold font-playfair'>
             {t(StringKey.AVAILABLE_NOW)}
           </h2>
           <h4 className='text-muted-foreground font-lg text-start mb-8'>

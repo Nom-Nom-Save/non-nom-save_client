@@ -2,7 +2,8 @@ import { useForm, useWatch, Controller } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { toast } from 'sonner';
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
-import { cn } from '@/lib/utils';
+import { Button } from '@/components/ui/button';
+import { FormInput } from '@/components/ui/form-input';
 import {
   publishMenuSchema,
   type PublishMenuFormData,
@@ -18,13 +19,6 @@ const toDatetimeLocal = (date: Date) => {
   const pad = (n: number) => String(n).padStart(2, '0');
   return `${date.getFullYear()}-${pad(date.getMonth() + 1)}-${pad(date.getDate())}T${pad(date.getHours())}:${pad(date.getMinutes())}`;
 };
-
-const inputClass = (hasError: boolean) =>
-  cn(
-    'w-full rounded-xl border px-3 py-2.5 text-sm outline-none transition-colors bg-white',
-    'focus:ring-2 focus:ring-brand-green/30',
-    hasError ? 'border-destructive' : 'border-border'
-  );
 
 interface PublishDialogProps {
   open: boolean;
@@ -114,12 +108,12 @@ export const PublishDialog = ({
               <label htmlFor='publish-original-price' className='text-sm font-medium'>
                 {t(StringKey.ORIGINAL_PRICE)}
               </label>
-              <input
+              <FormInput
                 id='publish-original-price'
                 type='number'
                 step='0.01'
                 {...register('originalPrice', { valueAsNumber: true })}
-                className={inputClass(!!errors.originalPrice)}
+                hasError={!!errors.originalPrice}
               />
               {errors.originalPrice && (
                 <p className='text-destructive text-xs'>{errors.originalPrice.message}</p>
@@ -130,12 +124,12 @@ export const PublishDialog = ({
               <label htmlFor='publish-discount-price' className='text-sm font-medium'>
                 {t(StringKey.DISCOUNT_PRICE)}
               </label>
-              <input
+              <FormInput
                 id='publish-discount-price'
                 type='number'
                 step='0.01'
                 {...register('discountPrice', { valueAsNumber: true })}
-                className={inputClass(!!errors.discountPrice)}
+                hasError={!!errors.discountPrice}
               />
               {errors.discountPrice && (
                 <p className='text-destructive text-xs'>{errors.discountPrice.message}</p>
@@ -147,11 +141,11 @@ export const PublishDialog = ({
             <label htmlFor='publish-quantity' className='text-sm font-medium'>
               {t(StringKey.QUANTITY)}
             </label>
-            <input
+            <FormInput
               id='publish-quantity'
               type='number'
               {...register('totalQuantity', { valueAsNumber: true })}
-              className={inputClass(!!errors.totalQuantity)}
+              hasError={!!errors.totalQuantity}
             />
             {errors.totalQuantity && (
               <p className='text-destructive text-xs'>{errors.totalQuantity.message}</p>
@@ -193,13 +187,9 @@ export const PublishDialog = ({
             {errors.endTime && <p className='text-destructive text-xs'>{errors.endTime.message}</p>}
           </div>
 
-          <button
-            type='submit'
-            disabled={isPending}
-            className='w-full rounded-xl py-3 text-sm font-semibold text-white transition-colors cursor-pointer mt-2 bg-brand-green hover:bg-brand-green-hover disabled:opacity-60 disabled:cursor-not-allowed'
-          >
+          <Button type='submit' variant='brand' size='dialog' disabled={isPending} className='mt-2'>
             {isPending ? t(StringKey.PUBLISHING) : t(StringKey.PUBLISH_TO_MENU)}
-          </button>
+          </Button>
         </form>
       </DialogContent>
     </Dialog>

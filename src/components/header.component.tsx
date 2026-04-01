@@ -3,6 +3,7 @@ import { Link, useNavigate, useRouterState } from '@tanstack/react-router';
 import { useTranslation } from 'react-i18next';
 import { LogOut } from 'lucide-react';
 import { cn } from '@/lib/utils';
+import { Button } from '@/components/ui/button';
 import { useAuthStore } from '@/store/auth.store';
 import { useEstablishmentProfileQuery } from '@/queries/establishment.queries';
 import logoUrl from '@/assets/NomNomSave-Logo.svg';
@@ -45,20 +46,14 @@ const Header = () => {
       </div>
       <div className='flex flex-col sm:flex-row gap-3 items-center'>
         <Link to='/login'>
-          <button
-            type='button'
-            className='rounded-xl py-2 px-5 text-md font-semibold text-brand-green border border-brand-green transition-colors cursor-pointer hover:bg-brand-green hover:text-white'
-          >
+          <Button type='button' variant='brand-outline' className='rounded-xl py-2 px-5 text-base'>
             {t(StringKey.LOG_IN)}
-          </button>
+          </Button>
         </Link>
         <Link to='/register'>
-          <button
-            type='button'
-            className='rounded-xl py-2 px-5 text-md font-semibold text-white transition-colors cursor-pointer bg-brand-green hover:bg-brand-green-hover'
-          >
+          <Button type='button' variant='brand' className='rounded-xl py-2 px-5 text-base'>
             {t(StringKey.SING_IN)}
-          </button>
+          </Button>
         </Link>
       </div>
     </header>
@@ -106,14 +101,9 @@ const UserHeader: FC<UserHeaderProps> = ({ t, location, handleLogout }) => {
         </div>
 
         <div className='flex items-center gap-4'>
-          <button
-            type='button'
-            onClick={handleLogout}
-            className='w-9 h-9 rounded-full bg-brand-cream border border-border flex items-center justify-center cursor-pointer hover:bg-destructive/10 transition-colors'
-            title={t(StringKey.LOGOUT)}
-          >
+          <Button type='button' variant='ghost-circle' className='w-9 h-9 rounded-full' onClick={handleLogout} title={t(StringKey.LOGOUT)}>
             <LogOut size={18} className='text-foreground/50' />
-          </button>
+          </Button>
           <Link to='/profile/settings' className='flex items-center gap-2'>
             <div className='w-[38px] h-[38px] rounded-full bg-brand-green-muted border-2 border-brand-green flex items-center justify-center'>
               <span className='text-sm font-bold text-brand-green'>
@@ -166,14 +156,9 @@ const EstablishmentHeader = ({ t, location, handleLogout }: EstablishmentHeaderP
         </div>
 
         <div className='flex items-center gap-4'>
-          <button
-            type='button'
-            onClick={handleLogout}
-            className='w-9 h-9 rounded-full bg-brand-cream border border-border flex items-center justify-center cursor-pointer hover:bg-destructive/10 transition-colors'
-            title={t(StringKey.LOGOUT)}
-          >
+          <Button type='button' variant='ghost-circle' className='w-9 h-9 rounded-full' onClick={handleLogout} title={t(StringKey.LOGOUT)}>
             <LogOut size={18} className='text-foreground/50' />
-          </button>
+          </Button>
           <Link to='/settings' className='flex items-center gap-2'>
             <div className='w-[38px] h-[38px] rounded-full bg-brand-green-muted border-2 border-brand-green flex items-center justify-center'>
               <span className='text-sm font-bold text-brand-green'>

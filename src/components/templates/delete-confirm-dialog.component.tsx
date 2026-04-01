@@ -1,6 +1,7 @@
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
 import { useTranslation } from 'react-i18next';
 import { StringKey } from '@/consts/string-key.consts';
+import { Button } from '@/components/ui/button';
 
 interface DeleteConfirmDialogProps {
   open: boolean;
@@ -32,21 +33,12 @@ export const DeleteConfirmDialog = ({
         </p>
 
         <div className='flex gap-3 mt-4'>
-          <button
-            type='button'
-            onClick={() => onOpenChange(false)}
-            className='flex-1 rounded-xl border border-border py-2.5 bg-background text-sm font-medium text-foreground hover:bg-muted transition-colors cursor-pointer'
-          >
+          <Button type='button' variant='outline' className='flex-1 rounded-xl py-2.5 text-sm font-medium cursor-pointer' onClick={() => onOpenChange(false)}>
             {t(StringKey.CANCEL)}
-          </button>
-          <button
-            type='button'
-            onClick={onConfirm}
-            disabled={isPending}
-            className='flex-1 rounded-xl py-2.5 text-sm font-medium text-white bg-destructive hover:bg-destructive/90 transition-colors cursor-pointer disabled:opacity-60 disabled:cursor-not-allowed'
-          >
+          </Button>
+          <Button type='button' variant='destructive' className='flex-1 rounded-xl py-2.5 text-sm font-medium cursor-pointer' disabled={isPending} onClick={onConfirm}>
             {isPending ? t(StringKey.DELETING) : t(StringKey.DELETE)}
-          </button>
+          </Button>
         </div>
       </DialogContent>
     </Dialog>

@@ -15,6 +15,8 @@ import { ApiError } from '@/api/client';
 import { useTranslation } from 'react-i18next';
 import { StringKey } from '@/consts/string-key.consts';
 import { searchCityOrCountry, type NominatimFeature } from '@/api/nominatim.api';
+import { Button } from '@/components/ui/button';
+import { FormInput } from '@/components/ui/form-input';
 
 export const BusinessForm = () => {
   const { t } = useTranslation();
@@ -117,18 +119,13 @@ export const BusinessForm = () => {
         >
           {t(StringKey.BUSINESS_NAME)}
         </label>
-        <input
+        <FormInput
           id='business-name'
           type='text'
+          variant='auth'
           placeholder={t(StringKey.BUSINESS_NAME_PLACEHOLDER)}
           {...register('establishmentName')}
-          className={cn(
-            'w-full rounded-xl border px-4 py-4 text-base outline-none transition-colors placeholder:text-muted-foreground',
-            'bg-white focus:ring-2 focus:ring-(--brand-green)/30',
-            errors.establishmentName
-              ? 'border-destructive bg-destructive/5 focus:ring-destructive/20'
-              : 'border-border'
-          )}
+          hasError={!!errors.establishmentName}
         />
         {errors.establishmentName && (
           <p className='text-destructive text-xs'>{errors.establishmentName.message}</p>
@@ -146,18 +143,14 @@ export const BusinessForm = () => {
           {t(StringKey.EMAIL_ADDRESS)}
         </label>
         <div className='relative'>
-          <input
+          <FormInput
             id='business-email'
             type='email'
+            variant='auth'
             placeholder={t(StringKey.BUSINESS_EMAIL_PLACEHOLDER)}
             {...register('email')}
-            className={cn(
-              'w-full rounded-xl border px-4 py-4 text-base outline-none transition-colors placeholder:text-muted-foreground',
-              'bg-white focus:ring-2 focus:ring-(--brand-green)/30',
-              errors.email
-                ? 'border-destructive bg-destructive/5 pr-11 focus:ring-destructive/20'
-                : 'border-border'
-            )}
+            hasError={!!errors.email}
+            className={errors.email ? 'pr-11' : undefined}
           />
           {errors.email && (
             <AlertCircle
@@ -180,9 +173,10 @@ export const BusinessForm = () => {
           {t(StringKey.STORE_ADDRESS)}
         </label>
         <div className='relative'>
-          <input
+          <FormInput
             id='business-address'
             type='text'
+            variant='auth'
             placeholder={t(StringKey.STORE_ADDRESS_PLACEHOLDER)}
             {...register('address')}
             value={search}
@@ -193,13 +187,8 @@ export const BusinessForm = () => {
                 setIsAddressSelected(false);
               }
             }}
-            className={cn(
-              'w-full rounded-xl border px-4 py-4 text-base outline-none transition-colors placeholder:text-muted-foreground',
-              'bg-white focus:ring-2 focus:ring-(--brand-green)/30',
-              errors.address
-                ? 'border-destructive bg-destructive/5 pr-11 focus:ring-destructive/20'
-                : 'border-border'
-            )}
+            hasError={!!errors.address}
+            className={errors.address ? 'pr-11' : undefined}
             onFocus={() => addressResults.length > 0 && setShowDropdown(true)}
             onBlur={() => {
               setTimeout(() => {
@@ -227,7 +216,7 @@ export const BusinessForm = () => {
                     setIsAddressSelected(true);
                     setShowDropdown(false);
                   }}
-                  className='px-4 py-3 text-sm cursor-pointer hover:bg-muted transition-colors first:rounded-t-xl last:rounded-b-xl'
+                  className='px-4 py-4 text-base cursor-pointer hover:bg-muted transition-colors first:rounded-t-xl last:rounded-b-xl'
                 >
                   {result.properties.displayName}
                 </li>
@@ -249,18 +238,14 @@ export const BusinessForm = () => {
           {t(StringKey.PASSWORD)}
         </label>
         <div className='relative'>
-          <input
+          <FormInput
             id='business-password'
             type={showPassword ? 'text' : 'password'}
+            variant='auth'
             placeholder={t(StringKey.PASSWORD_PLACEHOLDER)}
             {...register('password')}
-            className={cn(
-              'w-full rounded-xl border px-4 py-4 pr-11 text-base outline-none transition-colors placeholder:text-muted-foreground',
-              'bg-white focus:ring-2 focus:ring-(--brand-green)/30',
-              errors.password
-                ? 'border-destructive bg-destructive/5 focus:ring-destructive/20'
-                : 'border-border'
-            )}
+            hasError={!!errors.password}
+            className='pr-11'
           />
           <button
             type='button'
@@ -311,13 +296,9 @@ export const BusinessForm = () => {
         )}
       </div>
 
-      <button
-        type='submit'
-        disabled={isPending}
-        className='w-full rounded-xl py-4.5 text-lg font-semibold text-white transition-colors cursor-pointer mt-1 bg-brand-green hover:bg-brand-green-hover disabled:opacity-60 disabled:cursor-not-allowed'
-      >
+      <Button type='submit' variant='brand' size='auth' disabled={isPending} className='mt-1'>
         {isPending ? t(StringKey.CREATING_ACCOUNT) : t(StringKey.CREATE_ACCOUNT)}
-      </button>
+      </Button>
     </form>
   );
 };

@@ -10,6 +10,7 @@ import { ApiError } from '@/api/client';
 import { useTranslation } from 'react-i18next';
 import { StringKey } from '@/consts/string-key.consts';
 import { cn } from '@/lib/utils';
+import { Button } from '@/components/ui/button';
 
 const DAYS = [
   'monday',
@@ -149,14 +150,9 @@ export const WorkingHoursEditor = ({ initialHours }: WorkingHoursEditorProps) =>
         );
       })}
 
-      <button
-        type='button'
-        onClick={handleSave}
-        disabled={isPending}
-        className='w-full sm:w-auto self-start flex items-center justify-center gap-2 px-7 py-3 rounded-full text-sm font-bold text-white bg-brand-green hover:bg-brand-green-hover transition-colors cursor-pointer shadow-md disabled:opacity-60 disabled:cursor-not-allowed mt-2'
-      >
+      <Button type='button' variant='brand' size='settings' onClick={handleSave} disabled={isPending} className='w-full sm:w-auto mt-2'>
         {isPending ? t(StringKey.SAVING) : t(StringKey.SAVE_HOURS)}
-      </button>
+      </Button>
     </div>
   );
 };

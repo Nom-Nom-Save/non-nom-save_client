@@ -7,6 +7,8 @@ import { useVerifyEmailMutation } from '@/queries/auth.queries';
 import { ApiError } from '@/api/client';
 import { useTranslation } from 'react-i18next';
 import { StringKey } from '@/consts/string-key.consts';
+import { Button } from '@/components/ui/button';
+import { FormInput } from '@/components/ui/form-input';
 
 interface VerifyEmailFormProps {
   email: string;
@@ -127,7 +129,7 @@ export const VerifyEmailForm = ({ email }: VerifyEmailFormProps) => {
                 'focus:ring-2',
                 hasError
                   ? 'border-destructive bg-destructive/5 focus:ring-destructive/20 text-destructive'
-                  : 'border-border focus:ring-(--brand-green)/30'
+                  : 'border-border focus:ring-brand-green/30'
               )}
             />
           ))}
@@ -137,13 +139,9 @@ export const VerifyEmailForm = ({ email }: VerifyEmailFormProps) => {
         )}
       </div>
 
-      <button
-        type='submit'
-        disabled={isPending}
-        className='w-full rounded-xl py-4.5 text-lg font-semibold text-white transition-colors cursor-pointer bg-brand-green hover:bg-brand-green-hover disabled:opacity-60 disabled:cursor-not-allowed'
-      >
+      <Button type='submit' variant='brand' size='auth' disabled={isPending}>
         {isPending ? t(StringKey.VERIFYING_EMAIL) : t(StringKey.VERIFY_EMAIL)}
-      </button>
+      </Button>
     </form>
   );
 };

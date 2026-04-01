@@ -3,7 +3,8 @@ import { useForm, useWatch, Controller } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { toast } from 'sonner';
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
-import { cn } from '@/lib/utils';
+import { Button } from '@/components/ui/button';
+import { FormInput } from '@/components/ui/form-input';
 import {
   publishMenuSchema,
   type PublishMenuFormData,
@@ -33,13 +34,6 @@ export const EditMenuItemDialog = ({ open, onOpenChange, menuItem }: EditMenuIte
   const { mutate: updateMenuItem, isPending } = useUpdateMenuItemMutation();
 
   const isProduct = menuItem?.itemType === ItemType.PRODUCT;
-
-  const fieldClass = (hasError: boolean) =>
-    cn(
-      'w-full rounded-xl border px-3 py-2.5 text-sm outline-none transition-colors bg-white',
-      'focus:ring-2 focus:ring-brand-green/30',
-      hasError ? 'border-destructive' : 'border-border'
-    );
 
   const {
     register,
@@ -113,12 +107,12 @@ export const EditMenuItemDialog = ({ open, onOpenChange, menuItem }: EditMenuIte
               <label htmlFor='edit-original-price' className='text-sm font-medium'>
                 {t(StringKey.ORIGINAL_PRICE)}
               </label>
-              <input
+              <FormInput
                 id='edit-original-price'
                 type='number'
                 step='0.01'
                 {...register('originalPrice', { valueAsNumber: true })}
-                className={fieldClass(!!errors.originalPrice)}
+                hasError={!!errors.originalPrice}
               />
               {errors.originalPrice && (
                 <p className='text-destructive text-xs'>{errors.originalPrice.message}</p>
@@ -129,12 +123,12 @@ export const EditMenuItemDialog = ({ open, onOpenChange, menuItem }: EditMenuIte
               <label htmlFor='edit-discount-price' className='text-sm font-medium'>
                 {t(StringKey.DISCOUNT_PRICE)}
               </label>
-              <input
+              <FormInput
                 id='edit-discount-price'
                 type='number'
                 step='0.01'
                 {...register('discountPrice', { valueAsNumber: true })}
-                className={fieldClass(!!errors.discountPrice)}
+                hasError={!!errors.discountPrice}
               />
               {errors.discountPrice && (
                 <p className='text-destructive text-xs'>{errors.discountPrice.message}</p>
@@ -146,11 +140,11 @@ export const EditMenuItemDialog = ({ open, onOpenChange, menuItem }: EditMenuIte
             <label htmlFor='edit-quantity' className='text-sm font-medium'>
               {t(StringKey.QUANTITY)}
             </label>
-            <input
+            <FormInput
               id='edit-quantity'
               type='number'
               {...register('totalQuantity', { valueAsNumber: true })}
-              className={fieldClass(!!errors.totalQuantity)}
+              hasError={!!errors.totalQuantity}
             />
             {errors.totalQuantity && (
               <p className='text-destructive text-xs'>{errors.totalQuantity.message}</p>
@@ -234,13 +228,9 @@ export const EditMenuItemDialog = ({ open, onOpenChange, menuItem }: EditMenuIte
             </div>
           </div>
 
-          <button
-            type='submit'
-            disabled={isPending}
-            className='w-full rounded-xl py-3 text-sm font-semibold text-white transition-colors cursor-pointer mt-2 bg-brand-green hover:bg-brand-green-hover disabled:opacity-60 disabled:cursor-not-allowed'
-          >
+          <Button type='submit' variant='brand' size='dialog' disabled={isPending} className='mt-2'>
             {isPending ? t(StringKey.UPDATING) : t(StringKey.SAVE_CHANGES)}
-          </button>
+          </Button>
         </form>
       </DialogContent>
     </Dialog>

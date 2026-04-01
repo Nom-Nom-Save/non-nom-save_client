@@ -2,7 +2,6 @@ import { useEffect } from 'react';
 import { useForm, useWatch } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { toast } from 'sonner';
-import { cn } from '@/lib/utils';
 import {
   brandImagesSchema,
   type BrandImagesFormData,
@@ -12,13 +11,8 @@ import { useEstablishmentStore } from '@/store/establishment.store';
 import { ApiError } from '@/api/client';
 import { useTranslation } from 'react-i18next';
 import { StringKey } from '@/consts/string-key.consts';
-
-const inputClass = (hasError: boolean) =>
-  cn(
-    'w-full px-4 py-3 border-[1.5px] rounded-xl bg-brand-cream text-sm font-medium outline-none transition-colors',
-    'focus:border-brand-green focus:bg-white',
-    hasError ? 'border-destructive' : 'border-border'
-  );
+import { Button } from '@/components/ui/button';
+import { FormInput } from '@/components/ui/form-input';
 
 export const BrandImagesForm = () => {
   const { t } = useTranslation();
@@ -76,11 +70,13 @@ export const BrandImagesForm = () => {
           {t(StringKey.LOGO_URL)}
         </label>
         <div className='flex gap-3 items-center'>
-          <input
+          <FormInput
             {...register('logo')}
             type='url'
+            variant='settings'
             placeholder='https://'
-            className={cn(inputClass(!!errors.logo), 'flex-1')}
+            hasError={!!errors.logo}
+            className='flex-1'
           />
           {logoUrl && (
             <div className='w-12 h-12 rounded-xl border-[1.5px] border-border overflow-hidden shrink-0 bg-brand-cream'>
@@ -100,11 +96,12 @@ export const BrandImagesForm = () => {
         <label className='text-xs font-bold text-foreground/50 uppercase tracking-wider'>
           {t(StringKey.BANNER_URL)}
         </label>
-        <input
+        <FormInput
           {...register('banner')}
           type='url'
+          variant='settings'
           placeholder='https://'
-          className={inputClass(!!errors.banner)}
+          hasError={!!errors.banner}
         />
         {errors.banner && <p className='text-destructive text-xs'>{errors.banner.message}</p>}
         {bannerUrl && (
@@ -119,13 +116,9 @@ export const BrandImagesForm = () => {
         )}
       </div>
 
-      <button
-        type='submit'
-        disabled={isPending}
-        className='w-full sm:w-auto self-start flex items-center justify-center gap-2 px-7 py-3 rounded-full text-sm font-bold text-white bg-brand-green hover:bg-brand-green-hover transition-colors cursor-pointer shadow-md disabled:opacity-60 disabled:cursor-not-allowed'
-      >
+      <Button type='submit' variant='brand' size='settings' disabled={isPending} className='w-full sm:w-auto'>
         {isPending ? t(StringKey.SAVING) : t(StringKey.SAVE_CHANGES)}
-      </button>
+      </Button>
     </form>
   );
 };

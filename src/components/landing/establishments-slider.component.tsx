@@ -97,7 +97,7 @@ const EstablishmentsSlider: FC<EstablishmentsSliderProps> = ({ establishments })
           {establishments.map(establishment => (
             <div
               key={establishment.id}
-              className={cn('min-w-0 bg-white rounded-4xl p-6', slideClass)}
+              className={cn('min-w-0 bg-white rounded-[1.25rem] p-6', slideClass)}
             >
               {establishment.logo ? (
                 <img className='mx-auto w-32 h-32 mb-4' src={`${establishment.logo}`} />
@@ -105,8 +105,8 @@ const EstablishmentsSlider: FC<EstablishmentsSliderProps> = ({ establishments })
                 <Store className='mx-auto w-32 h-32 mb-4' />
               )}
               <p className='font-bold text-xl font-playfair mb-2'>{establishment.name}</p>
-              <p className='text-[#94A3B8] text-sm'>{establishment.address}</p>
-              <p className='text-[#94A3B8]'>{establishment.description}</p>
+              <p className='text-muted-foreground text-sm'>{establishment.address}</p>
+              <p className='text-muted-foreground'>{establishment.description}</p>
             </div>
           ))}
         </div>
@@ -120,7 +120,7 @@ const EstablishmentsSlider: FC<EstablishmentsSliderProps> = ({ establishments })
               onClick={() => scrollTo(index)}
               className={cn(
                 'rounded-full transition-all',
-                selectedIndex === index ? 'h-2.5 w-2.5 bg-brand-green' : 'h-2 w-2 bg-[#C4C4C4]'
+                selectedIndex === index ? 'h-2.5 w-2.5 bg-brand-green' : 'h-2 w-2 bg-border'
               )}
             />
           ))}

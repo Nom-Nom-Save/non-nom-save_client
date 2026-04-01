@@ -8,8 +8,9 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { AlertCircle } from 'lucide-react';
 import { Controller, useForm } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
-import { inputClass } from '../settings/profile-form.component';
 import { useUpdateUserProfileMutation } from '@/queries/user.queries';
+import { Button } from '@/components/ui/button';
+import { FormInput } from '@/components/ui/form-input';
 import { toast } from 'sonner';
 import { ApiError } from '@/api/client';
 import Toggle from '../ui/toggle';
@@ -80,7 +81,7 @@ const ProfileSettings = () => {
         <h2 className='text-brand-green font-bold font-playfair text-3xl mb-3'>
           {t(StringKey.PROFILE_SETTINGS)}
         </h2>
-        <p className='text-[#4B5563] text-lg'>{t(StringKey.PROFILE_SETTINGS_DESCRIPTION)}</p>
+        <p className='text-foreground/50 text-lg'>{t(StringKey.PROFILE_SETTINGS_DESCRIPTION)}</p>
       </div>
       <div>
         <h3
@@ -103,11 +104,12 @@ const ProfileSettings = () => {
               {t(StringKey.FULL_NAME).toUpperCase()}
             </label>
 
-            <input
+            <FormInput
               id='fullName'
               type='text'
+              variant='settings'
               {...register('fullName')}
-              className={inputClass(!!errors.fullName)}
+              hasError={!!errors.fullName}
               placeholder={t(StringKey.FULL_NAME_PLACEHOLDER)}
               disabled={isPending}
             />
@@ -125,11 +127,12 @@ const ProfileSettings = () => {
             </label>
 
             <div className='relative'>
-              <input
+              <FormInput
                 id='user-email'
                 type='email'
+                variant='settings'
                 {...register('email')}
-                className={inputClass(!!errors.email)}
+                hasError={!!errors.email}
                 placeholder={t(StringKey.BUYER_EMAIL_PLACEHOLDER)}
                 disabled={isPending}
               />
@@ -185,20 +188,12 @@ const ProfileSettings = () => {
           </div>
 
           <div className='flex gap-2 justify-end'>
-            <button
-              type='button'
-              onClick={() => handleCancel()}
-              className='w-full sm:w-auto self-start flex items-center justify-center gap-2 px-7 py-3 rounded-full text-sm font-bold bg-background border border-border text-foreground hover:bg-muted transition-colors cursor-pointer'
-            >
+            <Button type='button' variant='outline' size='settings' onClick={() => handleCancel()} className='w-full sm:w-auto shadow-none'>
               {t(StringKey.CANCEL)}
-            </button>
-            <button
-              type='submit'
-              disabled={isPending}
-              className='w-full sm:w-auto self-start flex items-center justify-center gap-2 px-7 py-3 rounded-full text-sm font-bold text-white bg-brand-green hover:bg-brand-green-hover transition-colors cursor-pointer shadow-md disabled:opacity-60 disabled:cursor-not-allowed'
-            >
+            </Button>
+            <Button type='submit' variant='brand' size='settings' disabled={isPending} className='w-full sm:w-auto'>
               {isPending ? t(StringKey.SAVING) : t(StringKey.SAVE_CHANGES)}
-            </button>
+            </Button>
           </div>
         </form>
       </div>

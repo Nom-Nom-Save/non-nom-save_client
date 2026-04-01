@@ -12,6 +12,8 @@ import { ApiError } from '@/api/client';
 import googleIcon from '@/assets/google-icon.svg';
 import { StringKey } from '@/consts/string-key.consts';
 import { useTranslation } from 'react-i18next';
+import { Button } from '@/components/ui/button';
+import { FormInput } from '@/components/ui/form-input';
 
 export const LoginForm = () => {
   const { t } = useTranslation();
@@ -82,18 +84,14 @@ export const LoginForm = () => {
           {t(StringKey.EMAIL_ADDRESS)}
         </label>
         <div className='relative'>
-          <input
+          <FormInput
             id='login-email'
             type='email'
+            variant='auth'
             placeholder={t(StringKey.LOGIN_EMAIL_PLACEHOLDER)}
             {...register('email')}
-            className={cn(
-              'w-full rounded-xl border px-4 py-4 text-base outline-none transition-colors placeholder:text-muted-foreground',
-              'bg-white focus:ring-2 focus:ring-(--brand-green)/30',
-              errors.email
-                ? 'border-destructive bg-destructive/5 pr-11 focus:ring-destructive/20'
-                : 'border-border'
-            )}
+            hasError={!!errors.email}
+            className={errors.email ? 'pr-11' : undefined}
           />
           {errors.email && (
             <AlertCircle
@@ -124,18 +122,14 @@ export const LoginForm = () => {
           </Link>
         </div>
         <div className='relative'>
-          <input
+          <FormInput
             id='login-password'
             type={showPassword ? 'text' : 'password'}
+            variant='auth'
             placeholder={t(StringKey.PASSWORD_PLACEHOLDER)}
             {...register('password')}
-            className={cn(
-              'w-full rounded-xl border px-4 py-4 pr-11 text-base outline-none transition-colors placeholder:text-muted-foreground',
-              'bg-white focus:ring-2 focus:ring-(--brand-green)/30',
-              errors.password
-                ? 'border-destructive bg-destructive/5 focus:ring-destructive/20'
-                : 'border-border'
-            )}
+            hasError={!!errors.password}
+            className='pr-11'
           />
           <button
             type='button'
@@ -149,13 +143,9 @@ export const LoginForm = () => {
         {errors.password && <p className='text-destructive text-xs'>{errors.password.message}</p>}
       </div>
 
-      <button
-        type='submit'
-        disabled={isPending}
-        className='w-full rounded-xl py-4.5 text-lg font-semibold text-white transition-colors cursor-pointer mt-1 bg-brand-green hover:bg-brand-green-hover disabled:opacity-60 disabled:cursor-not-allowed'
-      >
+      <Button type='submit' variant='brand' size='auth' disabled={isPending} className='mt-1'>
         {isPending ? t(StringKey.SIGNING_IN) : t(StringKey.LOGIN)}
-      </button>
+      </Button>
 
       <div className='flex items-center gap-4'>
         <div className='flex-1 h-px bg-border' />
@@ -165,13 +155,10 @@ export const LoginForm = () => {
         <div className='flex-1 h-px bg-border' />
       </div>
 
-      <button
-        type='button'
-        className='w-full flex items-center justify-center gap-3 rounded-xl border border-border bg-white py-4.5 text-lg font-semibold text-foreground hover:bg-muted transition-colors cursor-pointer'
-      >
+      <Button type='button' variant='outline' size='auth' className='gap-3'>
         <img src={googleIcon} alt='Google' />
         {t(StringKey.CONTINUE_WITH_GOOGLE)}
-      </button>
+      </Button>
     </form>
   );
 };

@@ -63,8 +63,8 @@ const UserOrders = () => {
         </h2>
 
         <ul className='grid grid-cols-3 gap-2 sm:gap-4 w-full'>
-          <li className='bg-white rounded-2xl sm:rounded-3xl border border-border p-3 sm:p-6 md:p-8 shadow-sm text-center flex-1'>
-            <div className='w-10 h-10 sm:w-16 sm:h-16 bg-[#EEF8F3] rounded-full mx-auto mb-2 sm:mb-4 flex items-center justify-center'>
+          <li className='bg-white rounded-[1.25rem] border border-border p-3 sm:p-6 md:p-8 shadow-sm text-center flex-1'>
+            <div className='w-10 h-10 sm:w-16 sm:h-16 bg-brand-status-success-bg rounded-full mx-auto mb-2 sm:mb-4 flex items-center justify-center'>
               <img src={ordersBag} alt='Bag Icon' className='w-5 h-5 sm:w-8 sm:h-8' />
             </div>
             <p className='text-[10px] sm:text-xs font-bold text-foreground/50 uppercase tracking-wider leading-tight'>
@@ -72,8 +72,8 @@ const UserOrders = () => {
             </p>
             <p className='text-brand-green font-bold text-xl sm:text-3xl'>{orders?.length || 0}</p>
           </li>
-          <li className='bg-white rounded-2xl sm:rounded-3xl border border-border p-3 sm:p-6 md:p-8 shadow-sm text-center flex-1'>
-            <div className='w-10 h-10 sm:w-16 sm:h-16 bg-[#F0F9FF] rounded-full mx-auto mb-2 sm:mb-4 flex items-center justify-center'>
+          <li className='bg-white rounded-[1.25rem] border border-border p-3 sm:p-6 md:p-8 shadow-sm text-center flex-1'>
+            <div className='w-10 h-10 sm:w-16 sm:h-16 bg-brand-blue-light rounded-full mx-auto mb-2 sm:mb-4 flex items-center justify-center'>
               <img src={money} alt='Money Icon' className='w-5 h-5 sm:w-8 sm:h-8' />
             </div>
             <p className='text-[10px] sm:text-xs font-bold text-foreground/50 uppercase tracking-wider leading-tight'>
@@ -81,8 +81,8 @@ const UserOrders = () => {
             </p>
             <p className='text-brand-green font-bold text-xl sm:text-3xl'>${user?.totalSavings}</p>
           </li>
-          <li className='bg-white rounded-2xl sm:rounded-3xl border border-border p-3 sm:p-6 md:p-8 shadow-sm text-center flex-1'>
-            <div className='w-10 h-10 sm:w-16 sm:h-16 bg-[#F1F8F5] rounded-full mx-auto mb-2 sm:mb-4 flex items-center justify-center'>
+          <li className='bg-white rounded-[1.25rem] border border-border p-3 sm:p-6 md:p-8 shadow-sm text-center flex-1'>
+            <div className='w-10 h-10 sm:w-16 sm:h-16 bg-brand-status-success-bg rounded-full mx-auto mb-2 sm:mb-4 flex items-center justify-center'>
               <img src={recycle} alt='Recycle Icon' className='w-5 h-5 sm:w-8 sm:h-8' />
             </div>
             <p className='text-[10px] sm:text-xs font-bold text-foreground/50 uppercase tracking-wider leading-tight'>
@@ -96,11 +96,11 @@ const UserOrders = () => {
       </div>
 
       <div>
-        <h3 className='relative text-brand-green font-bold font-playfair text-xl sm:text-2xl pl-4 mb-6 before:content-[""] before:absolute before:left-0 before:top-0 before:h-full before:w-2 before:bg-[#F4A261] before:rounded-full'>
+        <h3 className='relative text-brand-green font-bold font-playfair text-xl sm:text-2xl pl-4 mb-6 before:content-[""] before:absolute before:left-0 before:top-0 before:h-full before:w-2 before:bg-brand-orange before:rounded-full'>
           {t(StringKey.UPCOMING_ORDERS)}
         </h3>
 
-        <ul className='bg-white rounded-3xl border-[1.5px] border-border p-4 md:p-8 shadow-sm flex flex-col gap-6'>
+        <ul className='bg-white rounded-[1.25rem] border-[1.5px] border-border p-4 md:p-8 shadow-sm flex flex-col gap-6'>
           {isLoading ? (
             <div className='flex justify-center'>
               <Loading />
@@ -179,9 +179,9 @@ const UserOrders = () => {
                       <span>{t(StringKey.CANCEL)}</span>
                     </button>
 
-                    <div className='flex gap-1 items-center font-bold bg-[#FFF7ED] border border-[#FFEDD5] rounded-full px-3 py-2'>
-                      <Timer className='text-[#F4A261] w-4 h-4' />
-                      <span className='text-[#F4A261] text-sm'>
+                    <div className='flex gap-1 items-center font-bold bg-brand-orange-light border border-brand-orange-border rounded-full px-3 py-2'>
+                      <Timer className='text-brand-orange w-4 h-4' />
+                      <span className='text-brand-orange text-sm'>
                         {isExpired ? t(StringKey.EXPIRED) : `${hours}h ${minutes}m`}
                       </span>
                     </div>
@@ -209,7 +209,7 @@ const UserOrders = () => {
                   </div>
 
                   <div className='flex flex-wrap justify-between items-center gap-2'>
-                    <p className='flex items-center rounded-3xl gap-2 px-3 py-2 border border-border bg-[#F3F4F6] text-sm'>
+                    <p className='flex items-center rounded-full gap-2 px-3 py-2 border border-border bg-muted text-sm'>
                       <Clock className='text-brand-green w-4 h-4 shrink-0' />
                       <span className='font-playfair'>{t(StringKey.PICKUP)}:</span>
                       <span className='text-brand-green font-bold'>
@@ -236,7 +236,7 @@ const UserOrders = () => {
           {t(StringKey.COMPLETED_ORDERS)}
         </h3>
 
-        <ul className='bg-white rounded-3xl border-[1.5px] border-border p-4 md:p-8 shadow-sm flex flex-col gap-6'>
+        <ul className='bg-white rounded-[1.25rem] border-[1.5px] border-border p-4 md:p-8 shadow-sm flex flex-col gap-6'>
           {isLoading ? (
             <div className='flex justify-center'>
               <Loading />
@@ -287,7 +287,7 @@ const UserOrders = () => {
                     </ul>
 
                     <div className='flex flex-col items-end gap-2 shrink-0'>
-                      <span className='flex items-center gap-1.5 bg-[#EEF8F3] border border-[#A7D7BE] rounded-full px-2.5 py-1 sm:px-3 sm:py-1.5 text-xs sm:text-sm font-semibold text-[#1B6B3A] whitespace-nowrap'>
+                      <span className='flex items-center gap-1.5 bg-brand-status-success-bg border border-brand-status-success-border rounded-full px-2.5 py-1 sm:px-3 sm:py-1.5 text-xs sm:text-sm font-semibold text-brand-status-success-text whitespace-nowrap'>
                         <span className='w-2 h-2 rounded-full bg-brand-green shrink-0' />
                         {t(StringKey.COMPLETED)}
                       </span>
@@ -298,7 +298,7 @@ const UserOrders = () => {
                   </div>
 
                   <div className='flex justify-end items-center mt-1'>
-                    <p className='flex items-center gap-1.5 sm:gap-2 bg-[#EEF8F3] border border-[#A7D7BE] rounded-full px-2.5 py-1 sm:px-3 sm:py-1.5 text-xs sm:text-sm font-semibold text-[#1B6B3A]'>
+                    <p className='flex items-center gap-1.5 sm:gap-2 bg-brand-status-success-bg border border-brand-status-success-border rounded-full px-2.5 py-1 sm:px-3 sm:py-1.5 text-xs sm:text-sm font-semibold text-brand-status-success-text'>
                       <CheckCircle2 className='w-3.5 h-3.5 sm:w-4 sm:h-4 shrink-0' />
                       <span>
                         {t(StringKey.PICKED_UP)} · {pickedUpDate}, {pickedUpAt}
@@ -321,7 +321,7 @@ const UserOrders = () => {
           type='single'
           collapsible
           defaultValue='item-1'
-          className='bg-white rounded-3xl border-[1.5px] border-border p-4 md:p-8 shadow-sm flex flex-col gap-6'
+          className='bg-white rounded-[1.25rem] border-[1.5px] border-border p-4 md:p-8 shadow-sm flex flex-col gap-6'
         >
           <AccordionItem value='item-1'>
             <AccordionTrigger className='text-muted-foreground font-bold text-base sm:text-xl'>
@@ -333,7 +333,7 @@ const UserOrders = () => {
               </div>
             </AccordionTrigger>
             <AccordionContent>
-              <ul className='bg-white rounded-3xl border-[1.5px] border-border p-4 md:p-8 shadow-sm flex flex-col gap-6'>
+              <ul className='bg-white rounded-[1.25rem] border-[1.5px] border-border p-4 md:p-8 shadow-sm flex flex-col gap-6'>
                 {isLoading ? (
                   <div className='flex justify-center'>
                     <Loading />
@@ -386,14 +386,14 @@ const UserOrders = () => {
                               className={cn(
                                 'flex items-center gap-1.5 border rounded-full px-2.5 py-1 sm:px-3 sm:py-1.5 text-xs sm:text-sm font-semibold whitespace-nowrap',
                                 isCancelled
-                                  ? 'bg-[#FEE2E2] border-destructive text-destructive'
-                                  : 'bg-[#FFF7ED] border-[#F4A261] text-[#F4A261]'
+                                  ? 'bg-destructive/10 border-destructive text-destructive'
+                                  : 'bg-brand-orange-light border-brand-orange-border text-brand-orange'
                               )}
                             >
                               <span
                                 className={cn(
                                   'w-2 h-2 rounded-full shrink-0',
-                                  isCancelled ? 'bg-destructive' : 'bg-[#F4A261]'
+                                  isCancelled ? 'bg-destructive' : 'bg-brand-orange'
                                 )}
                               />
                               {t(isCancelled ? StringKey.CANCELLED : StringKey.EXPIRED)}

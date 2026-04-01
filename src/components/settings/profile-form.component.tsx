@@ -13,14 +13,8 @@ import { useEstablishmentStore } from '@/store/establishment.store';
 import { ApiError } from '@/api/client';
 import { useTranslation } from 'react-i18next';
 import { StringKey } from '@/consts/string-key.consts';
-
-export const inputClass = (hasError: boolean) =>
-  cn(
-    'w-full px-4 py-3 border-[1.5px] rounded-xl bg-brand-cream text-sm font-medium outline-none transition-colors',
-    'focus:border-brand-green focus:bg-white',
-    hasError ? 'border-destructive' : 'border-border',
-    'disabled:opacity-50 disabled:cursor-not-allowed disabled:bg-brand-cream'
-  );
+import { Button } from '@/components/ui/button';
+import { FormInput, formInputVariants } from '@/components/ui/form-input';
 
 export const ProfileForm = () => {
   const { t } = useTranslation();
@@ -68,7 +62,7 @@ export const ProfileForm = () => {
         <label className='text-xs font-bold text-foreground/50 uppercase tracking-wider'>
           {t(StringKey.ESTABLISHMENT_NAME)} *
         </label>
-        <input {...register('name')} className={inputClass(!!errors.name)} />
+        <FormInput variant='settings' {...register('name')} hasError={!!errors.name} />
         {errors.name && <p className='text-destructive text-xs'>{errors.name.message}</p>}
       </div>
 
@@ -79,7 +73,7 @@ export const ProfileForm = () => {
         <textarea
           rows={4}
           {...register('description')}
-          className={cn(inputClass(!!errors.description), 'resize-none')}
+          className={cn(formInputVariants({ variant: 'settings', hasError: !!errors.description }), 'resize-none')}
         />
         {errors.description && (
           <p className='text-destructive text-xs'>{errors.description.message}</p>
@@ -95,18 +89,14 @@ export const ProfileForm = () => {
             size={18}
             className='absolute left-3.5 top-1/2 -translate-y-1/2 text-foreground/35'
           />
-          <input {...register('address')} className={cn(inputClass(!!errors.address), 'pl-11')} />
+          <FormInput variant='settings' {...register('address')} hasError={!!errors.address} className='pl-11' />
         </div>
         {errors.address && <p className='text-destructive text-xs'>{errors.address.message}</p>}
       </div>
 
-      <button
-        type='submit'
-        disabled={isPending}
-        className='w-full sm:w-auto self-start flex items-center justify-center gap-2 px-7 py-3 rounded-full text-sm font-bold text-white bg-brand-green hover:bg-brand-green-hover transition-colors cursor-pointer shadow-md disabled:opacity-60 disabled:cursor-not-allowed'
-      >
+      <Button type='submit' variant='brand' size='settings' disabled={isPending} className='w-full sm:w-auto'>
         {isPending ? t(StringKey.SAVING) : t(StringKey.SAVE_CHANGES)}
-      </button>
+      </Button>
     </form>
   );
 };

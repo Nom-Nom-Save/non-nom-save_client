@@ -59,7 +59,7 @@ export const TimePicker = ({ value, onChange, min, disabled, isHighlighted }: Ti
         disabled && 'opacity-30'
       )}
     >
-      <Clock size={13} className='text-foreground/40 shrink-0' />
+      <Clock size={13} className='text-foreground/50 shrink-0' />
 
       <select
         value={h}
@@ -74,7 +74,7 @@ export const TimePicker = ({ value, onChange, min, disabled, isHighlighted }: Ti
         ))}
       </select>
 
-      <span className='text-foreground/40 font-bold text-sm'>:</span>
+      <span className='text-foreground/50 font-bold text-sm'>:</span>
 
       <select
         value={m}

@@ -13,6 +13,8 @@ import { useAuthStore } from '@/store/auth.store';
 import { ApiError } from '@/api/client';
 import { StringKey } from '@/consts/string-key.consts';
 import { useTranslation } from 'react-i18next';
+import { Button } from '@/components/ui/button';
+import { FormInput } from '@/components/ui/form-input';
 
 export const ForgotPasswordForm = () => {
   const { t } = useTranslation();
@@ -65,18 +67,14 @@ export const ForgotPasswordForm = () => {
           {t(StringKey.EMAIL_ADDRESS)}
         </label>
         <div className='relative'>
-          <input
+          <FormInput
             id='forgot-email'
             type='email'
+            variant='auth'
             placeholder={t(StringKey.EMAIL_PLACEHOLDER)}
             {...register('email')}
-            className={cn(
-              'w-full rounded-xl border px-4 py-4 text-base outline-none transition-colors placeholder:text-muted-foreground',
-              'bg-white focus:ring-2 focus:ring-(--brand-green)/30',
-              errors.email
-                ? 'border-destructive bg-destructive/5 pr-11 focus:ring-destructive/20'
-                : 'border-border'
-            )}
+            hasError={!!errors.email}
+            className={errors.email ? 'pr-11' : undefined}
           />
           {errors.email && (
             <AlertCircle
@@ -88,11 +86,7 @@ export const ForgotPasswordForm = () => {
         {errors.email && <p className='text-destructive text-xs'>{errors.email.message}</p>}
       </div>
 
-      <button
-        type='submit'
-        disabled={isPending}
-        className='w-full flex items-center justify-center gap-2 rounded-xl py-4.5 text-lg font-semibold text-white transition-colors cursor-pointer bg-brand-green hover:bg-brand-green-hover disabled:opacity-60 disabled:cursor-not-allowed'
-      >
+      <Button type='submit' variant='brand' size='auth' disabled={isPending}>
         {isPending ? (
           t(StringKey.SENDING)
         ) : (
@@ -101,7 +95,7 @@ export const ForgotPasswordForm = () => {
             <ArrowRight size={20} />
           </>
         )}
-      </button>
+      </Button>
 
       <Link
         to='/login'

@@ -1,5 +1,6 @@
 import { Pause, Play, CircleOff, Pencil, Clock } from 'lucide-react';
 import { cn } from '@/lib/utils';
+import { Button } from '@/components/ui/button';
 import { MenuStatus } from '@/types/menu.types';
 import type { MenuItemResponse } from '@/types/menu.types';
 import { useTranslation } from 'react-i18next';
@@ -70,53 +71,28 @@ export const MenuItemCard = ({
   const actionButtons = (
     <div className='flex items-center gap-2'>
       {status === MenuStatus.ACTIVE && (
-        <button
-          type='button'
-          onClick={() => onPause(id)}
-          className='w-[34px] h-[34px] rounded-full bg-brand-cream border border-border flex items-center justify-center cursor-pointer transition-colors hover:bg-border'
-          title={t(StringKey.PAUSE)}
-        >
+        <Button type='button' variant='ghost-circle' size='icon-circle' onClick={() => onPause(id)} title={t(StringKey.PAUSE)}>
           <Pause size={16} className='text-foreground/50' />
-        </button>
+        </Button>
       )}
       {status === MenuStatus.INACTIVE && (
         <>
-          <button
-            type='button'
-            onClick={() => onResume(id)}
-            className='w-[34px] h-[34px] rounded-full bg-brand-cream border border-border flex items-center justify-center cursor-pointer transition-colors hover:bg-border'
-            title={t(StringKey.RESUME)}
-          >
+          <Button type='button' variant='ghost-circle' size='icon-circle' onClick={() => onResume(id)} title={t(StringKey.RESUME)}>
             <Play size={16} className='text-foreground/50' />
-          </button>
-          <button
-            type='button'
-            onClick={() => onEdit(item)}
-            className='w-[34px] h-[34px] rounded-full bg-brand-cream border border-border flex items-center justify-center cursor-pointer transition-colors hover:bg-border'
-            title={t(StringKey.EDIT)}
-          >
+          </Button>
+          <Button type='button' variant='ghost-circle' size='icon-circle' onClick={() => onEdit(item)} title={t(StringKey.EDIT)}>
             <Pencil size={16} className='text-foreground/50' />
-          </button>
+          </Button>
         </>
       )}
       {status === MenuStatus.SOLD_OUT && (
         <>
-          <button
-            type='button'
-            onClick={() => onDeactivate(id)}
-            className='w-[34px] h-[34px] rounded-full bg-brand-cream border border-border flex items-center justify-center cursor-pointer transition-colors hover:bg-destructive/10'
-            title={t(StringKey.DEACTIVATE)}
-          >
-            <CircleOff size={16} className='text-foreground/40' />
-          </button>
-          <button
-            type='button'
-            onClick={() => onEdit(item)}
-            className='w-[34px] h-[34px] rounded-full bg-brand-cream border border-border flex items-center justify-center cursor-pointer transition-colors hover:bg-border'
-            title={t(StringKey.EDIT)}
-          >
+          <Button type='button' variant='ghost-circle-destructive' size='icon-circle' onClick={() => onDeactivate(id)} title={t(StringKey.DEACTIVATE)}>
+            <CircleOff size={16} className='text-foreground/50' />
+          </Button>
+          <Button type='button' variant='ghost-circle' size='icon-circle' onClick={() => onEdit(item)} title={t(StringKey.EDIT)}>
             <Pencil size={16} className='text-foreground/50' />
-          </button>
+          </Button>
         </>
       )}
     </div>
@@ -139,11 +115,11 @@ export const MenuItemCard = ({
           <h3 className='text-[17px] font-bold font-playfair text-foreground mb-0.5 truncate'>
             {itemDetails.name}
           </h3>
-          <p className='text-[13px] text-foreground/45 truncate'>{itemDetails.description}</p>
+          <p className='text-[13px] text-foreground/50 truncate'>{itemDetails.description}</p>
         </div>
 
         <div className='text-center min-w-[120px] shrink-0'>
-          <p className='text-[11px] text-foreground/40 mb-1'>{t(StringKey.PICKUP_WINDOW)}</p>
+          <p className='text-[11px] text-foreground/50 mb-1'>{t(StringKey.PICKUP_WINDOW)}</p>
           <div className='flex items-center gap-1.5 justify-center'>
             <Clock size={14} className='text-brand-green' />
             <span className='text-[13px] font-bold'>
@@ -153,7 +129,7 @@ export const MenuItemCard = ({
         </div>
 
         <div className='text-center min-w-[90px] shrink-0'>
-          <p className='text-[11px] text-foreground/40 mb-1'>{t(StringKey.QUANTITY)}</p>
+          <p className='text-[11px] text-foreground/50 mb-1'>{t(StringKey.QUANTITY)}</p>
           <span className={cn('text-[13px] font-bold', isSoldOut && 'text-orange-600')}>
             {priceData.availableQuantity}{' '}
             <span className='text-foreground/35 font-normal'>/ {priceData.totalQuantity}</span>
@@ -161,14 +137,14 @@ export const MenuItemCard = ({
         </div>
 
         <div className='text-right min-w-[100px] shrink-0'>
-          <p className='text-[11px] text-foreground/40 mb-0.5'>{t(StringKey.ORIGINAL_PRICE)}</p>
-          <p className='text-[13px] font-semibold text-foreground/45 line-through'>
+          <p className='text-[11px] text-foreground/50 mb-0.5'>{t(StringKey.ORIGINAL_PRICE)}</p>
+          <p className='text-[13px] font-semibold text-foreground/50 line-through'>
             €{priceData.originalPrice.toFixed(2)}
           </p>
         </div>
 
         <div className='text-right min-w-[100px] shrink-0'>
-          <p className='text-[11px] text-foreground/40 mb-0.5'>{t(StringKey.DISCOUNT)}</p>
+          <p className='text-[11px] text-foreground/50 mb-0.5'>{t(StringKey.DISCOUNT)}</p>
           <p className='text-base font-black text-brand-green'>
             €{priceData.discountPrice.toFixed(2)}
           </p>
@@ -195,7 +171,7 @@ export const MenuItemCard = ({
               </h3>
               {statusBadge}
             </div>
-            <p className='text-[13px] text-foreground/45 truncate'>{itemDetails.description}</p>
+            <p className='text-[13px] text-foreground/50 truncate'>{itemDetails.description}</p>
           </div>
         </div>
 
@@ -214,7 +190,7 @@ export const MenuItemCard = ({
           </div>
 
           <div className='flex items-center gap-2'>
-            <span className='text-[13px] font-semibold text-foreground/45 line-through'>
+            <span className='text-[13px] font-semibold text-foreground/50 line-through'>
               €{priceData.originalPrice.toFixed(2)}
             </span>
             <span className='text-[15px] font-black text-brand-green'>
