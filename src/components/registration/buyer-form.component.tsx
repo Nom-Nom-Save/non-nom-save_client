@@ -8,7 +8,7 @@ import { cn } from '@/lib/utils';
 import {
   buyerRegistrationSchema,
   type BuyerRegistrationFormData,
-} from '@/utils/validations-registration/buyer-registration.utils';
+} from '@/utils/validations-auth/buyer-registration.utils';
 import { useRegisterUserMutation } from '@/queries/auth.queries';
 import { useAuthStore } from '@/store/auth.store';
 import { ApiError } from '@/api/client';

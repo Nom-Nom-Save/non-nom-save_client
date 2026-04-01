@@ -1,11 +1,11 @@
 import { MapPin } from 'lucide-react';
-import { useEstablishmentStore } from '@/store/establishment.store';
+import { useEstablishmentProfileQuery } from '@/queries/establishment.queries';
 import { useTranslation } from 'react-i18next';
 import { StringKey } from '@/consts/string-key.consts';
 
 export const EstablishmentPreview = () => {
   const { t } = useTranslation();
-  const profile = useEstablishmentStore(s => s.profile);
+  const { data: profile } = useEstablishmentProfileQuery();
 
   return (
     <div className='bg-white rounded-3xl border-[1.5px] border-border p-6 shadow-sm'>

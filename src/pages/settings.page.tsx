@@ -3,14 +3,14 @@ import { BrandImagesForm } from '@/components/settings/brand-images-form.compone
 import { WorkingHoursEditor } from '@/components/settings/working-hours-editor.component';
 import { ImpactStats } from '@/components/settings/impact-stats.component';
 import { EstablishmentPreview } from '@/components/settings/establishment-preview.component';
-import { useEstablishmentStore } from '@/store/establishment.store';
+import { useEstablishmentProfileQuery } from '@/queries/establishment.queries';
 import { parseWorkingHours } from '@/utils/working-hours.utils';
 import { useTranslation } from 'react-i18next';
 import { StringKey } from '@/consts/string-key.consts';
 
 const SettingsPage = () => {
   const { t } = useTranslation();
-  const profile = useEstablishmentStore(s => s.profile);
+  const { data: profile } = useEstablishmentProfileQuery();
 
   return (
     <main className='max-w-[1320px] mx-auto px-4 py-6 pb-16 sm:px-8 sm:py-10 sm:pb-32'>

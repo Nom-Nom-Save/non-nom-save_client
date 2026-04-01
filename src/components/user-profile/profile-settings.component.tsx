@@ -1,5 +1,4 @@
 import { StringKey } from '@/consts/string-key.consts';
-import { useUserStore } from '@/store/user.store';
 import {
   userProfileSchema,
   type UserProfileFormData,
@@ -8,7 +7,7 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { AlertCircle } from 'lucide-react';
 import { Controller, useForm } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
-import { useUpdateUserProfileMutation } from '@/queries/user.queries';
+import { useUpdateUserProfileMutation, useUserProfileQuery } from '@/queries/user.queries';
 import { Button } from '@/components/ui/button';
 import { FormInput } from '@/components/ui/form-input';
 import { toast } from 'sonner';
@@ -18,7 +17,7 @@ import { useEffect } from 'react';
 
 const ProfileSettings = () => {
   const { t } = useTranslation();
-  const { user } = useUserStore();
+  const { data: user } = useUserProfileQuery();
   const { mutate: updateUserProfile, isPending } = useUpdateUserProfileMutation();
 
   const {
@@ -188,10 +187,22 @@ const ProfileSettings = () => {
           </div>
 
           <div className='flex gap-2 justify-end'>
-            <Button type='button' variant='outline' size='settings' onClick={() => handleCancel()} className='w-full sm:w-auto shadow-none'>
+            <Button
+              type='button'
+              variant='outline'
+              size='settings'
+              onClick={() => handleCancel()}
+              className='w-full sm:w-auto shadow-none'
+            >
               {t(StringKey.CANCEL)}
             </Button>
-            <Button type='submit' variant='brand' size='settings' disabled={isPending} className='w-full sm:w-auto'>
+            <Button
+              type='submit'
+              variant='brand'
+              size='settings'
+              disabled={isPending}
+              className='w-full sm:w-auto'
+            >
               {isPending ? t(StringKey.SAVING) : t(StringKey.SAVE_CHANGES)}
             </Button>
           </div>

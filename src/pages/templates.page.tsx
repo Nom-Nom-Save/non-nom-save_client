@@ -86,11 +86,23 @@ const TemplatesPage = () => {
           <p className='text-sm text-foreground/50'>{t(StringKey.TEMPLATES_LIBRARY_DESCRIPTION)}</p>
         </div>
         <div className='flex gap-2 flex-wrap sm:flex-nowrap'>
-          <Button type='button' variant='brand-outline' size='pill-sm' onClick={() => setCreateProductOpen(true)} className='flex-1 sm:flex-none'>
+          <Button
+            type='button'
+            variant='brand-outline'
+            size='pill-sm'
+            onClick={() => setCreateProductOpen(true)}
+            className='flex-1 sm:flex-none'
+          >
             <Plus size={18} />
             {t(StringKey.NEW_PRODUCT)}
           </Button>
-          <Button type='button' variant='brand-outline' size='pill-sm' onClick={() => setCreateBoxOpen(true)} className='flex-1 sm:flex-none'>
+          <Button
+            type='button'
+            variant='brand-outline'
+            size='pill-sm'
+            onClick={() => setCreateBoxOpen(true)}
+            className='flex-1 sm:flex-none'
+          >
             <Sparkles size={18} />
             {t(StringKey.NEW_BOX)}
           </Button>

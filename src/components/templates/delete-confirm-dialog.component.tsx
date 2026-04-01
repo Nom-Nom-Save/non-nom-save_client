@@ -33,10 +33,21 @@ export const DeleteConfirmDialog = ({
         </p>
 
         <div className='flex gap-3 mt-4'>
-          <Button type='button' variant='outline' className='flex-1 rounded-xl py-2.5 text-sm font-medium cursor-pointer' onClick={() => onOpenChange(false)}>
+          <Button
+            type='button'
+            variant='outline'
+            className='flex-1 rounded-xl py-2.5 text-sm font-medium cursor-pointer'
+            onClick={() => onOpenChange(false)}
+          >
             {t(StringKey.CANCEL)}
           </Button>
-          <Button type='button' variant='destructive' className='flex-1 rounded-xl py-2.5 text-sm font-medium cursor-pointer' disabled={isPending} onClick={onConfirm}>
+          <Button
+            type='button'
+            variant='destructive'
+            className='flex-1 rounded-xl py-2.5 text-sm font-medium cursor-pointer'
+            disabled={isPending}
+            onClick={onConfirm}
+          >
             {isPending ? t(StringKey.DELETING) : t(StringKey.DELETE)}
           </Button>
         </div>

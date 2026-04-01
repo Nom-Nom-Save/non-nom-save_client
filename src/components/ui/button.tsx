@@ -20,8 +20,7 @@ const buttonVariants = cva(
         // Brand variants
         brand:
           'bg-brand-green text-white hover:bg-brand-green-hover cursor-pointer disabled:opacity-60',
-        'ghost-circle':
-          'bg-brand-cream border border-border hover:bg-border cursor-pointer',
+        'ghost-circle': 'bg-brand-cream border border-border hover:bg-border cursor-pointer',
         'ghost-circle-destructive':
           'bg-brand-cream border border-border hover:bg-destructive/10 cursor-pointer',
         'outline-pill':

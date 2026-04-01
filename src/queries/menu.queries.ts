@@ -6,6 +6,7 @@ import {
   createMenuItem,
   updateMenuItem,
   updateMenuItemStatus,
+  deleteMenuItem,
 } from '@/api/menu.api';
 import type {
   CreateMenuItemRequest,
@@ -48,5 +49,11 @@ export const useUpdateMenuStatusMutation = () =>
   useMutation({
     mutationFn: ({ id, data }: { id: string; data: UpdateMenuStatusRequest }) =>
       updateMenuItemStatus(id, data),
+    onSuccess: () => void queryClient.invalidateQueries({ queryKey: menuKeys.all() }),
+  });
+
+export const useDeleteMenuItemMutation = () =>
+  useMutation({
+    mutationFn: (id: string) => deleteMenuItem(id),
     onSuccess: () => void queryClient.invalidateQueries({ queryKey: menuKeys.all() }),
   });

@@ -8,7 +8,7 @@ import { ApiError } from '@/api/client';
 import { useTranslation } from 'react-i18next';
 import { StringKey } from '@/consts/string-key.consts';
 import { Button } from '@/components/ui/button';
-import { FormInput } from '@/components/ui/form-input';
+// import { FormInput } from '@/components/ui/form-input';
 
 interface VerifyEmailFormProps {
   email: string;

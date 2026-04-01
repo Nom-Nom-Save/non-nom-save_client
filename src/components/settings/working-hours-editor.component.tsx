@@ -2,8 +2,10 @@ import { useState } from 'react';
 import { toast } from 'sonner';
 import { Switch } from '@/components/ui/switch';
 import { TimePicker } from '@/components/time-picker.component';
-import { useUpdateEstablishmentProfileMutation } from '@/queries/establishment.queries';
-import { useEstablishmentStore } from '@/store/establishment.store';
+import {
+  useEstablishmentProfileQuery,
+  useUpdateEstablishmentProfileMutation,
+} from '@/queries/establishment.queries';
 import { serializeWorkingHours } from '@/utils/working-hours.utils';
 import type { WorkingHours, DaySchedule } from '@/types/establishment.types';
 import { ApiError } from '@/api/client';
@@ -38,7 +40,7 @@ interface WorkingHoursEditorProps {
 
 export const WorkingHoursEditor = ({ initialHours }: WorkingHoursEditorProps) => {
   const { t } = useTranslation();
-  const profile = useEstablishmentStore(s => s.profile);
+  const { data: profile } = useEstablishmentProfileQuery();
   const { mutate: updateProfile, isPending } = useUpdateEstablishmentProfileMutation();
 
   const [hours, setHours] = useState<WorkingHours>(initialHours);
@@ -150,7 +152,14 @@ export const WorkingHoursEditor = ({ initialHours }: WorkingHoursEditorProps) =>
         );
       })}
 
-      <Button type='button' variant='brand' size='settings' onClick={handleSave} disabled={isPending} className='w-full sm:w-auto mt-2'>
+      <Button
+        type='button'
+        variant='brand'
+        size='settings'
+        onClick={handleSave}
+        disabled={isPending}
+        className='w-full sm:w-auto mt-2'
+      >
         {isPending ? t(StringKey.SAVING) : t(StringKey.SAVE_HOURS)}
       </Button>
     </div>

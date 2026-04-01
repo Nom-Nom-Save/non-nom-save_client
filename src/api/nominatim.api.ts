@@ -1,3 +1,5 @@
+import { apiRequest } from './client';
+
 export interface NominatimFeature {
   properties: {
     osmId?: number;
@@ -12,16 +14,5 @@ export interface NominatimFeature {
   };
 }
 
-export const searchCityOrCountry = async (query: string) => {
-  const params = new URLSearchParams({ q: query });
-  const baseUrl = `${import.meta.env.VITE_API_URL}/osm/search`;
-
-  const response = await fetch(`${baseUrl}?${params}`);
-
-  if (!response.ok) {
-    throw new Error(`Search API error: ${response.status} ${response.statusText}`);
-  }
-
-  const data: unknown = await response.json();
-  return data as NominatimFeature[];
-};
+export const searchCityOrCountry = (query: string) =>
+  apiRequest<NominatimFeature[]>(`/osm/search?${new URLSearchParams({ q: query })}`);

@@ -8,7 +8,7 @@ import { cn } from '@/lib/utils';
 import {
   businessRegistrationSchema,
   type BusinessRegistrationFormData,
-} from '@/utils/validations-registration/business-registration.utils';
+} from '@/utils/validations-auth/business-registration.utils';
 import { useRegisterEstablishmentMutation } from '@/queries/auth.queries';
 import { useAuthStore } from '@/store/auth.store';
 import { ApiError } from '@/api/client';

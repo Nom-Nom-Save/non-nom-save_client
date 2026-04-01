@@ -5,8 +5,8 @@ import { StringKey } from '@/consts/string-key.consts';
 export const productSchema = z.object({
   name: z
     .string()
-    .min(2, { error: i18next.t(StringKey.PRODUCT_NAME_MIN) })
-    .max(100, { error: i18next.t(StringKey.PRODUCT_NAME_MAX) }),
+    .min(2, { error: i18next.t(StringKey.ITEM_NAME_MIN) })
+    .max(100, { error: i18next.t(StringKey.ITEM_NAME_MAX) }),
   description: z
     .string()
     .min(10, { error: i18next.t(StringKey.DESCRIPTION_MIN) })

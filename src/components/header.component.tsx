@@ -7,7 +7,6 @@ import { Button } from '@/components/ui/button';
 import { useAuthStore } from '@/store/auth.store';
 import { useEstablishmentProfileQuery } from '@/queries/establishment.queries';
 import logoUrl from '@/assets/NomNomSave-Logo.svg';
-import { useUserStore } from '@/store/user.store';
 import type { FC } from 'react';
 import { USER_NAV } from '@/types/user.types';
 import { ESTABLISHMENT_NAV } from '@/types/establishments.types';
@@ -67,8 +66,7 @@ interface UserHeaderProps {
 }
 
 const UserHeader: FC<UserHeaderProps> = ({ t, location, handleLogout }) => {
-  useUserProfileQuery();
-  const { user } = useUserStore();
+  const { data: user } = useUserProfileQuery();
 
   return (
     <header className='sticky top-0 z-50 h-[72px] bg-brand-cream/92 backdrop-blur-sm border-b border-border'>
@@ -101,7 +99,13 @@ const UserHeader: FC<UserHeaderProps> = ({ t, location, handleLogout }) => {
         </div>
 
         <div className='flex items-center gap-4'>
-          <Button type='button' variant='ghost-circle' className='w-9 h-9 rounded-full' onClick={handleLogout} title={t(StringKey.LOGOUT)}>
+          <Button
+            type='button'
+            variant='ghost-circle'
+            className='w-9 h-9 rounded-full'
+            onClick={handleLogout}
+            title={t(StringKey.LOGOUT)}
+          >
             <LogOut size={18} className='text-foreground/50' />
           </Button>
           <Link to='/profile/settings' className='flex items-center gap-2'>
@@ -156,7 +160,13 @@ const EstablishmentHeader = ({ t, location, handleLogout }: EstablishmentHeaderP
         </div>
 
         <div className='flex items-center gap-4'>
-          <Button type='button' variant='ghost-circle' className='w-9 h-9 rounded-full' onClick={handleLogout} title={t(StringKey.LOGOUT)}>
+          <Button
+            type='button'
+            variant='ghost-circle'
+            className='w-9 h-9 rounded-full'
+            onClick={handleLogout}
+            title={t(StringKey.LOGOUT)}
+          >
             <LogOut size={18} className='text-foreground/50' />
           </Button>
           <Link to='/settings' className='flex items-center gap-2'>

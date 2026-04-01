@@ -8,8 +8,10 @@ import {
   profileSchema,
   type ProfileFormData,
 } from '@/utils/validations-establishment/profile.utils';
-import { useUpdateEstablishmentProfileMutation } from '@/queries/establishment.queries';
-import { useEstablishmentStore } from '@/store/establishment.store';
+import {
+  useEstablishmentProfileQuery,
+  useUpdateEstablishmentProfileMutation,
+} from '@/queries/establishment.queries';
 import { ApiError } from '@/api/client';
 import { useTranslation } from 'react-i18next';
 import { StringKey } from '@/consts/string-key.consts';
@@ -18,7 +20,7 @@ import { FormInput, formInputVariants } from '@/components/ui/form-input';
 
 export const ProfileForm = () => {
   const { t } = useTranslation();
-  const profile = useEstablishmentStore(s => s.profile);
+  const { data: profile } = useEstablishmentProfileQuery();
   const { mutate: updateProfile, isPending } = useUpdateEstablishmentProfileMutation();
 
   const {
@@ -73,7 +75,10 @@ export const ProfileForm = () => {
         <textarea
           rows={4}
           {...register('description')}
-          className={cn(formInputVariants({ variant: 'settings', hasError: !!errors.description }), 'resize-none')}
+          className={cn(
+            formInputVariants({ variant: 'settings', hasError: !!errors.description }),
+            'resize-none'
+          )}
         />
         {errors.description && (
           <p className='text-destructive text-xs'>{errors.description.message}</p>
@@ -89,12 +94,23 @@ export const ProfileForm = () => {
             size={18}
             className='absolute left-3.5 top-1/2 -translate-y-1/2 text-foreground/35'
           />
-          <FormInput variant='settings' {...register('address')} hasError={!!errors.address} className='pl-11' />
+          <FormInput
+            variant='settings'
+            {...register('address')}
+            hasError={!!errors.address}
+            className='pl-11'
+          />
         </div>
         {errors.address && <p className='text-destructive text-xs'>{errors.address.message}</p>}
       </div>
 
-      <Button type='submit' variant='brand' size='settings' disabled={isPending} className='w-full sm:w-auto'>
+      <Button
+        type='submit'
+        variant='brand'
+        size='settings'
+        disabled={isPending}
+        className='w-full sm:w-auto'
+      >
         {isPending ? t(StringKey.SAVING) : t(StringKey.SAVE_CHANGES)}
       </Button>
     </form>

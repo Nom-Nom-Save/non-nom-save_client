@@ -5,7 +5,7 @@ import { AlertCircle, Eye, EyeOff } from 'lucide-react';
 import { Link, useNavigate } from '@tanstack/react-router';
 import { toast } from 'sonner';
 import { cn } from '@/lib/utils';
-import { loginSchema, type LoginFormData } from '@/utils/validations-login/login.utils';
+import { loginSchema, type LoginFormData } from '@/utils/validations-auth/login.utils';
 import { useLoginMutation } from '@/queries/auth.queries';
 import { useAuthStore } from '@/store/auth.store';
 import { ApiError } from '@/api/client';

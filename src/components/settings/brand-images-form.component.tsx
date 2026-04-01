@@ -6,8 +6,10 @@ import {
   brandImagesSchema,
   type BrandImagesFormData,
 } from '@/utils/validations-establishment/brand-images.utils';
-import { useUpdateEstablishmentProfileMutation } from '@/queries/establishment.queries';
-import { useEstablishmentStore } from '@/store/establishment.store';
+import {
+  useEstablishmentProfileQuery,
+  useUpdateEstablishmentProfileMutation,
+} from '@/queries/establishment.queries';
 import { ApiError } from '@/api/client';
 import { useTranslation } from 'react-i18next';
 import { StringKey } from '@/consts/string-key.consts';
@@ -16,7 +18,7 @@ import { FormInput } from '@/components/ui/form-input';
 
 export const BrandImagesForm = () => {
   const { t } = useTranslation();
-  const profile = useEstablishmentStore(s => s.profile);
+  const { data: profile } = useEstablishmentProfileQuery();
   const { mutate: updateProfile, isPending } = useUpdateEstablishmentProfileMutation();
 
   const {
@@ -116,7 +118,13 @@ export const BrandImagesForm = () => {
         )}
       </div>
 
-      <Button type='submit' variant='brand' size='settings' disabled={isPending} className='w-full sm:w-auto'>
+      <Button
+        type='submit'
+        variant='brand'
+        size='settings'
+        disabled={isPending}
+        className='w-full sm:w-auto'
+      >
         {isPending ? t(StringKey.SAVING) : t(StringKey.SAVE_CHANGES)}
       </Button>
     </form>

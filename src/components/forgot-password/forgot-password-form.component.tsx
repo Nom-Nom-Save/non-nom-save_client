@@ -7,7 +7,7 @@ import { cn } from '@/lib/utils';
 import {
   forgotPasswordSchema,
   type ForgotPasswordFormData,
-} from '@/utils/validations-login/forgot-password.utils';
+} from '@/utils/validations-auth/forgot-password.utils';
 import { useForgotPasswordMutation } from '@/queries/auth.queries';
 import { useAuthStore } from '@/store/auth.store';
 import { ApiError } from '@/api/client';

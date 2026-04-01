@@ -217,8 +217,8 @@ export const enMessages: Record<StringKey, string> = {
   [StringKey.FAILED_TO_DELETE]: 'Failed to delete.',
 
   // Validation (establishment)
-  [StringKey.PRODUCT_NAME_MIN]: 'Name must be at least 2 characters',
-  [StringKey.PRODUCT_NAME_MAX]: 'Name must be less than 100 characters',
+  [StringKey.ITEM_NAME_MIN]: 'Name must be at least 2 characters',
+  [StringKey.ITEM_NAME_MAX]: 'Name must be less than 100 characters',
   [StringKey.DESCRIPTION_MIN]: 'Description must be at least 10 characters',
   [StringKey.DESCRIPTION_MAX]: 'Description must be less than 500 characters',
   [StringKey.PRICE_POSITIVE]: 'Price must be greater than 0',

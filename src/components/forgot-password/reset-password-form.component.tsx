@@ -8,7 +8,7 @@ import { cn } from '@/lib/utils';
 import {
   resetPasswordSchema,
   type ResetPasswordFormData,
-} from '@/utils/validations-login/reset-password.utils';
+} from '@/utils/validations-auth/reset-password.utils';
 import { useVerifyCodeMutation, useResetPasswordMutation } from '@/queries/auth.queries';
 import { useAuthStore } from '@/store/auth.store';
 import { ApiError } from '@/api/client';
@@ -186,7 +186,14 @@ export const ResetPasswordForm = ({ email, onStepChange }: ResetPasswordFormProp
           {codeError && <p className='text-destructive text-xs'>{t(StringKey.RESET_CODE_ERROR)}</p>}
         </div>
 
-        <Button type='button' variant='brand' size='auth' onClick={handleVerifyCode} disabled={isVerifying} className='mt-1'>
+        <Button
+          type='button'
+          variant='brand'
+          size='auth'
+          onClick={handleVerifyCode}
+          disabled={isVerifying}
+          className='mt-1'
+        >
           {isVerifying ? t(StringKey.VERIFYING) : t(StringKey.VERIFY_CODE)}
         </Button>
 

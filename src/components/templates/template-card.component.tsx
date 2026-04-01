@@ -66,13 +66,24 @@ export const TemplateCard = ({
             <span className='hidden sm:inline'>{t(StringKey.EDIT)}</span>
           </Button>
 
-          <Button type='button' variant='brand' size='pill' onClick={() => onPublish(id)} className='shadow-sm'>
+          <Button
+            type='button'
+            variant='brand'
+            size='pill'
+            onClick={() => onPublish(id)}
+            className='shadow-sm'
+          >
             <Upload size={14} />
             <span className='hidden sm:inline'>{t(StringKey.PUBLISH_TO_MENU_BTN)}</span>
           </Button>
 
           <div className='relative'>
-            <Button type='button' variant='ghost-circle' size='icon-circle' onClick={() => setMenuOpen(!menuOpen)}>
+            <Button
+              type='button'
+              variant='ghost-circle'
+              size='icon-circle'
+              onClick={() => setMenuOpen(!menuOpen)}
+            >
               <MoreVertical size={16} className='text-foreground/50' />
             </Button>
             {menuOpen && (

@@ -1,8 +1,6 @@
 import { create } from 'zustand';
 import type { LoginType } from '@/types/auth.types';
 import { queryClient } from '@/lib/query-client';
-import { useEstablishmentStore } from '@/store/establishment.store';
-import { useUserStore } from './user.store';
 
 interface AuthState {
   pendingVerificationEmail: string | null;
@@ -39,8 +37,6 @@ export const useAuthStore = create<AuthState>(set => ({
     localStorage.removeItem('token');
     localStorage.removeItem('loginType');
     set({ accessToken: null, loginType: null });
-    useEstablishmentStore.getState().clearProfile();
-    useUserStore.getState().clearProfile();
     queryClient.clear();
   },
 }));

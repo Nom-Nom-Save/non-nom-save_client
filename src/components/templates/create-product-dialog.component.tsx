@@ -136,11 +136,7 @@ export const CreateProductDialog = ({
               {t(StringKey.NAME)}
             </label>
             <div className='relative'>
-              <FormInput
-                id='product-name'
-                {...register('name')}
-                hasError={!!errors.name}
-              />
+              <FormInput id='product-name' {...register('name')} hasError={!!errors.name} />
               {errors.name && (
                 <AlertCircle
                   size={16}

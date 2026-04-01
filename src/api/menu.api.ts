@@ -14,9 +14,6 @@ export const getMenuItems = () => apiRequest<MenuListResponse>('/menu');
 export const getMenuItem = (menuId: string) =>
   apiRequest<MenuItemDetailResponse>(`/menu/item/${menuId}`);
 
-export const getPublicMenuItems = (establishmentId: string) =>
-  apiRequest<MenuListResponse>(`/menu/public/${establishmentId}`);
-
 export const createMenuItem = (data: CreateMenuItemRequest) =>
   apiRequest<CreateMenuItemResponse>('/menu', {
     method: 'POST',
@@ -34,3 +31,6 @@ export const updateMenuItemStatus = (menuId: string, data: UpdateMenuStatusReque
     method: 'PATCH',
     body: JSON.stringify(data),
   });
+
+export const deleteMenuItem = (menuId: string) =>
+  apiRequest<MessageResponse>(`/menu/${menuId}`, { method: 'DELETE' });

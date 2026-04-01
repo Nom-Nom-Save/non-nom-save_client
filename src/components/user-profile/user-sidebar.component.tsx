@@ -1,4 +1,4 @@
-import { useUserStore } from '@/store/user.store';
+import { useUserProfileQuery } from '@/queries/user.queries';
 import userAvatar from '@/assets/user-avatar.svg';
 import {
   ShoppingBag,
@@ -40,7 +40,7 @@ const UserSidebar = () => {
   const { t } = useTranslation();
   const location = useLocation();
 
-  const { user } = useUserStore();
+  const { data: user } = useUserProfileQuery();
   const memberSinceYear = new Date(user?.createdAt ?? '').getFullYear();
 
   return (
@@ -96,7 +96,9 @@ const UserSidebar = () => {
                   activeRoute && 'bg-brand-green text-white rounded-4xl'
                 )}
               >
-                <Icon className={cn('w-5 h-5', activeRoute ? 'text-white' : 'text-foreground/50')} />
+                <Icon
+                  className={cn('w-5 h-5', activeRoute ? 'text-white' : 'text-foreground/50')}
+                />
                 {t(navigationItem.lable)}
               </Link>
             );
@@ -117,7 +119,9 @@ const UserSidebar = () => {
                   activeRoute && 'bg-brand-green text-white rounded-4xl'
                 )}
               >
-                <Icon className={cn('w-5 h-5', activeRoute ? 'text-white' : 'text-foreground/50')} />
+                <Icon
+                  className={cn('w-5 h-5', activeRoute ? 'text-white' : 'text-foreground/50')}
+                />
                 <span className='whitespace-nowrap'>{t(navigationItem.lable)}</span>
               </Link>
             );

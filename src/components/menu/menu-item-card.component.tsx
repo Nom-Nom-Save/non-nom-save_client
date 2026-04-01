@@ -71,26 +71,56 @@ export const MenuItemCard = ({
   const actionButtons = (
     <div className='flex items-center gap-2'>
       {status === MenuStatus.ACTIVE && (
-        <Button type='button' variant='ghost-circle' size='icon-circle' onClick={() => onPause(id)} title={t(StringKey.PAUSE)}>
+        <Button
+          type='button'
+          variant='ghost-circle'
+          size='icon-circle'
+          onClick={() => onPause(id)}
+          title={t(StringKey.PAUSE)}
+        >
           <Pause size={16} className='text-foreground/50' />
         </Button>
       )}
       {status === MenuStatus.INACTIVE && (
         <>
-          <Button type='button' variant='ghost-circle' size='icon-circle' onClick={() => onResume(id)} title={t(StringKey.RESUME)}>
+          <Button
+            type='button'
+            variant='ghost-circle'
+            size='icon-circle'
+            onClick={() => onResume(id)}
+            title={t(StringKey.RESUME)}
+          >
             <Play size={16} className='text-foreground/50' />
           </Button>
-          <Button type='button' variant='ghost-circle' size='icon-circle' onClick={() => onEdit(item)} title={t(StringKey.EDIT)}>
+          <Button
+            type='button'
+            variant='ghost-circle'
+            size='icon-circle'
+            onClick={() => onEdit(item)}
+            title={t(StringKey.EDIT)}
+          >
             <Pencil size={16} className='text-foreground/50' />
           </Button>
         </>
       )}
       {status === MenuStatus.SOLD_OUT && (
         <>
-          <Button type='button' variant='ghost-circle-destructive' size='icon-circle' onClick={() => onDeactivate(id)} title={t(StringKey.DEACTIVATE)}>
+          <Button
+            type='button'
+            variant='ghost-circle-destructive'
+            size='icon-circle'
+            onClick={() => onDeactivate(id)}
+            title={t(StringKey.DEACTIVATE)}
+          >
             <CircleOff size={16} className='text-foreground/50' />
           </Button>
-          <Button type='button' variant='ghost-circle' size='icon-circle' onClick={() => onEdit(item)} title={t(StringKey.EDIT)}>
+          <Button
+            type='button'
+            variant='ghost-circle'
+            size='icon-circle'
+            onClick={() => onEdit(item)}
+            title={t(StringKey.EDIT)}
+          >
             <Pencil size={16} className='text-foreground/50' />
           </Button>
         </>

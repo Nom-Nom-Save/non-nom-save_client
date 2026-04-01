@@ -6,8 +6,7 @@ const formInputVariants = cva('w-full rounded-xl outline-none transition-colors'
   variants: {
     variant: {
       // Dialog & general forms: white bg, ring focus
-      default:
-        'border px-4 py-4 text-base bg-white focus:ring-2 focus:ring-brand-green/30',
+      default: 'border px-4 py-4 text-base bg-white focus:ring-2 focus:ring-brand-green/30',
       // Auth forms: white bg, ring focus, destructive ring on error, placeholder styling
       auth: 'border px-4 py-4 text-base bg-white placeholder:text-muted-foreground focus:ring-2 focus:ring-brand-green/30',
       // Settings forms: cream bg, border focus (no ring)
