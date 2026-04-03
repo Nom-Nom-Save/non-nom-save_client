@@ -1,0 +1,4 @@
+export enum QueryKey {
+  FAVORITES = 'FAVORITES',
+  ESTABLISHMENT = 'ESTABLISHMENT',
+}

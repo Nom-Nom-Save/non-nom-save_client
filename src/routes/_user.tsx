@@ -2,10 +2,12 @@ import { createFileRoute, Outlet, redirect } from '@tanstack/react-router';
 import { Toaster } from 'sonner';
 import { useUserProfileQuery } from '@/queries/user.queries';
 import { useOrdersQuery } from '@/queries/order.queries';
+import { useGetFavoritesQuery } from '@/queries/favorites.queries';
 
 const UserLayout = () => {
   useUserProfileQuery();
   useOrdersQuery();
+  useGetFavoritesQuery();
 
   return (
     <div className='min-h-screen bg-brand-cream'>

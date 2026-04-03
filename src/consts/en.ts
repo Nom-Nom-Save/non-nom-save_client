@@ -441,4 +441,23 @@ export const enMessages: Record<StringKey, string> = {
   [StringKey.CANCELLED]: 'Cancelled',
   [StringKey.NO_CANCELLED_OR_EXPIRED_ORDERS]: 'No Cancelled or Expired Orders',
   [StringKey.QR_CODE]: 'QR Code',
+
+  // Favorites
+  [StringKey.YOUR_SAVED_ESTABLISHMENTS]: 'Your saved establishments',
+  [StringKey.PLACES]: 'places',
+  [StringKey.ADDED]: 'Added',
+  [StringKey.VIEW]: 'View',
+  [StringKey.NO_FAVORITES_ESTABLISHMENTS]: 'No favorite establishments',
+  [StringKey.SUCCESSFULLY_REMOVED_FROM_FAVORITES]:
+    'Successfully removed {establishmentName} from favorites',
+  [StringKey.FAILED_TO_REMOVE_FROM_FAVORITES]:
+    'Failed to remove {establishmentName} from favorites',
+  [StringKey.REMOVE_FROM_FAVORITES]: 'Remove from favorites',
+  [StringKey.SURE_YOU_WANT_TO_REMOVE_FROM_FAVORITES]:
+    'Are you sure you want to remove {establishmentName} from favorites?',
+  [StringKey.REMOVE]: 'Remove',
+  [StringKey.REMOVING]: 'Removing',
+  [StringKey.SUCCESSFULLY_ADDED_TO_FAVORITES]:
+    'Successfully added {establishmentName} to favorites',
+  [StringKey.FAILED_TO_ADD_TO_FAVORITES]: 'Failed to add {establishmentName} to favorites',
 };
