@@ -11,6 +11,13 @@ export const getEstablishmentProfile = async (): Promise<EstablishmentProfile> =
   return data.establishment;
 };
 
+export const getEstablishmentById = async (
+  establishmentId: string
+): Promise<EstablishmentProfile> => {
+  const data = await apiRequest<EstablishmentProfileResponse>(`/establishments/${establishmentId}`);
+  return data.establishment;
+};
+
 export const updateEstablishmentProfile = async (
   establishmentId: string,
   data: UpdateEstablishmentRequest

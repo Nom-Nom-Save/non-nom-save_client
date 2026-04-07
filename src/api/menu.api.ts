@@ -7,7 +7,9 @@ import type {
   MenuListResponse,
   MenuItemDetailResponse,
   MessageResponse,
+  MenuItemResponse,
 } from '@/types/menu.types';
+import type { PaginationMeta, PaginationParams } from '@/types/pagination.types';
 
 export const getMenuItems = () => apiRequest<MenuListResponse>('/menu');
 
@@ -34,3 +36,12 @@ export const updateMenuItemStatus = (menuId: string, data: UpdateMenuStatusReque
 
 export const deleteMenuItem = (menuId: string) =>
   apiRequest<MessageResponse>(`/menu/${menuId}`, { method: 'DELETE' });
+
+export const getEstablishmentMenu = async (establishmentId: string, params?: PaginationParams) => {
+  const query = params ? `?page=${params.page}&limit=${params.limit}` : '';
+
+  const response = await apiRequest<{ menu: MenuItemResponse[]; meta: PaginationMeta }>(
+    `/menu/public/${establishmentId}${query}`
+  );
+  return response;
+};

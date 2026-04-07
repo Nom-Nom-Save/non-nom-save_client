@@ -7,12 +7,14 @@ import {
   updateMenuItem,
   updateMenuItemStatus,
   deleteMenuItem,
+  getEstablishmentMenu,
 } from '@/api/menu.api';
 import type {
   CreateMenuItemRequest,
   UpdateMenuItemRequest,
   UpdateMenuStatusRequest,
 } from '@/types/menu.types';
+import { QueryKey } from '@/consts/query-key.consts';
 
 export const menuKeys = {
   all: () => ['menu'] as const,
@@ -21,7 +23,7 @@ export const menuKeys = {
 
 export const useMenuItemsQuery = () =>
   useQuery({
-    queryKey: menuKeys.all(),
+    queryKey: [QueryKey.MENU],
     queryFn: getMenuItems,
   });
 
@@ -57,3 +59,10 @@ export const useDeleteMenuItemMutation = () =>
     mutationFn: (id: string) => deleteMenuItem(id),
     onSuccess: () => void queryClient.invalidateQueries({ queryKey: menuKeys.all() }),
   });
+
+export const useGetEstablishmentMenu = (establishmentId: string, page = 1, limit = 5) => {
+  return useQuery({
+    queryKey: [QueryKey.MENU],
+    queryFn: () => getEstablishmentMenu(establishmentId, { page, limit }),
+  });
+};

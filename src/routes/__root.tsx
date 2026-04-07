@@ -3,6 +3,8 @@ import { createRootRoute, Outlet, useRouterState } from '@tanstack/react-router'
 import { TanStackRouterDevtools } from '@tanstack/react-router-devtools';
 import { QueryClientProvider } from '@tanstack/react-query';
 import { queryClient } from '@/lib/query-client';
+import { Toaster } from 'sonner';
+import { TooltipProvider } from '@/components/ui/tooltip';
 
 const AUTH_ROUTES = ['/register', '/login', '/verify-email', '/forgot-password', '/reset-password'];
 
@@ -12,12 +14,15 @@ const RootLayout = () => {
 
   return (
     <QueryClientProvider client={queryClient}>
-      <div className='flex flex-col min-h-screen'>
-        {!isAuthRoute && <Header />}
-        <div className='flex-1 flex flex-col'>
-          <Outlet />
+      <TooltipProvider>
+        <div className='flex flex-col min-h-screen'>
+          {!isAuthRoute && <Header />}
+          <div className='flex-1 flex flex-col'>
+            <Outlet />
+            <Toaster position='top-right' richColors />
+          </div>
         </div>
-      </div>
+      </TooltipProvider>
       <TanStackRouterDevtools />
     </QueryClientProvider>
   );

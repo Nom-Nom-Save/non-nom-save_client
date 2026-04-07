@@ -44,7 +44,7 @@ const UserSidebar = () => {
   const memberSinceYear = new Date(user?.createdAt ?? '').getFullYear();
 
   return (
-    <aside className='w-full md:w-[300px]'>
+    <aside className='lg:sticky lg:top-4 w-full md:w-[300px]'>
       <section className='bg-white p-8 rounded-[1.25rem] h-fit mb-6'>
         <div className='flex flex-col items-center justify-center mb-6'>
           <div className='relative mb-3'>
