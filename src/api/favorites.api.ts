@@ -2,13 +2,6 @@ import type { Favorites } from '@/types/favorites.types';
 import { apiRequest } from './client';
 import type { PaginationMeta, PaginationParams } from '@/types/pagination.types';
 
-export interface FavoritesMeta {
-  total: number;
-  page: number;
-  limit: number;
-  totalPages: number;
-}
-
 export const getUserFavorites = async (params?: PaginationParams) => {
   const query = params ? `?page=${params.page}&limit=${params.limit}` : '';
 

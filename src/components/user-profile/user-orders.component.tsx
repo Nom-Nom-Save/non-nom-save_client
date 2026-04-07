@@ -147,6 +147,17 @@ const UserOrders = () => {
                     ))}
                   </ul>
 
+                  {pendingOrder.allergens.length > 0 && (
+                    <div className='flex items-center gap-1.5 mb-3 flex-wrap'>
+                      <span className='text-xs bg-red-100 text-red-700 px-2 py-0.5 rounded-full font-medium'>
+                        {t(StringKey.ALLERGENS)}:
+                      </span>
+                      <span className='text-xs text-muted-foreground'>
+                        {pendingOrder.allergens.join(' · ')}
+                      </span>
+                    </div>
+                  )}
+
                   <div className='flex flex-wrap items-center gap-2 mb-3'>
                     <Dialog
                       open={cancelDialogOrderId === pendingOrder.id}
@@ -297,6 +308,17 @@ const UserOrders = () => {
                     </div>
                   </div>
 
+                  {completedOrder.allergens.length > 0 && (
+                    <div className='flex items-center gap-1.5 mb-3 flex-wrap'>
+                      <span className='text-xs bg-red-100 text-red-700 px-2 py-0.5 rounded-full font-medium'>
+                        {t(StringKey.ALLERGENS)}:
+                      </span>
+                      <span className='text-xs text-muted-foreground'>
+                        {completedOrder.allergens.join(' · ')}
+                      </span>
+                    </div>
+                  )}
+
                   <div className='flex justify-end items-center mt-1'>
                     <p className='flex items-center gap-1.5 sm:gap-2 bg-brand-status-success-bg border border-brand-status-success-border rounded-full px-2.5 py-1 sm:px-3 sm:py-1.5 text-xs sm:text-sm font-semibold text-brand-status-success-text'>
                       <CheckCircle2 className='w-3.5 h-3.5 sm:w-4 sm:h-4 shrink-0' />
@@ -403,6 +425,17 @@ const UserOrders = () => {
                             </p>
                           </div>
                         </div>
+
+                        {cancelledOrder.allergens.length > 0 && (
+                          <div className='flex items-center gap-1.5 mt-2 flex-wrap'>
+                            <span className='text-xs bg-red-100 text-red-700 px-2 py-0.5 rounded-full font-medium'>
+                              {t(StringKey.ALLERGENS)}:
+                            </span>
+                            <span className='text-xs text-muted-foreground'>
+                              {cancelledOrder.allergens.join(' · ')}
+                            </span>
+                          </div>
+                        )}
                       </li>
                     );
                   })

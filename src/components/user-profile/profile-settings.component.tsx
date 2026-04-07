@@ -186,7 +186,7 @@ const ProfileSettings = () => {
             </div>
           </div>
 
-          <div className='flex gap-2 justify-end'>
+          <div className='flex flex-col gap-2 sm:flex-row sm:justify-end mt-4'>
             <Button
               type='button'
               variant='outline'

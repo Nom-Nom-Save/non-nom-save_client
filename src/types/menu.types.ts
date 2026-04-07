@@ -24,6 +24,8 @@ export interface MenuPriceData {
 export interface MenuItemDetails {
   name: string;
   description: string;
+  picture?: string;
+  weightInfo?: string;
   types: string[];
   allergens: string[];
 }
