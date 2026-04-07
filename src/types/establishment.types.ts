@@ -21,6 +21,9 @@ export interface EstablishmentProfile {
   banner: string | null;
   rating: string | null;
   createdAt: string;
+  foodSaved: string;
+  reviewCount: number;
+  bagsSold: number;
 }
 
 export interface UpdateEstablishmentRequest {

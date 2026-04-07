@@ -13,26 +13,7 @@ import { useTranslation } from 'react-i18next';
 import { StringKey } from '@/consts/string-key.consts';
 import { cn } from '@/lib/utils';
 import { Button } from '@/components/ui/button';
-
-const DAYS = [
-  'monday',
-  'tuesday',
-  'wednesday',
-  'thursday',
-  'friday',
-  'saturday',
-  'sunday',
-] as const;
-
-const DAY_LABELS: Record<(typeof DAYS)[number], StringKey> = {
-  monday: StringKey.MONDAY,
-  tuesday: StringKey.TUESDAY,
-  wednesday: StringKey.WEDNESDAY,
-  thursday: StringKey.THURSDAY,
-  friday: StringKey.FRIDAY,
-  saturday: StringKey.SATURDAY,
-  sunday: StringKey.SUNDAY,
-};
+import { DAY_LABELS, DAYS } from '@/types/working-hours.types';
 
 interface WorkingHoursEditorProps {
   initialHours: WorkingHours;

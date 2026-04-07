@@ -18,3 +18,13 @@ export const getTimeUntilExpiry = (expiresAt: string) => {
     isExpired: false,
   };
 };
+
+export const formatEditableUntil = (dateStr: string) => {
+  const date = new Date(dateStr);
+  return date.toLocaleTimeString([], {
+    day: '2-digit',
+    month: '2-digit',
+    hour: '2-digit',
+    minute: '2-digit',
+  });
+};

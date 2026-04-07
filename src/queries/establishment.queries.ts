@@ -1,7 +1,12 @@
 import { useQuery, useMutation } from '@tanstack/react-query';
 import { queryClient } from '@/lib/query-client';
-import { getEstablishmentProfile, updateEstablishmentProfile } from '@/api/establishment.api';
+import {
+  getEstablishmentById,
+  getEstablishmentProfile,
+  updateEstablishmentProfile,
+} from '@/api/establishment.api';
 import type { UpdateEstablishmentRequest } from '@/types/establishment.types';
+import { QueryKey } from '@/consts/query-key.consts';
 
 export const establishmentKeys = {
   profile: () => ['establishment', 'profile'] as const,
@@ -12,6 +17,14 @@ export const useEstablishmentProfileQuery = () =>
     queryKey: establishmentKeys.profile(),
     queryFn: () => getEstablishmentProfile(),
   });
+
+export const useEstablishmentByIdQuery = (establishmentId: string) => {
+  return useQuery({
+    queryKey: [QueryKey.ESTABLISHMENT, establishmentId],
+    queryFn: () => getEstablishmentById(establishmentId),
+    enabled: !!establishmentId,
+  });
+};
 
 export const useUpdateEstablishmentProfileMutation = () => {
   return useMutation({

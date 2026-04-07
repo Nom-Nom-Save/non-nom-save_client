@@ -2,8 +2,7 @@ import { StringKey } from '@/consts/string-key.consts';
 import { useGetFavoritesQuery, useRemoveFromFavoritesQuery } from '@/queries/favorites.queries';
 import { useTranslation } from 'react-i18next';
 import { Loading } from '../loading.component';
-import { Heart, MapPin, Star } from 'lucide-react';
-import { cn } from '@/lib/utils';
+import { Heart, MapPin } from 'lucide-react';
 import { useState } from 'react';
 import { Link } from '@tanstack/react-router';
 import { toast } from 'sonner';
@@ -18,6 +17,8 @@ import {
   DialogTitle,
 } from '../ui/dialog';
 import { Button } from '../ui/button';
+import { formatEstablishmentToastMessage } from '@/utils/format-establishment-toast.utils';
+import { renderRating } from '@/utils/rating.utils';
 
 const UserFavorites = () => {
   const { t } = useTranslation();
@@ -37,57 +38,22 @@ const UserFavorites = () => {
     removeFromFavorites(establishmentId, {
       onSuccess: () => {
         toast.success(
-          t(StringKey.SUCCESSFULLY_REMOVED_FROM_FAVORITES)
-            .split('{establishmentName}')
-            .map((part, i) =>
-              i === 0 ? (
-                <span key={i}>
-                  {part}
-                  <span className='font-bold text-black'>{selectedFavorite?.name}</span>
-                </span>
-              ) : (
-                <span key={i}>{part}</span>
-              )
-            )
+          formatEstablishmentToastMessage(
+            t(StringKey.SUCCESSFULLY_REMOVED_FROM_FAVORITES),
+            selectedFavorite?.name ?? ''
+          )
         );
         setSelectedFavorite(null);
       },
       onError: (error: Error) => {
         if (error instanceof ApiError) {
-          toast.error(
-            t(StringKey.FAILED_TO_REMOVE_FROM_FAVORITES)
-              .split('{establishmentName}')
-              .map((part, i) =>
-                i === 0 ? (
-                  <span key={i}>
-                    {part}
-                    <span className='font-bold text-black'>{selectedFavorite?.name}</span>
-                  </span>
-                ) : (
-                  <span key={i}>{part}</span>
-                )
-              )
+          formatEstablishmentToastMessage(
+            t(StringKey.FAILED_TO_REMOVE_FROM_FAVORITES),
+            selectedFavorite?.name ?? ''
           );
         }
       },
     });
-  };
-
-  const renderRating = (rating: number, max = 5) => {
-    return (
-      <div className='flex items-center gap-1'>
-        {Array.from({ length: max }, (_, i) => (
-          <Star
-            key={i}
-            className={cn(
-              i < Math.floor(rating) ? 'text-[#F59E0B]' : 'text-muted-foreground',
-              'w-4 h-4'
-            )}
-          />
-        ))}
-        <p className='font-bold ml-2'>{rating.toFixed(1)}</p>
-      </div>
-    );
   };
 
   return (
@@ -117,11 +83,13 @@ const UserFavorites = () => {
                 className='bg-white rounded-[1.25rem] border-[1.5px] border-border p-4 md:p-6 shadow-sm'
               >
                 <div className='flex items-start gap-4'>
-                  <img
-                    src={`${favorite.establishment.logo}`}
-                    alt={`${favorite.establishment.name} logo`}
-                    className='w-16 h-16 sm:w-20 sm:h-20 object-cover rounded-xl shrink-0'
-                  />
+                  <div className='bg-white rounded-2xl border-[1.5px] border-border shadow-sm w-16 h-16 sm:w-20 sm:h-20 overflow-hidden'>
+                    <img
+                      src={`${favorite.establishment.logo}`}
+                      alt={`${favorite.establishment.name} logo`}
+                      className='w-full h-full object-cover'
+                    />
+                  </div>
 
                   <div className='flex-1 min-w-0'>
                     <div className='flex items-start justify-between gap-1'>
@@ -130,14 +98,14 @@ const UserFavorites = () => {
                       </p>
 
                       <div className='flex items-center gap-2 shrink-0'>
-                        <button className='px-3 py-2 sm:px-4 sm:py-3 rounded-full text-sm font-bold text-white bg-brand-green hover:bg-brand-green-hover transition-colors cursor-pointer shadow-md whitespace-nowrap'>
-                          <Link
-                            to='/establishments/$establishmentId'
-                            params={{ establishmentId: favorite.establishmentId }}
-                          >
+                        <Link
+                          to='/establishments/$establishmentId'
+                          params={{ establishmentId: favorite.establishmentId }}
+                        >
+                          <button className='px-3 py-2 sm:px-4 sm:py-3 rounded-full text-sm font-bold text-white bg-brand-green hover:bg-brand-green-hover transition-colors cursor-pointer shadow-md whitespace-nowrap'>
                             {t(StringKey.VIEW)}
-                          </Link>
-                        </button>
+                          </button>
+                        </Link>
 
                         <button
                           className='group cursor-pointer border border-border rounded-full p-2.5 hover:bg-border transition-colors'
