@@ -6,7 +6,6 @@ import { useEffect, useState, type FC } from 'react';
 import { useTranslation } from 'react-i18next';
 import EstablishmentReviews from './establishment-reviews.component';
 import { DAY_LABELS, DAYS } from '@/types/working-hours.types';
-import { useGetEstablishmentReviewsQuery } from '@/queries/reviews.queries';
 import { useGetEstablishmentMenu } from '@/queries/menu.queries';
 import EstablishmentMenuItem from './establishment-menu-item';
 import type { MenuItemResponse } from '@/types/menu.types';
@@ -21,14 +20,11 @@ const EstablishmentGeneralInfo: FC<EstablishmentGeneralInfoProps> = ({ establish
 
   const [menuPage, setMenuPage] = useState(1);
   const [allMenuItems, setAllMenuItems] = useState<MenuItemResponse[]>([]);
-  const [reviewPage, setReviewPage] = useState(1);
 
   const { data: establishmentMenuData, isLoading: isMenuLoading } = useGetEstablishmentMenu(
     establishment.id,
     menuPage
   );
-  const { data: establishmentReviewsData, isLoading: isReviewsLoading } =
-    useGetEstablishmentReviewsQuery(establishment.id, reviewPage);
 
   useEffect(() => {
     if (establishmentMenuData?.menu) {
@@ -37,13 +33,6 @@ const EstablishmentGeneralInfo: FC<EstablishmentGeneralInfoProps> = ({ establish
       );
     }
   }, [establishmentMenuData, menuPage]);
-
-  const myReview = establishmentReviewsData?.myReview ?? null;
-  const reviews = establishmentReviewsData?.reviews.filter(review => review.id !== myReview?.id);
-  const averageRating = establishmentReviewsData?.rating ?? 0;
-  const ratingDistribution = establishmentReviewsData?.ratingDistribution ?? [];
-  const totalCount = establishmentReviewsData?.meta?.total ?? 0;
-  const totalPages = establishmentReviewsData?.meta?.totalPages ?? 1;
 
   const menuTotalPages = establishmentMenuData?.meta?.totalPages ?? 1;
   const menuTotalItems = establishmentMenuData?.meta?.total ?? 0;
@@ -194,18 +183,7 @@ const EstablishmentGeneralInfo: FC<EstablishmentGeneralInfoProps> = ({ establish
         })}
       </div>
 
-      <EstablishmentReviews
-        establishmentId={establishment.id}
-        reviews={reviews ?? []}
-        myReview={myReview}
-        isLoading={isReviewsLoading}
-        totalCount={totalCount}
-        averageRating={+averageRating}
-        ratingDistribution={ratingDistribution}
-        currentPage={reviewPage}
-        totalPages={totalPages}
-        onPageChange={setReviewPage}
-      />
+      <EstablishmentReviews establishmentId={establishment.id} />
     </section>
   );
 };

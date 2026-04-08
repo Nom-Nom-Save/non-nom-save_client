@@ -1,17 +1,12 @@
 import { StringKey } from '@/consts/string-key.consts';
 import { cn } from '@/lib/utils';
-import {
-  ReviewMode,
-  type MyReview,
-  type RatingDistribution,
-  type Review,
-} from '@/types/reviews.types';
+import { ReviewMode, type MyReview, type RatingFilter } from '@/types/reviews.types';
 import { useEffect, useState, type FC } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Loading } from '../loading.component';
 import { renderRating } from '@/utils/rating.utils';
 import { formInputVariants } from '../ui/form-input';
-import { Star, Pencil, Trash2, Clock, User } from 'lucide-react';
+import { Star, Pencil, Trash2, Clock } from 'lucide-react';
 import { useForm } from 'react-hook-form';
 import { reviewSchema, type ReviewFormData } from '@/utils/validations-user/review.utils';
 import { zodResolver } from '@hookform/resolvers/zod';
@@ -21,6 +16,8 @@ import {
   useUpdateReviewMutation,
   useDeleteReviewMutation,
   useUserReviewsForEstablishmentQuery,
+  useGetEstablishmentReviewsQuery,
+  useGetEstablishmentReviewsDistributionQuery,
 } from '@/queries/reviews.queries';
 import { toast } from 'sonner';
 import { ApiError } from '@/api/client';
@@ -37,6 +34,8 @@ import {
 } from '../ui/dialog';
 import { formatEditableUntil } from '@/utils/time.utils';
 import { getPaginationPages } from '@/utils/get-pagination-pages.utils';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '../ui/select';
+import { SortOrder } from '@/types/common.types';
 
 enum ActiveTab {
   ALL = 'all',
@@ -53,39 +52,47 @@ const getInitials = (fullName: string) => {
 
 interface EstablishmentReviewsProps {
   establishmentId: string;
-  reviews: Review[];
-  myReview: MyReview | null;
-  isLoading: boolean;
-  totalCount: number;
-  averageRating: number;
-  ratingDistribution: RatingDistribution[];
-  currentPage: number;
-  totalPages: number;
-  onPageChange: (page: number) => void;
 }
 
-const EstablishmentReviews: FC<EstablishmentReviewsProps> = ({
-  establishmentId,
-  reviews,
-  myReview,
-  isLoading,
-  totalCount,
-  averageRating,
-  ratingDistribution,
-  currentPage,
-  totalPages,
-  onPageChange,
-}) => {
+const EstablishmentReviews: FC<EstablishmentReviewsProps> = ({ establishmentId }) => {
   const { t } = useTranslation();
+
   const { data: user } = useUserProfileQuery();
   const { mutate: createReview, isPending: isCreating } = useCreateReviewMutation();
   const { mutate: updateReview, isPending: isUpdating } = useUpdateReviewMutation();
   const { mutate: deleteReview, isPending: isDeleting } = useDeleteReviewMutation();
 
-  const { data: userReviews, isLoading: isUserReviewsLoading } =
-    useUserReviewsForEstablishmentQuery(establishmentId);
+  const { data: reviewsDistribution, isLoading: isReviewsDistributionLoading } =
+    useGetEstablishmentReviewsDistributionQuery(establishmentId);
 
   const isPending = isCreating || isUpdating;
+
+  const [reviewPage, setReviewPage] = useState(1);
+  const [sortOrder, setSortOrder] = useState<SortOrder>(SortOrder.DESC);
+  const [ratingFilter, setRatingFilter] = useState<RatingFilter | null>(null);
+
+  const { data: establishmentReviewsData, isLoading: isEstablishmentReviewsLoading } =
+    useGetEstablishmentReviewsQuery({
+      establishmentId,
+      sortOrder,
+      page: reviewPage,
+      ratingFilter,
+    });
+  const { data: userReviews, isLoading: isUserReviewsLoading } =
+    useUserReviewsForEstablishmentQuery({
+      establishmentId,
+      sortOrder,
+      ratingFilter,
+    });
+
+  const isLoading = isEstablishmentReviewsLoading && isReviewsDistributionLoading;
+
+  const myReview = establishmentReviewsData?.myReview ?? null;
+  const reviews = establishmentReviewsData?.reviews.filter(review => review.id !== myReview?.id);
+  const averageRating = Number(reviewsDistribution?.rating ?? 0);
+  const ratingDistribution = reviewsDistribution?.ratingDistribution ?? [];
+  const totalCount = establishmentReviewsData?.meta?.total ?? 0;
+  const totalPages = establishmentReviewsData?.meta?.totalPages ?? 1;
 
   const [activeTab, setActiveTab] = useState<ActiveTab>(ActiveTab.ALL);
   const [selectedReview, setSelectedReview] = useState<{ id: string; comment: string } | null>(
@@ -216,6 +223,16 @@ const EstablishmentReviews: FC<EstablishmentReviewsProps> = ({
     );
   };
 
+  const handleSort = (value: SortOrder) => {
+    setSortOrder(value);
+    setReviewPage(1);
+  };
+
+  const handleRatingFilter = (rating: RatingFilter) => {
+    setRatingFilter(prev => (prev === rating ? null : rating));
+    setReviewPage(1);
+  };
+
   const renderHeaderAction = () => {
     if (mode === ReviewMode.WRITE || mode === ReviewMode.EDIT) {
       return (
@@ -284,85 +301,126 @@ const EstablishmentReviews: FC<EstablishmentReviewsProps> = ({
       );
     }
 
-    if (!userReviews || userReviews.length === 0) {
+    if (!userReviews || (userReviews.length === 0 && !ratingFilter)) {
       return (
-        <div className='flex flex-col items-center gap-3 py-10 text-center'>
-          <div className='w-12 h-12 rounded-full bg-muted flex items-center justify-center'>
-            <User className='w-6 h-6 text-muted-foreground' />
-          </div>
-          <p className='text-foreground/50 text-base font-bold'>
-            {t(StringKey.YOU_HAVE_NO_REVIEWS)}
-          </p>
-          <p className='text-muted-foreground text-sm max-w-[260px]'>
-            {t(StringKey.VISIT_ESTABLISHMENTS_TO_REVIEW)}
-          </p>
-        </div>
+        <p className='text-center text-foreground/50 text-lg sm:text-2xl font-bold'>
+          {t(StringKey.YOU_HAVE_NO_REVIEWS)}
+        </p>
       );
     }
 
     return (
       <div className='flex flex-col gap-4'>
-        {userReviews.map(review => (
-          <div key={review.id} className='bg-muted/40 rounded-2xl p-6'>
-            <div className='flex items-start gap-4'>
-              <div className='w-10 h-10 rounded-full bg-brand-green/10 text-brand-green flex items-center justify-center font-bold text-sm shrink-0'>
-                {user ? getInitials(user.fullName) : '?'}
-              </div>
+        <div className='flex items-center gap-2 flex-wrap'>
+          <span className='text-xs text-muted-foreground font-medium'>{t(StringKey.FILTER)}:</span>
+          <button
+            onClick={() => setRatingFilter(null)}
+            className={cn(
+              'text-xs font-semibold px-3 py-1.5 rounded-full transition-colors cursor-pointer',
+              ratingFilter === null
+                ? 'bg-brand-green text-white'
+                : 'bg-muted text-muted-foreground hover:bg-muted/80'
+            )}
+          >
+            {t(StringKey.ALL)}
+          </button>
 
-              <div className='flex-1'>
-                <div className='flex flex-col gap-2 sm:flex-row sm:items-start sm:justify-between'>
-                  <div className='min-w-0'>
-                    <div className='flex items-center gap-2 flex-wrap'>
-                      <p className='font-bold text-sm truncate'>{user?.fullName}</p>
-                      <span className='text-[10px] font-black px-2 py-0.5 rounded-full bg-brand-green text-white uppercase'>
-                        {t(StringKey.YOU)}
-                      </span>
-                    </div>
-                    <p className='text-xs text-muted-foreground uppercase tracking-wide mt-0.5'>
-                      {formatDate(review.createdAt)}
-                    </p>
-                  </div>
-
-                  <div className='flex items-center gap-2 shrink-0 self-start sm:self-auto'>
-                    {renderRating(review.rating)}
-
-                    {review.isEditable && (
-                      <button
-                        onClick={() => handleStartEditReview(review)}
-                        className='p-1.5 rounded-lg hover:bg-brand-green/10 text-brand-green transition-colors cursor-pointer'
-                        title={t(StringKey.EDIT)}
-                      >
-                        <Pencil className='w-4 h-4' />
-                      </button>
-                    )}
-
-                    <button
-                      onClick={() => setSelectedReview({ id: review.id, comment: review.comment })}
-                      disabled={isDeleting}
-                      className='p-1.5 rounded-lg hover:bg-destructive/10 text-destructive transition-colors disabled:opacity-50 cursor-pointer'
-                      title={t(StringKey.DELETE)}
-                    >
-                      <Trash2 className='w-4 h-4' />
-                    </button>
-                  </div>
+          {[5, 4, 3, 2, 1].map(star => (
+            <button
+              key={star}
+              onClick={() =>
+                setRatingFilter(prev => (prev === star ? null : (star as RatingFilter)))
+              }
+              className={cn(
+                'flex items-center gap-1 text-xs font-semibold px-3 py-1.5 rounded-full transition-colors cursor-pointer',
+                ratingFilter === star
+                  ? 'bg-brand-green/10 text-brand-green ring-1 ring-brand-green/30'
+                  : 'bg-muted text-muted-foreground hover:bg-muted/80'
+              )}
+            >
+              <Star
+                className={cn(
+                  'w-3 h-3',
+                  ratingFilter === star ? 'fill-[#F59E0B] text-[#F59E0B]' : 'text-muted-foreground'
+                )}
+              />
+              {star}
+            </button>
+          ))}
+        </div>
+        {userReviews.length === 0 ? (
+          <p className='text-center text-foreground/50 text-sm font-bold py-6'>
+            {t(StringKey.NO_REVIEWS_FOR_RATING, {
+              rating: ratingFilter,
+            })}
+          </p>
+        ) : (
+          userReviews.map(review => (
+            <div key={review.id} className='bg-muted/40 rounded-2xl p-6'>
+              <div className='flex items-start gap-4'>
+                <div className='w-10 h-10 rounded-full bg-brand-green/10 text-brand-green flex items-center justify-center font-bold text-sm shrink-0'>
+                  {user ? getInitials(user.fullName) : '?'}
                 </div>
 
-                <p className='text-sm text-foreground/80 mt-3 leading-relaxed'>{review.comment}</p>
+                <div className='flex-1'>
+                  <div className='flex flex-col gap-2 sm:flex-row sm:items-start sm:justify-between'>
+                    <div className='min-w-0'>
+                      <div className='flex items-center gap-2 flex-wrap'>
+                        <p className='font-bold text-sm truncate'>{user?.fullName}</p>
+                        <span className='text-[10px] font-black px-2 py-0.5 rounded-full bg-brand-green text-white uppercase'>
+                          {t(StringKey.YOU)}
+                        </span>
+                      </div>
+                      <p className='text-xs text-muted-foreground uppercase tracking-wide mt-0.5'>
+                        {formatDate(review.createdAt)}
+                      </p>
+                    </div>
 
-                {review.isEditable && (
-                  <div className='flex items-center gap-1.5 mt-3 text-xs text-muted-foreground'>
-                    <Clock className='w-3 h-3' />
-                    <span>
-                      {t(StringKey.CAN_EDIT_UNTIL, {
-                        time: formatEditableUntil(review.editableUntil),
-                      })}
-                    </span>
+                    <div className='flex items-center gap-2 shrink-0 self-start sm:self-auto'>
+                      {renderRating(review.rating)}
+
+                      {review.isEditable && (
+                        <button
+                          onClick={() => handleStartEditReview(review)}
+                          className='p-1.5 rounded-lg hover:bg-brand-green/10 text-brand-green transition-colors cursor-pointer'
+                          title={t(StringKey.EDIT)}
+                        >
+                          <Pencil className='w-4 h-4' />
+                        </button>
+                      )}
+
+                      <button
+                        onClick={() =>
+                          setSelectedReview({ id: review.id, comment: review.comment })
+                        }
+                        disabled={isDeleting}
+                        className='p-1.5 rounded-lg hover:bg-destructive/10 text-destructive transition-colors disabled:opacity-50 cursor-pointer'
+                        title={t(StringKey.DELETE)}
+                      >
+                        <Trash2 className='w-4 h-4' />
+                      </button>
+                    </div>
                   </div>
-                )}
+
+                  <p className='text-sm text-foreground/80 mt-3 leading-relaxed'>
+                    {review.comment}
+                  </p>
+
+                  {review.isEditable && (
+                    <div className='flex items-center gap-1.5 mt-3 text-xs text-muted-foreground'>
+                      <Clock className='w-3 h-3' />
+                      <span>
+                        {t(StringKey.CAN_EDIT_UNTIL, {
+                          time: formatEditableUntil(review.editableUntil),
+                        })}
+                      </span>
+                    </div>
+                  )}
+                </div>
               </div>
             </div>
-          </div>
-        ))}
+          ))
+        )}
       </div>
     );
   };
@@ -388,20 +446,45 @@ const EstablishmentReviews: FC<EstablishmentReviewsProps> = ({
 
             <div className='flex flex-col gap-2 flex-1 justify-center'>
               {[...ratingDistribution].reverse().map(r => (
-                <div key={r.rating} className='flex items-center gap-3'>
-                  <span className='text-sm font-semibold text-muted-foreground w-2'>
+                <button
+                  key={r.rating}
+                  onClick={() => handleRatingFilter(r.rating as RatingFilter)}
+                  className={cn(
+                    'flex items-center gap-3 w-full rounded-lg px-2 py-1 transition-colors cursor-pointer group',
+                    ratingFilter === r.rating
+                      ? 'bg-brand-green/10 ring-1 ring-brand-green/30'
+                      : 'hover:bg-muted/60'
+                  )}
+                >
+                  <span
+                    className={cn(
+                      'text-sm font-semibold w-2 transition-colors',
+                      ratingFilter === r.rating ? 'text-brand-green' : 'text-muted-foreground'
+                    )}
+                  >
                     {r.rating}
                   </span>
+                  <Star
+                    className={cn(
+                      'w-3 h-3 shrink-0 transition-colors',
+                      ratingFilter === r.rating
+                        ? 'text-[#F59E0B] fill-[#F59E0B]'
+                        : 'text-muted-foreground/50'
+                    )}
+                  />
                   <div className='flex-1 h-2 bg-muted rounded-full overflow-hidden'>
                     <div
-                      className='h-full bg-brand-green rounded-full transition-all duration-500'
+                      className={cn(
+                        'h-full rounded-full transition-all duration-500',
+                        ratingFilter === r.rating ? 'bg-brand-green' : 'bg-brand-green/60'
+                      )}
                       style={{ width: `${r.percentage}%` }}
                     />
                   </div>
                   <span className='text-sm text-muted-foreground w-8 text-right'>
                     {r.percentage.toFixed(0)}%
                   </span>
-                </div>
+                </button>
               ))}
             </div>
           </div>
@@ -473,7 +556,11 @@ const EstablishmentReviews: FC<EstablishmentReviewsProps> = ({
               </div>
             )}
 
-            {reviews?.length === 0 && !myReview ? (
+            {isEstablishmentReviewsLoading ? (
+              <div className='mt-6 flex justify-center'>
+                <Loading size='lg' />
+              </div>
+            ) : reviews?.length === 0 && !myReview ? (
               <p className='text-center text-foreground/50 text-lg sm:text-2xl font-bold'>
                 {t(StringKey.NO_REVIEWS_YET)}
               </p>
@@ -532,14 +619,14 @@ const EstablishmentReviews: FC<EstablishmentReviewsProps> = ({
       {totalPages > 1 && (
         <div className='flex justify-center gap-1.5 sm:gap-2 mt-6 flex-wrap'>
           <button
-            onClick={() => onPageChange(currentPage - 1)}
-            disabled={currentPage === 1}
+            onClick={() => setReviewPage(reviewPage - 1)}
+            disabled={reviewPage === 1}
             className='w-8 h-8 rounded-full text-sm font-semibold text-muted-foreground hover:bg-muted disabled:opacity-30 disabled:cursor-not-allowed transition-colors cursor-pointer'
           >
             ‹
           </button>
 
-          {getPaginationPages(currentPage, totalPages).map((page, i) =>
+          {getPaginationPages(reviewPage, totalPages).map((page, i) =>
             page === '...' ? (
               <span
                 key={`ellipsis-${i}`}
@@ -550,10 +637,10 @@ const EstablishmentReviews: FC<EstablishmentReviewsProps> = ({
             ) : (
               <button
                 key={page}
-                onClick={() => onPageChange(page)}
+                onClick={() => setReviewPage(page)}
                 className={cn(
                   'w-8 h-8 rounded-full text-sm font-semibold transition-colors cursor-pointer',
-                  currentPage === page
+                  reviewPage === page
                     ? 'bg-brand-green text-white'
                     : 'text-muted-foreground hover:bg-muted'
                 )}
@@ -564,8 +651,8 @@ const EstablishmentReviews: FC<EstablishmentReviewsProps> = ({
           )}
 
           <button
-            onClick={() => onPageChange(currentPage + 1)}
-            disabled={currentPage === totalPages}
+            onClick={() => setReviewPage(reviewPage + 1)}
+            disabled={reviewPage === totalPages}
             className='w-8 h-8 rounded-full text-sm font-semibold text-muted-foreground hover:bg-muted disabled:opacity-30 disabled:cursor-not-allowed transition-colors cursor-pointer'
           >
             ›
@@ -582,7 +669,21 @@ const EstablishmentReviews: FC<EstablishmentReviewsProps> = ({
           <p className='font-bold text-brand-green font-playfair text-xl sm:text-2xl'>
             {t(StringKey.REVIEWS).slice(0, 1).toUpperCase() + t(StringKey.REVIEWS).slice(1)}
           </p>
-          {!isFormMode && renderHeaderAction()}
+          <div className='flex gap-3'>
+            <Select
+              defaultValue={sortOrder}
+              onValueChange={value => handleSort(value as SortOrder)}
+            >
+              <SelectTrigger className='w-40'>
+                <SelectValue />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value={SortOrder.DESC}>{t(StringKey.NEWEST_FIRST)}</SelectItem>
+                <SelectItem value={SortOrder.ASC}>{t(StringKey.OLDEST_FIRST)}</SelectItem>
+              </SelectContent>
+            </Select>
+            {!isFormMode && renderHeaderAction()}
+          </div>
           {isFormMode && (
             <button
               className='font-bold text-brand-green cursor-pointer hover:underline text-sm'
@@ -671,7 +772,10 @@ const EstablishmentReviews: FC<EstablishmentReviewsProps> = ({
             {user && (
               <div className='flex gap-1 mb-6 bg-muted/50 rounded-xl p-1'>
                 <button
-                  onClick={() => setActiveTab(ActiveTab.ALL)}
+                  onClick={() => {
+                    setActiveTab(ActiveTab.ALL);
+                    setRatingFilter(null);
+                  }}
                   className={cn(
                     'flex-1 text-sm font-semibold py-1.5 rounded-lg transition-all cursor-pointer',
                     activeTab === ActiveTab.ALL
@@ -682,7 +786,10 @@ const EstablishmentReviews: FC<EstablishmentReviewsProps> = ({
                   {t(StringKey.ALL_REVIEWS)}
                 </button>
                 <button
-                  onClick={() => setActiveTab(ActiveTab.MY)}
+                  onClick={() => {
+                    setActiveTab(ActiveTab.MY);
+                    setRatingFilter(null);
+                  }}
                   className={cn(
                     'flex-1 text-sm font-semibold py-1.5 rounded-lg transition-all cursor-pointer',
                     activeTab === ActiveTab.MY
