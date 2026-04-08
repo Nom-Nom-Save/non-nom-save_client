@@ -508,4 +508,9 @@ export const enMessages: Record<StringKey, string> = {
   [StringKey.VISIT_ESTABLISHMENTS_TO_REVIEW]: 'Visit establishments to review',
   [StringKey.ALL_REVIEWS]: 'All reviews',
   [StringKey.MY_REVIEWS]: 'My reviews',
+  [StringKey.NEWEST_FIRST]: 'Newest first',
+  [StringKey.OLDEST_FIRST]: 'Oldest first',
+  [StringKey.FILTER]: 'Filter',
+  [StringKey.ALL]: 'All',
+  [StringKey.NO_REVIEWS_FOR_RATING]: "You haven't left any {{rating}}-star reviews",
 };

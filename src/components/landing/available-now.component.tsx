@@ -6,6 +6,7 @@ import { useTranslation } from 'react-i18next';
 import EstablishmentsSlider from './establishments-slider.component';
 import { Loading } from '../loading.component';
 import { MoveRight } from 'lucide-react';
+import { Link } from '@tanstack/react-router';
 
 const AvailableNow = () => {
   const { t } = useTranslation();
@@ -55,13 +56,15 @@ const AvailableNow = () => {
             {t(StringKey.FRESHLY_LISTED)}
           </h4>
         </div>
-        <button
-          type='button'
-          className='rounded-xl py-4 px-8 text-lg font-semibold text-white transition-colors cursor-pointer bg-brand-green hover:bg-brand-green-hover flex justify-between items-center gap-4'
-        >
-          <span>{t(StringKey.EXPLORE_ALL)}</span>
-          <MoveRight />
-        </button>
+        <Link to={'/dashboard'}>
+          <button
+            type='button'
+            className='rounded-xl py-4 px-8 text-lg font-semibold text-white transition-colors cursor-pointer bg-brand-green hover:bg-brand-green-hover flex justify-between items-center gap-4'
+          >
+            <span>{t(StringKey.EXPLORE_ALL)}</span>
+            <MoveRight />
+          </button>
+        </Link>
       </div>
 
       {isLoading ? (
