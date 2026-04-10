@@ -7,11 +7,13 @@ import EstablishmentsSlider from './establishments-slider.component';
 import { Loading } from '../loading.component';
 import { MoveRight } from 'lucide-react';
 import { Link } from '@tanstack/react-router';
+import { useLocationStore } from '@/store/location.store';
 
 const AvailableNow = () => {
   const { t } = useTranslation();
   const [nearbyEstablishments, setNearbyEstablishments] = useState<EstablishmentResponse[]>([]);
   const [isLoading, setIsLoading] = useState<boolean>(true);
+  const { setLocation } = useLocationStore();
 
   useEffect(() => {
     void getVisitiorIp();
@@ -28,6 +30,7 @@ const AvailableNow = () => {
 
         navigator.geolocation.getCurrentPosition(({ coords }) => {
           const { latitude, longitude } = coords;
+          setLocation(longitude, latitude);
           getNearbyEstablishments(longitude, latitude, 50)
             .then(res => {
               setNearbyEstablishments(res.establishments);

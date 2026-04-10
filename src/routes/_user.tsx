@@ -10,7 +10,7 @@ const UserLayout = () => {
   useGetFavoritesQuery();
 
   return (
-    <div className='min-h-screen bg-brand-cream'>
+    <div className='min-h-screen bg-brand-cream px-6'>
       <Toaster position='top-right' richColors />
       <Outlet />
     </div>

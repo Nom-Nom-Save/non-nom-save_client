@@ -20,8 +20,7 @@ import {
   DialogTitle,
 } from '../ui/dialog';
 import { Button } from '../ui/button';
-import { parseWorkingHours } from '@/utils/working-hours.utils';
-import type { DAYS } from '@/types/working-hours.types';
+import { isEstablishmentOpen } from '@/utils/working-hours.utils';
 
 const SHARE_OPTIONS = [
   {
@@ -66,24 +65,7 @@ const EstablishmentHeader: FC<EstablishmentHeaderProps> = ({ establishment }) =>
     favoritesData?.favorites?.some(favorite => favorite.establishmentId === establishment.id) ??
     false;
 
-  const now = new Date();
-
-  const todayDay = new Date()
-    .toLocaleDateString('en-US', { weekday: 'long' })
-    .toLowerCase() as (typeof DAYS)[number];
-
-  const todayWorkingHours = parseWorkingHours(establishment.workingHours ?? null)[todayDay];
-
-  const [openHour, openMinute] = todayWorkingHours.open.split(':').map(Number);
-  const [closeHour, closeMinute] = todayWorkingHours.close.split(':').map(Number);
-
-  const openTime = new Date();
-  openTime.setHours(openHour, openMinute, 0, 0);
-
-  const closeTime = new Date();
-  closeTime.setHours(closeHour, closeMinute, 0, 0);
-
-  const isOpenNow = now >= openTime && now < closeTime;
+  const isOpenNow = isEstablishmentOpen(establishment.workingHours);
 
   const { mutate: removeFromFavorites, isPending: isRemovePending } = useRemoveFromFavoritesQuery();
   const { mutate: addToFavorites, isPending: isAddPending } = useAddToFavoritesQuery();
