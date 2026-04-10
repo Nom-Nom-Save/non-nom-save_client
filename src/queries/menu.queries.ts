@@ -62,7 +62,7 @@ export const useDeleteMenuItemMutation = () =>
 
 export const useGetEstablishmentMenu = (establishmentId: string, page = 1, limit = 5) => {
   return useQuery({
-    queryKey: [QueryKey.MENU],
+    queryKey: [QueryKey.MENU, establishmentId, page, limit],
     queryFn: () => getEstablishmentMenu(establishmentId, { page, limit }),
   });
 };

@@ -31,3 +31,10 @@ export const updateEstablishmentProfile = async (
   );
   return response.establishment;
 };
+
+export const getEstablishmentsCities = async () => {
+  const response = await apiRequest<{ messages: string; cities: string[] }>(
+    '/establishments/cities'
+  );
+  return response.cities;
+};

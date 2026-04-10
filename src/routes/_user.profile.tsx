@@ -7,7 +7,7 @@ export const Route = createFileRoute('/_user/profile')({
 
 function RouteComponent() {
   return (
-    <div className='bg-brand-cream px-6 flex flex-col md:flex-row gap-8 pt-4 flex-1 items-start'>
+    <div className='flex flex-col md:flex-row gap-8 pt-4 flex-1 items-start'>
       <UserSidebar />
       <div className='flex-1 min-w-0'>
         <Outlet />
