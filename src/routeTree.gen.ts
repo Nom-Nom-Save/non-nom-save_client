@@ -9,11 +9,14 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
+import { Route as CompleteSubscriptionRouteImport } from './routes/complete-subscription'
+import { Route as CancelSubscriptionRouteImport } from './routes/cancel-subscription'
 import { Route as AboutRouteImport } from './routes/about'
 import { Route as UserRouteImport } from './routes/_user'
 import { Route as EstablishmentRouteImport } from './routes/_establishment'
 import { Route as AuthRouteImport } from './routes/_auth'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as SubscriptionsPlansRouteImport } from './routes/subscriptions.plans'
 import { Route as UserProfileRouteImport } from './routes/_user.profile'
 import { Route as UserMapRouteImport } from './routes/_user.map'
 import { Route as UserHowItWorksRouteImport } from './routes/_user.how-it-works'
@@ -32,6 +35,16 @@ import { Route as UserProfilePaymentMethodsRouteImport } from './routes/_user.pr
 import { Route as UserProfileOrdersRouteImport } from './routes/_user.profile.orders'
 import { Route as UserProfileFavoritesRouteImport } from './routes/_user.profile.favorites'
 
+const CompleteSubscriptionRoute = CompleteSubscriptionRouteImport.update({
+  id: '/complete-subscription',
+  path: '/complete-subscription',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const CancelSubscriptionRoute = CancelSubscriptionRouteImport.update({
+  id: '/cancel-subscription',
+  path: '/cancel-subscription',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const AboutRoute = AboutRouteImport.update({
   id: '/about',
   path: '/about',
@@ -52,6 +65,11 @@ const AuthRoute = AuthRouteImport.update({
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const SubscriptionsPlansRoute = SubscriptionsPlansRouteImport.update({
+  id: '/subscriptions/plans',
+  path: '/subscriptions/plans',
   getParentRoute: () => rootRouteImport,
 } as any)
 const UserProfileRoute = UserProfileRouteImport.update({
@@ -144,6 +162,8 @@ const UserProfileFavoritesRoute = UserProfileFavoritesRouteImport.update({
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/about': typeof AboutRoute
+  '/cancel-subscription': typeof CancelSubscriptionRoute
+  '/complete-subscription': typeof CompleteSubscriptionRoute
   '/forgot-password': typeof AuthForgotPasswordRoute
   '/login': typeof AuthLoginRoute
   '/register': typeof AuthRegisterRoute
@@ -157,6 +177,7 @@ export interface FileRoutesByFullPath {
   '/how-it-works': typeof UserHowItWorksRoute
   '/map': typeof UserMapRoute
   '/profile': typeof UserProfileRouteWithChildren
+  '/subscriptions/plans': typeof SubscriptionsPlansRoute
   '/profile/favorites': typeof UserProfileFavoritesRoute
   '/profile/orders': typeof UserProfileOrdersRoute
   '/profile/payment-methods': typeof UserProfilePaymentMethodsRoute
@@ -165,6 +186,8 @@ export interface FileRoutesByFullPath {
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/about': typeof AboutRoute
+  '/cancel-subscription': typeof CancelSubscriptionRoute
+  '/complete-subscription': typeof CompleteSubscriptionRoute
   '/forgot-password': typeof AuthForgotPasswordRoute
   '/login': typeof AuthLoginRoute
   '/register': typeof AuthRegisterRoute
@@ -178,6 +201,7 @@ export interface FileRoutesByTo {
   '/how-it-works': typeof UserHowItWorksRoute
   '/map': typeof UserMapRoute
   '/profile': typeof UserProfileRouteWithChildren
+  '/subscriptions/plans': typeof SubscriptionsPlansRoute
   '/profile/favorites': typeof UserProfileFavoritesRoute
   '/profile/orders': typeof UserProfileOrdersRoute
   '/profile/payment-methods': typeof UserProfilePaymentMethodsRoute
@@ -190,6 +214,8 @@ export interface FileRoutesById {
   '/_establishment': typeof EstablishmentRouteWithChildren
   '/_user': typeof UserRouteWithChildren
   '/about': typeof AboutRoute
+  '/cancel-subscription': typeof CancelSubscriptionRoute
+  '/complete-subscription': typeof CompleteSubscriptionRoute
   '/_auth/forgot-password': typeof AuthForgotPasswordRoute
   '/_auth/login': typeof AuthLoginRoute
   '/_auth/register': typeof AuthRegisterRoute
@@ -203,6 +229,7 @@ export interface FileRoutesById {
   '/_user/how-it-works': typeof UserHowItWorksRoute
   '/_user/map': typeof UserMapRoute
   '/_user/profile': typeof UserProfileRouteWithChildren
+  '/subscriptions/plans': typeof SubscriptionsPlansRoute
   '/_user/profile/favorites': typeof UserProfileFavoritesRoute
   '/_user/profile/orders': typeof UserProfileOrdersRoute
   '/_user/profile/payment-methods': typeof UserProfilePaymentMethodsRoute
@@ -213,6 +240,8 @@ export interface FileRouteTypes {
   fullPaths:
     | '/'
     | '/about'
+    | '/cancel-subscription'
+    | '/complete-subscription'
     | '/forgot-password'
     | '/login'
     | '/register'
@@ -226,6 +255,7 @@ export interface FileRouteTypes {
     | '/how-it-works'
     | '/map'
     | '/profile'
+    | '/subscriptions/plans'
     | '/profile/favorites'
     | '/profile/orders'
     | '/profile/payment-methods'
@@ -234,6 +264,8 @@ export interface FileRouteTypes {
   to:
     | '/'
     | '/about'
+    | '/cancel-subscription'
+    | '/complete-subscription'
     | '/forgot-password'
     | '/login'
     | '/register'
@@ -247,6 +279,7 @@ export interface FileRouteTypes {
     | '/how-it-works'
     | '/map'
     | '/profile'
+    | '/subscriptions/plans'
     | '/profile/favorites'
     | '/profile/orders'
     | '/profile/payment-methods'
@@ -258,6 +291,8 @@ export interface FileRouteTypes {
     | '/_establishment'
     | '/_user'
     | '/about'
+    | '/cancel-subscription'
+    | '/complete-subscription'
     | '/_auth/forgot-password'
     | '/_auth/login'
     | '/_auth/register'
@@ -271,6 +306,7 @@ export interface FileRouteTypes {
     | '/_user/how-it-works'
     | '/_user/map'
     | '/_user/profile'
+    | '/subscriptions/plans'
     | '/_user/profile/favorites'
     | '/_user/profile/orders'
     | '/_user/profile/payment-methods'
@@ -283,10 +319,27 @@ export interface RootRouteChildren {
   EstablishmentRoute: typeof EstablishmentRouteWithChildren
   UserRoute: typeof UserRouteWithChildren
   AboutRoute: typeof AboutRoute
+  CancelSubscriptionRoute: typeof CancelSubscriptionRoute
+  CompleteSubscriptionRoute: typeof CompleteSubscriptionRoute
+  SubscriptionsPlansRoute: typeof SubscriptionsPlansRoute
 }
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
+    '/complete-subscription': {
+      id: '/complete-subscription'
+      path: '/complete-subscription'
+      fullPath: '/complete-subscription'
+      preLoaderRoute: typeof CompleteSubscriptionRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/cancel-subscription': {
+      id: '/cancel-subscription'
+      path: '/cancel-subscription'
+      fullPath: '/cancel-subscription'
+      preLoaderRoute: typeof CancelSubscriptionRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/about': {
       id: '/about'
       path: '/about'
@@ -320,6 +373,13 @@ declare module '@tanstack/react-router' {
       path: '/'
       fullPath: '/'
       preLoaderRoute: typeof IndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/subscriptions/plans': {
+      id: '/subscriptions/plans'
+      path: '/subscriptions/plans'
+      fullPath: '/subscriptions/plans'
+      preLoaderRoute: typeof SubscriptionsPlansRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/_user/profile': {
@@ -520,6 +580,9 @@ const rootRouteChildren: RootRouteChildren = {
   EstablishmentRoute: EstablishmentRouteWithChildren,
   UserRoute: UserRouteWithChildren,
   AboutRoute: AboutRoute,
+  CancelSubscriptionRoute: CancelSubscriptionRoute,
+  CompleteSubscriptionRoute: CompleteSubscriptionRoute,
+  SubscriptionsPlansRoute: SubscriptionsPlansRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)

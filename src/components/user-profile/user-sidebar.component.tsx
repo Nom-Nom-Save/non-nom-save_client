@@ -7,11 +7,15 @@ import {
   Heart,
   CreditCard,
   CircleUserRound,
+  Crown,
 } from 'lucide-react';
 import { StringKey } from '@/consts/string-key.consts';
+import { SubscriptionStatus } from '@/types/subscription.types';
 import { useTranslation } from 'react-i18next';
 import { Link, useLocation } from '@tanstack/react-router';
 import { cn } from '@/lib/utils';
+import { formatDate } from '@/utils/time.utils';
+import { UnlockPremiumButton } from '@/components/subscription/unlock-premium-button.component';
 
 const UserSidebarNavigationItems = [
   {
@@ -42,6 +46,7 @@ const UserSidebar = () => {
 
   const { data: user } = useUserProfileQuery();
   const memberSinceYear = new Date(user?.createdAt ?? '').getFullYear();
+  const isPremium = user?.subscription?.status === SubscriptionStatus.ACTIVE;
 
   return (
     <aside className='w-full md:w-[300px]'>
@@ -53,9 +58,17 @@ const UserSidebar = () => {
               alt='User Avatar'
               className='w-24 h-24 rounded-full border-4 border-border bg-brand-avatar-bg'
             />
+            {isPremium && (
+              <div className='absolute -bottom-2 left-1/2 -translate-x-1/2 flex items-center gap-1 bg-brand-green text-white text-[10px] font-black uppercase tracking-widest px-2.5 py-1 rounded-full whitespace-nowrap'>
+                <Crown size={10} />
+                {t(StringKey.PREMIUM)}
+              </div>
+            )}
           </div>
 
-          <p className='font-playfair text-brand-green text-lg font-semibold'>{user?.fullName}</p>
+          <p className='font-playfair text-brand-green text-lg font-semibold mt-1'>
+            {user?.fullName}
+          </p>
           <p className='text-foreground/50 text-sm'>
             {t(StringKey.MEMBER_SINCE)} {memberSinceYear}
           </p>
@@ -79,6 +92,20 @@ const UserSidebar = () => {
             </div>
             <span className='text-brand-blue font-semibold'>${user?.totalSavings ?? 0}</span>
           </div>
+
+          {isPremium && user?.subscription ? (
+            <div className='flex items-center justify-between bg-brand-green/8 border border-brand-green/20 rounded-[1.25rem] px-4 py-3'>
+              <div className='flex items-center gap-2 text-foreground/50 text-sm'>
+                <Crown size={16} className='text-brand-green' />
+                {user.subscription.planName}
+              </div>
+              <span className='text-brand-green text-xs font-semibold'>
+                {t(StringKey.PLAN_EXPIRES)} {formatDate(user.subscription.endDate)}
+              </span>
+            </div>
+          ) : (
+            <UnlockPremiumButton />
+          )}
         </div>
       </section>
       <nav>

@@ -9,6 +9,8 @@ export type WorkingHours = Record<
   DaySchedule
 >;
 
+import type { Subscription } from '@/types/subscription.types';
+
 export interface EstablishmentProfile {
   id: string;
   name: string;
@@ -21,6 +23,11 @@ export interface EstablishmentProfile {
   banner: string | null;
   rating: string | null;
   createdAt: string;
+  reviewCount: number;
+  isFavorite: boolean;
+  bagsSold: number;
+  foodSaved: string;
+  subscription: Subscription | null;
 }
 
 export interface UpdateEstablishmentRequest {

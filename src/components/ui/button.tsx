@@ -29,6 +29,7 @@ const buttonVariants = cva(
           'border-2 border-brand-green text-brand-green bg-white hover:bg-brand-green hover:text-white cursor-pointer',
         'danger-outline':
           'border-[1.5px] border-destructive/30 bg-white text-destructive cursor-pointer',
+        paypal: 'bg-[#ffc439] text-[#003087] hover:bg-[#f5b800] cursor-pointer font-extrabold',
       },
       size: {
         default: 'h-9 px-4 py-2 has-[>svg]:px-3',
@@ -46,6 +47,7 @@ const buttonVariants = cva(
         pill: 'rounded-full px-4 py-2 text-[13px] font-semibold',
         'pill-sm': 'rounded-full px-6 py-2.5 text-[13px] font-bold',
         'icon-circle': 'size-[34px] rounded-full',
+        plan: 'w-full rounded-full py-3.5 text-[15px] font-bold justify-center',
       },
     },
     defaultVariants: {

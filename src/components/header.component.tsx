@@ -1,7 +1,8 @@
 import { StringKey } from '@/consts/string-key.consts';
 import { Link, useNavigate, useRouterState } from '@tanstack/react-router';
 import { useTranslation } from 'react-i18next';
-import { LogOut } from 'lucide-react';
+import { LogOut, Crown } from 'lucide-react';
+import { SubscriptionStatus } from '@/types/subscription.types';
 import { cn } from '@/lib/utils';
 import { Button } from '@/components/ui/button';
 import { useAuthStore } from '@/store/auth.store';
@@ -109,10 +110,19 @@ const UserHeader: FC<UserHeaderProps> = ({ t, location, handleLogout }) => {
             <LogOut size={18} className='text-foreground/50' />
           </Button>
           <Link to='/profile/settings' className='flex items-center gap-2'>
-            <div className='w-[38px] h-[38px] rounded-full bg-brand-green-muted border-2 border-brand-green flex items-center justify-center'>
-              <span className='text-sm font-bold text-brand-green'>
-                {user?.fullName?.charAt(0)?.toUpperCase() ?? 'E'}
-              </span>
+            <div className='relative'>
+              <div className='w-[38px] h-[38px] rounded-full bg-brand-green-muted border-2 border-brand-green flex items-center justify-center'>
+                <span className='text-sm font-bold text-brand-green'>
+                  {user?.fullName?.charAt(0)?.toUpperCase() ?? 'E'}
+                </span>
+              </div>
+              {/* {user?.subscription?.status === SubscriptionStatus.ACTIVE && ( */}
+              <Crown
+                size={18}
+                className='absolute -top-2.5 -right-1.5'
+                style={{ color: 'var(--brand-green)', fill: 'var(--brand-green)' }}
+              />
+              {/* )} */}
             </div>
           </Link>
         </div>
@@ -170,10 +180,19 @@ const EstablishmentHeader = ({ t, location, handleLogout }: EstablishmentHeaderP
             <LogOut size={18} className='text-foreground/50' />
           </Button>
           <Link to='/settings' className='flex items-center gap-2'>
-            <div className='w-[38px] h-[38px] rounded-full bg-brand-green-muted border-2 border-brand-green flex items-center justify-center'>
-              <span className='text-sm font-bold text-brand-green'>
-                {profile?.name?.charAt(0)?.toUpperCase() ?? 'E'}
-              </span>
+            <div className='relative'>
+              <div className='w-[38px] h-[38px] rounded-full bg-brand-green-muted border-2 border-brand-green flex items-center justify-center'>
+                <span className='text-sm font-bold text-brand-green'>
+                  {profile?.name?.charAt(0)?.toUpperCase() ?? 'E'}
+                </span>
+              </div>
+              {profile?.subscription?.status === SubscriptionStatus.ACTIVE && (
+                <Crown
+                  size={18}
+                  className='absolute -top-2.5 -right-1.5'
+                  style={{ color: 'var(--brand-green)', fill: 'var(--brand-green)' }}
+                />
+              )}
             </div>
           </Link>
         </div>

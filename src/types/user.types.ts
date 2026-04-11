@@ -1,4 +1,5 @@
 import { StringKey } from '@/consts/string-key.consts';
+import type { Subscription } from '@/types/subscription.types';
 
 export interface User {
   id: string;
@@ -11,6 +12,7 @@ export interface User {
   successfulOrdersCount: number;
   totalSavings: number;
   totalOrderedItems: number;
+  subscription: Subscription | null;
 }
 
 export const USER_NAV = [
