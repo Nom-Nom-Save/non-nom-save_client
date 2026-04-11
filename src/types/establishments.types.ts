@@ -1,4 +1,5 @@
 import { StringKey } from '@/consts/string-key.consts';
+import type { SortOrder } from './common.types';
 
 export interface EstablishmentResponse {
   id: string;
@@ -17,6 +18,8 @@ export interface EstablishmentResponse {
   boundTo: string;
   createdAt: Date | null;
   status: string;
+  reviewCount: number;
+  distance?: number;
 }
 
 export const ESTABLISHMENT_NAV = [
@@ -25,3 +28,22 @@ export const ESTABLISHMENT_NAV = [
   { to: '/analytics' as const, labelKey: StringKey.ANALYTICS },
   { to: '/settings' as const, labelKey: StringKey.SETTINGS },
 ];
+
+export interface GetEstabslishmentsListParams {
+  city?: string;
+  lat?: number;
+  lon?: number;
+  radius?: number;
+  minRating?: number;
+  productTypeIds?: string[];
+  sortBy?: string;
+  sortOrder?: SortOrder;
+  page?: number;
+  limit?: number;
+}
+
+export enum EstablishmentsSortBy {
+  RATING = 'rating',
+  DISTANCE = 'distance',
+  CLOSING_TIME = 'closingTime',
+}

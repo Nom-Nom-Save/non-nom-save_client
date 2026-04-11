@@ -35,10 +35,6 @@ const DEFAULT_SCHEDULE: DaySchedule = { open: '09:00', close: '18:00', isOpen: t
 export const getDefaultHours = (): WorkingHours =>
   Object.fromEntries(DAYS.map(day => [day, { ...DEFAULT_SCHEDULE }])) as WorkingHours;
 
-/**
- * Compact format: "mon=09:00-18:00|tue=09:00-18:00|wed=closed|..."
- * Max ~154 chars for 7 days — fits 255 DB limit.
- */
 export const serializeWorkingHours = (hours: WorkingHours): string =>
   DAYS.map(day => {
     const schedule = hours[day];
@@ -49,7 +45,6 @@ export const serializeWorkingHours = (hours: WorkingHours): string =>
 export const parseWorkingHours = (raw: string | null): WorkingHours => {
   if (!raw) return getDefaultHours();
 
-  // Compact format: "mon=09:00-18:00|tue=closed|..."
   if (raw.includes('|') || raw.includes('=')) {
     const result = getDefaultHours();
     for (const part of raw.split('|')) {
@@ -71,10 +66,45 @@ export const parseWorkingHours = (raw: string | null): WorkingHours => {
     return result;
   }
 
-  // Fallback: try JSON (legacy)
   try {
     return JSON.parse(raw) as WorkingHours;
   } catch {
     return getDefaultHours();
   }
+};
+
+export const isEstablishmentOpen = (
+  workingHoursRaw: string | null | undefined,
+  targetDate: Date = new Date()
+): boolean => {
+  if (!workingHoursRaw) {
+    return false;
+  }
+
+  const parsedHours = parseWorkingHours(workingHoursRaw);
+
+  const dayName = targetDate
+    .toLocaleDateString('en-US', { weekday: 'long' })
+    .toLowerCase() as (typeof DAYS)[number];
+
+  const todaySchedule = parsedHours[dayName];
+
+  if (!todaySchedule || !todaySchedule.open || !todaySchedule.close) {
+    return false;
+  }
+
+  const [openHour, openMinute] = todaySchedule.open.split(':').map(Number);
+  const [closeHour, closeMinute] = todaySchedule.close.split(':').map(Number);
+
+  const openTime = new Date(targetDate);
+  openTime.setHours(openHour, openMinute, 0, 0);
+
+  const closeTime = new Date(targetDate);
+  closeTime.setHours(closeHour, closeMinute, 0, 0);
+
+  if (closeTime <= openTime) {
+    closeTime.setDate(closeTime.getDate() + 1);
+  }
+
+  return targetDate >= openTime && targetDate < closeTime;
 };

@@ -17,6 +17,7 @@ import { Route as EstablishmentRouteImport } from './routes/_establishment'
 import { Route as AuthRouteImport } from './routes/_auth'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as SubscriptionsPlansRouteImport } from './routes/subscriptions.plans'
+import { Route as EstablishmentsEstablishmentIdRouteImport } from './routes/establishments.$establishmentId'
 import { Route as UserProfileRouteImport } from './routes/_user.profile'
 import { Route as UserMapRouteImport } from './routes/_user.map'
 import { Route as UserHowItWorksRouteImport } from './routes/_user.how-it-works'
@@ -67,6 +68,12 @@ const IndexRoute = IndexRouteImport.update({
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const EstablishmentsEstablishmentIdRoute =
+  EstablishmentsEstablishmentIdRouteImport.update({
+    id: '/establishments/$establishmentId',
+    path: '/establishments/$establishmentId',
+    getParentRoute: () => rootRouteImport,
+  } as any)
 const SubscriptionsPlansRoute = SubscriptionsPlansRouteImport.update({
   id: '/subscriptions/plans',
   path: '/subscriptions/plans',
@@ -178,6 +185,7 @@ export interface FileRoutesByFullPath {
   '/map': typeof UserMapRoute
   '/profile': typeof UserProfileRouteWithChildren
   '/subscriptions/plans': typeof SubscriptionsPlansRoute
+  '/establishments/$establishmentId': typeof EstablishmentsEstablishmentIdRoute
   '/profile/favorites': typeof UserProfileFavoritesRoute
   '/profile/orders': typeof UserProfileOrdersRoute
   '/profile/payment-methods': typeof UserProfilePaymentMethodsRoute
@@ -202,6 +210,7 @@ export interface FileRoutesByTo {
   '/map': typeof UserMapRoute
   '/profile': typeof UserProfileRouteWithChildren
   '/subscriptions/plans': typeof SubscriptionsPlansRoute
+  '/establishments/$establishmentId': typeof EstablishmentsEstablishmentIdRoute
   '/profile/favorites': typeof UserProfileFavoritesRoute
   '/profile/orders': typeof UserProfileOrdersRoute
   '/profile/payment-methods': typeof UserProfilePaymentMethodsRoute
@@ -230,6 +239,7 @@ export interface FileRoutesById {
   '/_user/map': typeof UserMapRoute
   '/_user/profile': typeof UserProfileRouteWithChildren
   '/subscriptions/plans': typeof SubscriptionsPlansRoute
+  '/establishments/$establishmentId': typeof EstablishmentsEstablishmentIdRoute
   '/_user/profile/favorites': typeof UserProfileFavoritesRoute
   '/_user/profile/orders': typeof UserProfileOrdersRoute
   '/_user/profile/payment-methods': typeof UserProfilePaymentMethodsRoute
@@ -256,6 +266,7 @@ export interface FileRouteTypes {
     | '/map'
     | '/profile'
     | '/subscriptions/plans'
+    | '/establishments/$establishmentId'
     | '/profile/favorites'
     | '/profile/orders'
     | '/profile/payment-methods'
@@ -280,6 +291,7 @@ export interface FileRouteTypes {
     | '/map'
     | '/profile'
     | '/subscriptions/plans'
+    | '/establishments/$establishmentId'
     | '/profile/favorites'
     | '/profile/orders'
     | '/profile/payment-methods'
@@ -307,6 +319,7 @@ export interface FileRouteTypes {
     | '/_user/map'
     | '/_user/profile'
     | '/subscriptions/plans'
+    | '/establishments/$establishmentId'
     | '/_user/profile/favorites'
     | '/_user/profile/orders'
     | '/_user/profile/payment-methods'
@@ -322,6 +335,7 @@ export interface RootRouteChildren {
   CancelSubscriptionRoute: typeof CancelSubscriptionRoute
   CompleteSubscriptionRoute: typeof CompleteSubscriptionRoute
   SubscriptionsPlansRoute: typeof SubscriptionsPlansRoute
+  EstablishmentsEstablishmentIdRoute: typeof EstablishmentsEstablishmentIdRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -380,6 +394,13 @@ declare module '@tanstack/react-router' {
       path: '/subscriptions/plans'
       fullPath: '/subscriptions/plans'
       preLoaderRoute: typeof SubscriptionsPlansRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/establishments/$establishmentId': {
+      id: '/establishments/$establishmentId'
+      path: '/establishments/$establishmentId'
+      fullPath: '/establishments/$establishmentId'
+      preLoaderRoute: typeof EstablishmentsEstablishmentIdRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/_user/profile': {
@@ -583,6 +604,7 @@ const rootRouteChildren: RootRouteChildren = {
   CancelSubscriptionRoute: CancelSubscriptionRoute,
   CompleteSubscriptionRoute: CompleteSubscriptionRoute,
   SubscriptionsPlansRoute: SubscriptionsPlansRoute,
+  EstablishmentsEstablishmentIdRoute: EstablishmentsEstablishmentIdRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
