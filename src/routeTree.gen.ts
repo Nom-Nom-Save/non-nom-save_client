@@ -68,17 +68,17 @@ const IndexRoute = IndexRouteImport.update({
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const SubscriptionsPlansRoute = SubscriptionsPlansRouteImport.update({
+  id: '/subscriptions/plans',
+  path: '/subscriptions/plans',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const EstablishmentsEstablishmentIdRoute =
   EstablishmentsEstablishmentIdRouteImport.update({
     id: '/establishments/$establishmentId',
     path: '/establishments/$establishmentId',
     getParentRoute: () => rootRouteImport,
   } as any)
-const SubscriptionsPlansRoute = SubscriptionsPlansRouteImport.update({
-  id: '/subscriptions/plans',
-  path: '/subscriptions/plans',
-  getParentRoute: () => rootRouteImport,
-} as any)
 const UserProfileRoute = UserProfileRouteImport.update({
   id: '/profile',
   path: '/profile',
@@ -184,8 +184,8 @@ export interface FileRoutesByFullPath {
   '/how-it-works': typeof UserHowItWorksRoute
   '/map': typeof UserMapRoute
   '/profile': typeof UserProfileRouteWithChildren
-  '/subscriptions/plans': typeof SubscriptionsPlansRoute
   '/establishments/$establishmentId': typeof EstablishmentsEstablishmentIdRoute
+  '/subscriptions/plans': typeof SubscriptionsPlansRoute
   '/profile/favorites': typeof UserProfileFavoritesRoute
   '/profile/orders': typeof UserProfileOrdersRoute
   '/profile/payment-methods': typeof UserProfilePaymentMethodsRoute
@@ -209,8 +209,8 @@ export interface FileRoutesByTo {
   '/how-it-works': typeof UserHowItWorksRoute
   '/map': typeof UserMapRoute
   '/profile': typeof UserProfileRouteWithChildren
-  '/subscriptions/plans': typeof SubscriptionsPlansRoute
   '/establishments/$establishmentId': typeof EstablishmentsEstablishmentIdRoute
+  '/subscriptions/plans': typeof SubscriptionsPlansRoute
   '/profile/favorites': typeof UserProfileFavoritesRoute
   '/profile/orders': typeof UserProfileOrdersRoute
   '/profile/payment-methods': typeof UserProfilePaymentMethodsRoute
@@ -238,8 +238,8 @@ export interface FileRoutesById {
   '/_user/how-it-works': typeof UserHowItWorksRoute
   '/_user/map': typeof UserMapRoute
   '/_user/profile': typeof UserProfileRouteWithChildren
-  '/subscriptions/plans': typeof SubscriptionsPlansRoute
   '/establishments/$establishmentId': typeof EstablishmentsEstablishmentIdRoute
+  '/subscriptions/plans': typeof SubscriptionsPlansRoute
   '/_user/profile/favorites': typeof UserProfileFavoritesRoute
   '/_user/profile/orders': typeof UserProfileOrdersRoute
   '/_user/profile/payment-methods': typeof UserProfilePaymentMethodsRoute
@@ -265,8 +265,8 @@ export interface FileRouteTypes {
     | '/how-it-works'
     | '/map'
     | '/profile'
-    | '/subscriptions/plans'
     | '/establishments/$establishmentId'
+    | '/subscriptions/plans'
     | '/profile/favorites'
     | '/profile/orders'
     | '/profile/payment-methods'
@@ -290,8 +290,8 @@ export interface FileRouteTypes {
     | '/how-it-works'
     | '/map'
     | '/profile'
-    | '/subscriptions/plans'
     | '/establishments/$establishmentId'
+    | '/subscriptions/plans'
     | '/profile/favorites'
     | '/profile/orders'
     | '/profile/payment-methods'
@@ -318,8 +318,8 @@ export interface FileRouteTypes {
     | '/_user/how-it-works'
     | '/_user/map'
     | '/_user/profile'
-    | '/subscriptions/plans'
     | '/establishments/$establishmentId'
+    | '/subscriptions/plans'
     | '/_user/profile/favorites'
     | '/_user/profile/orders'
     | '/_user/profile/payment-methods'
@@ -334,8 +334,8 @@ export interface RootRouteChildren {
   AboutRoute: typeof AboutRoute
   CancelSubscriptionRoute: typeof CancelSubscriptionRoute
   CompleteSubscriptionRoute: typeof CompleteSubscriptionRoute
-  SubscriptionsPlansRoute: typeof SubscriptionsPlansRoute
   EstablishmentsEstablishmentIdRoute: typeof EstablishmentsEstablishmentIdRoute
+  SubscriptionsPlansRoute: typeof SubscriptionsPlansRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -603,8 +603,8 @@ const rootRouteChildren: RootRouteChildren = {
   AboutRoute: AboutRoute,
   CancelSubscriptionRoute: CancelSubscriptionRoute,
   CompleteSubscriptionRoute: CompleteSubscriptionRoute,
-  SubscriptionsPlansRoute: SubscriptionsPlansRoute,
   EstablishmentsEstablishmentIdRoute: EstablishmentsEstablishmentIdRoute,
+  SubscriptionsPlansRoute: SubscriptionsPlansRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)

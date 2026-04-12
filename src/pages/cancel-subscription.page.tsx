@@ -1,16 +1,19 @@
 import { useNavigate } from '@tanstack/react-router';
 import { XCircle, CheckCircle, Lock, Crown, ArrowLeft } from 'lucide-react';
 import { Button } from '@/components/ui/button';
-
-const accessItems = [
-  { label: 'Browse offers list & feed', locked: false },
-  { label: 'Order & collect with QR code', locked: false },
-  { label: 'Order history & reviews', locked: false },
-  { label: 'Real-time map, early access & more — upgrade to unlock', locked: true },
-];
+import { useTranslation } from 'react-i18next';
+import { StringKey } from '@/consts/string-key.consts';
 
 const CancelSubscriptionPage = () => {
+  const { t } = useTranslation();
   const navigate = useNavigate();
+
+  const accessItems = [
+    { label: t(StringKey.BUYER_FREE_FEAT_1), locked: false },
+    { label: t(StringKey.BUYER_FREE_FEAT_2), locked: false },
+    { label: t(StringKey.BUYER_FREE_FEAT_3), locked: false },
+    { label: t(StringKey.CANCEL_SUB_LOCKED_ITEM), locked: true },
+  ];
 
   return (
     <div className='min-h-screen bg-brand-cream flex items-center justify-center px-4 py-20'>
@@ -20,20 +23,19 @@ const CancelSubscriptionPage = () => {
         </div>
 
         <span className='inline-block px-4 py-1.5 rounded-full bg-destructive/10 text-destructive text-xs font-extrabold tracking-widest uppercase mb-4'>
-          Payment cancelled
+          {t(StringKey.PAYMENT_CANCELLED_BADGE)}
         </span>
 
         <h1 className='font-playfair text-[clamp(1.8rem,4vw,2.8rem)] font-bold text-foreground leading-tight mb-3'>
-          No charge was made
+          {t(StringKey.NO_CHARGE_MADE)}
         </h1>
         <p className='text-base text-muted-foreground leading-relaxed mb-10 max-w-[420px] mx-auto'>
-          You cancelled the payment process. Your account has not been charged and you remain on
-          your current plan.
+          {t(StringKey.PAYMENT_CANCELLED_DESC)}
         </p>
 
         <div className='bg-white border-[1.5px] border-border rounded-[20px] p-7 mb-9 text-left'>
           <p className='text-[13px] font-bold text-muted-foreground uppercase tracking-[.08em] mb-4'>
-            You still have access to
+            {t(StringKey.YOU_STILL_HAVE_ACCESS)}
           </p>
           <div className='flex flex-col gap-2.5'>
             {accessItems.map(item => (
@@ -54,36 +56,34 @@ const CancelSubscriptionPage = () => {
           </div>
         </div>
 
-        <div
-          className='border-[1.5px] border-brand-green/20 rounded-[20px] p-7 mb-9 text-left'
-          style={{ background: 'linear-gradient(135deg, #dff0e4, #f0faf4)' }}
-        >
+        <div className='border-[1.5px] border-brand-green/20 rounded-[20px] p-7 mb-9 text-left bg-linear-to-br from-brand-green-muted to-white'>
           <div className='flex items-center gap-2 mb-2'>
             <Crown size={18} className='text-brand-green shrink-0' />
             <p className='font-playfair text-xl font-bold text-brand-green'>
-              Still thinking about it?
+              {t(StringKey.STILL_THINKING)}
             </p>
           </div>
           <p className='text-sm text-muted-foreground leading-relaxed mb-5'>
-            Premium starts at just <strong className='text-brand-green'>$4.99/month</strong>. Cancel
-            anytime, no commitments.
+            {t(StringKey.UPSELL_DESC)}
           </p>
           <Button
             variant='brand'
             size='settings'
             onClick={() => void navigate({ to: '/subscriptions/plans' })}
           >
-            See plans again
+            {t(StringKey.SEE_PLANS_AGAIN)}
           </Button>
         </div>
 
-        <button
-          className='inline-flex items-center gap-2 text-sm font-semibold text-muted-foreground hover:text-brand-green transition-colors'
+        <Button
+          variant='ghost'
+          size='sm'
+          className='gap-2 text-muted-foreground hover:text-brand-green hover:bg-transparent'
           onClick={() => void navigate({ to: '/dashboard' })}
         >
           <ArrowLeft size={18} />
-          Back to Dashboard
-        </button>
+          {t(StringKey.GO_TO_DASHBOARD)}
+        </Button>
       </div>
     </div>
   );

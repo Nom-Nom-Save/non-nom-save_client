@@ -2,7 +2,7 @@ import { StringKey } from '@/consts/string-key.consts';
 import { Link, useNavigate, useRouterState } from '@tanstack/react-router';
 import { useTranslation } from 'react-i18next';
 import { LogOut, Crown } from 'lucide-react';
-import { SubscriptionStatus } from '@/types/subscription.types';
+import { PlanName, SubscriptionStatus } from '@/types/subscription.types';
 import { cn } from '@/lib/utils';
 import { Button } from '@/components/ui/button';
 import { useAuthStore } from '@/store/auth.store';
@@ -116,13 +116,14 @@ const UserHeader: FC<UserHeaderProps> = ({ t, location, handleLogout }) => {
                   {user?.fullName?.charAt(0)?.toUpperCase() ?? 'E'}
                 </span>
               </div>
-              {/* {user?.subscription?.status === SubscriptionStatus.ACTIVE && ( */}
-              <Crown
-                size={18}
-                className='absolute -top-2.5 -right-1.5'
-                style={{ color: 'var(--brand-green)', fill: 'var(--brand-green)' }}
-              />
-              {/* )} */}
+              {user?.subscription?.status === SubscriptionStatus.ACTIVE &&
+                user?.subscription?.planName !== PlanName.Free && (
+                  <Crown
+                    size={18}
+                    className='absolute -top-2.5 -right-1.5'
+                    style={{ color: 'var(--brand-green)', fill: 'var(--brand-green)' }}
+                  />
+                )}
             </div>
           </Link>
         </div>
@@ -186,13 +187,14 @@ const EstablishmentHeader = ({ t, location, handleLogout }: EstablishmentHeaderP
                   {profile?.name?.charAt(0)?.toUpperCase() ?? 'E'}
                 </span>
               </div>
-              {profile?.subscription?.status === SubscriptionStatus.ACTIVE && (
-                <Crown
-                  size={18}
-                  className='absolute -top-2.5 -right-1.5'
-                  style={{ color: 'var(--brand-green)', fill: 'var(--brand-green)' }}
-                />
-              )}
+              {profile?.subscription?.status === SubscriptionStatus.ACTIVE &&
+                profile?.subscription?.planName !== PlanName.Free && (
+                  <Crown
+                    size={18}
+                    className='absolute -top-2.5 -right-1.5'
+                    style={{ color: 'var(--brand-green)', fill: 'var(--brand-green)' }}
+                  />
+                )}
             </div>
           </Link>
         </div>

@@ -423,6 +423,7 @@ export const enMessages: Record<StringKey, string> = {
   [StringKey.CURRENT_PLAN_BADGE]: 'Current plan',
   [StringKey.FREE_FOREVER]: '$0 / forever',
   [StringKey.PER_MONTH]: '/ month',
+  [StringKey.PER_DAY]: '/ day',
   [StringKey.FREE_PLAN_FEAT_1]: 'Browse all local offers',
   [StringKey.FREE_PLAN_FEAT_2]: 'Standard map access',
   [StringKey.FREE_PLAN_FEAT_3]: 'Basic order history',
@@ -497,6 +498,28 @@ export const enMessages: Record<StringKey, string> = {
   [StringKey.FAQ_4_Q]: 'What happens if I exceed 5 boxes on the Free plan?',
   [StringKey.FAQ_4_A]:
     'You will need to deactivate or remove an existing active box before publishing a new one. Upgrading to Pro removes this limit.',
+
+  // Complete / Cancel Subscription Pages
+  [StringKey.CONFIRMING_SUBSCRIPTION]: 'Confirming your subscription…',
+  [StringKey.PAYMENT_SUCCESSFUL_BADGE]: 'Payment successful',
+  [StringKey.YOU_ARE_ALL_SET]: "You're all set!",
+  [StringKey.SUBSCRIPTION_ACTIVATED_DESC]:
+    'Your subscription has been activated. Welcome to the premium experience on Nom Nom Save.',
+  [StringKey.MONTHLY_RENEWS]: 'Monthly · renews automatically',
+  [StringKey.NEXT_BILLING_DATE]: 'Next billing date:',
+  [StringKey.WHAT_YOU_UNLOCKED]: 'What you unlocked',
+  [StringKey.GO_TO_DASHBOARD]: 'Go to Dashboard',
+  [StringKey.VIEW_MY_PLAN]: 'View my plan',
+  [StringKey.PAYMENT_CANCELLED_BADGE]: 'Payment cancelled',
+  [StringKey.NO_CHARGE_MADE]: 'No charge was made',
+  [StringKey.PAYMENT_CANCELLED_DESC]:
+    'You cancelled the payment process. Your account has not been charged and you remain on your current plan.',
+  [StringKey.YOU_STILL_HAVE_ACCESS]: 'You still have access to',
+  [StringKey.CANCEL_SUB_LOCKED_ITEM]: 'Real-time map, early access & more — upgrade to unlock',
+  [StringKey.STILL_THINKING]: 'Still thinking about it?',
+  [StringKey.UPSELL_DESC]: 'Premium starts at just $4.99/month. Cancel anytime, no commitments.',
+  [StringKey.SEE_PLANS_AGAIN]: 'See plans again',
+
   [StringKey.MEMBER_SINCE]: 'Member since',
   [StringKey.ORDERS]: 'Orders',
   [StringKey.SAVED]: 'Saved',

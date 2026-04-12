@@ -5,9 +5,21 @@ export enum SubscriptionStatus {
   PENDING = 'pending',
 }
 
-export interface Subscription {
+export enum PlanName {
+  Free = 'Free',
+  Pro = 'Pro',
+  Sponsor = 'Sponsor',
+}
+
+export interface RawSubscription {
   status: SubscriptionStatus;
   planName: string;
+  endDate: string;
+}
+
+export interface Subscription {
+  status: SubscriptionStatus;
+  planName: PlanName;
   endDate: string;
 }
 

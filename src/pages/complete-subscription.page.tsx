@@ -1,23 +1,46 @@
 import { useEffect } from 'react';
 import { useNavigate } from '@tanstack/react-router';
 import { Route } from '@/routes/complete-subscription';
-
 import { CheckCircle, Calendar, Star } from 'lucide-react';
 import { format, addDays } from 'date-fns';
 import { Button } from '@/components/ui/button';
-import { useCaptureSubscriptionOrderMutation } from '@/queries/subscription.queries';
-
-const planFeatures = [
-  'Unlimited active offers',
-  'Advanced analytics dashboard',
-  'Offer templates & scheduling',
-  'Map promotion for your listing',
-];
+import {
+  useCaptureSubscriptionOrderMutation,
+  useSubscriptionPlansQuery,
+} from '@/queries/subscription.queries';
+import { useTranslation } from 'react-i18next';
+import { StringKey } from '@/consts/string-key.consts';
+import { useAuthStore } from '@/store/auth.store';
 
 const CompleteSubscriptionPage = () => {
+  const { t } = useTranslation();
   const navigate = useNavigate();
   const { token } = Route.useSearch();
   const captureOrderMutation = useCaptureSubscriptionOrderMutation();
+  const { data: plans } = useSubscriptionPlansQuery();
+  const loginType = useAuthStore(s => s.loginType);
+
+  const plan = plans?.[0];
+  const planName =
+    plan?.name ??
+    (loginType === 'establishment' ? t(StringKey.PLAN_PRO_NAME) : t(StringKey.PLAN_PREMIUM_NAME));
+  const planPrice = plan ? `$${plan.price}` : '—';
+
+  const buyerFeatures = [
+    t(StringKey.BUYER_PREMIUM_FEAT_2),
+    t(StringKey.BUYER_PREMIUM_FEAT_3),
+    t(StringKey.BUYER_PREMIUM_FEAT_4),
+    t(StringKey.BUYER_PREMIUM_FEAT_5),
+  ];
+
+  const estFeatures = [
+    t(StringKey.EST_PRO_FEAT_2),
+    t(StringKey.EST_PRO_FEAT_3),
+    t(StringKey.EST_PRO_FEAT_4),
+    t(StringKey.EST_PRO_FEAT_5),
+  ];
+
+  const planFeatures = loginType === 'establishment' ? estFeatures : buyerFeatures;
 
   useEffect(() => {
     if (!token) {
@@ -42,7 +65,7 @@ const CompleteSubscriptionPage = () => {
       <div className='min-h-screen bg-brand-cream flex items-center justify-center'>
         <div className='text-center'>
           <div className='w-12 h-12 border-4 border-brand-green border-t-transparent rounded-full animate-spin mx-auto mb-4' />
-          <p className='text-muted-foreground'>Confirming your subscription…</p>
+          <p className='text-muted-foreground'>{t(StringKey.CONFIRMING_SUBSCRIPTION)}</p>
         </div>
       </div>
     );
@@ -56,14 +79,14 @@ const CompleteSubscriptionPage = () => {
         </div>
 
         <span className='inline-block px-4 py-1.5 rounded-full bg-brand-green-muted text-brand-green text-xs font-extrabold tracking-widest uppercase mb-4'>
-          Payment successful
+          {t(StringKey.PAYMENT_SUCCESSFUL_BADGE)}
         </span>
 
         <h1 className='font-playfair text-[clamp(2rem,4vw,3rem)] font-bold text-brand-green leading-tight mb-3'>
-          You&apos;re all set!
+          {t(StringKey.YOU_ARE_ALL_SET)}
         </h1>
         <p className='text-base text-muted-foreground leading-relaxed mb-9 max-w-[440px] mx-auto'>
-          Your subscription has been activated. Welcome to the premium experience on Nom Nom Save.
+          {t(StringKey.SUBSCRIPTION_ACTIVATED_DESC)}
         </p>
 
         <div className='bg-white border border-border rounded-[20px] p-7 mb-9 text-left'>
@@ -73,11 +96,11 @@ const CompleteSubscriptionPage = () => {
                 🌱
               </div>
               <div>
-                <p className='font-playfair text-lg font-bold text-foreground'>Pro Plan</p>
-                <p className='text-[13px] text-muted-foreground'>Monthly · renews automatically</p>
+                <p className='font-playfair text-lg font-bold text-foreground'>{planName}</p>
+                <p className='text-[13px] text-muted-foreground'>{t(StringKey.MONTHLY_RENEWS)}</p>
               </div>
             </div>
-            <span className='text-xl font-black text-brand-green'>$9.99</span>
+            <span className='text-xl font-black text-brand-green'>{planPrice}</span>
           </div>
 
           <div className='h-px bg-border mb-4' />
@@ -97,14 +120,15 @@ const CompleteSubscriptionPage = () => {
           <div className='flex items-center gap-2.5 px-4 py-3 bg-muted rounded-xl'>
             <Calendar size={16} className='text-muted-foreground shrink-0' />
             <p className='text-[13px] text-muted-foreground'>
-              Next billing date: <strong className='text-foreground'>{nextBillingDate}</strong>
+              {t(StringKey.NEXT_BILLING_DATE)}{' '}
+              <strong className='text-foreground'>{nextBillingDate}</strong>
             </p>
           </div>
         </div>
 
         <div className='mb-10'>
           <p className='text-[13px] font-bold text-muted-foreground uppercase tracking-widest mb-3.5'>
-            What you unlocked
+            {t(StringKey.WHAT_YOU_UNLOCKED)}
           </p>
           <div className='flex flex-wrap gap-2 justify-center'>
             {planFeatures.map(feature => (
@@ -125,14 +149,14 @@ const CompleteSubscriptionPage = () => {
             size='settings'
             onClick={() => void navigate({ to: '/dashboard' })}
           >
-            Go to Dashboard
+            {t(StringKey.GO_TO_DASHBOARD)}
           </Button>
           <Button
             variant='outline'
             size='settings'
             onClick={() => void navigate({ to: '/subscriptions/plans' })}
           >
-            View my plan
+            {t(StringKey.VIEW_MY_PLAN)}
           </Button>
         </div>
       </div>

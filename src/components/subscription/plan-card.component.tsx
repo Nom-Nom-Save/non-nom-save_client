@@ -2,6 +2,8 @@ import paypalIcon from '@/assets/paypal-icon.svg';
 import { cn } from '@/lib/utils';
 import { Button } from '@/components/ui/button';
 import { PlanFeatureItem } from '@/components/subscription/plan-feature-item.component';
+import { useTranslation } from 'react-i18next';
+import { StringKey } from '@/consts/string-key.consts';
 
 export interface PlanFeature {
   label: string;
@@ -16,7 +18,7 @@ interface PlanCardProps {
   pricePerDay?: string;
   description: string;
   features: PlanFeature[];
-  buttonLabel: string;
+  buttonLabel?: string;
   isButtonDisabled?: boolean;
   isFeatured?: boolean;
   isCurrentPlan?: boolean;
@@ -39,7 +41,8 @@ export const PlanCard = ({
   variant = 'default',
   onSubscribe,
 }: PlanCardProps) => {
-  const isPaypal = !isButtonDisabled && variant !== 'sponsor';
+  const { t } = useTranslation();
+  const isPaypal = !isButtonDisabled && !!onSubscribe;
   const isSponsored = variant === 'sponsor';
 
   return (
@@ -82,7 +85,7 @@ export const PlanCard = ({
           </div>
           {isCurrentPlan && (
             <span className='text-[13px] font-bold px-3 py-1 rounded-full bg-muted text-muted-foreground'>
-              Current plan
+              {t(StringKey.CURRENT_PLAN_BADGE)}
             </span>
           )}
         </div>
@@ -113,15 +116,15 @@ export const PlanCard = ({
           <p
             className={cn(
               'text-xs font-semibold mt-1',
-              isSponsored ? 'text-amber-500' : 'text-[#52B788]'
+              isSponsored ? 'text-amber-500' : 'text-brand-green'
             )}
           >
-            ≈ {pricePerDay} per day
+            ≈ {pricePerDay} {t(StringKey.PER_DAY)}
           </p>
         )}
       </div>
 
-      <div className='flex flex-col gap-3 flex-1 mb-8'>
+      <div className={cn('flex flex-col gap-3 flex-1', buttonLabel && 'mb-8')}>
         {features.map(feature => (
           <PlanFeatureItem
             key={feature.label}
@@ -132,21 +135,29 @@ export const PlanCard = ({
         ))}
       </div>
 
-      {isPaypal ? (
-        <Button variant='paypal' size='plan' onClick={onSubscribe} disabled={isButtonDisabled}>
-          <img src={paypalIcon} alt='' className='w-4 h-4' />
-          {buttonLabel}
-        </Button>
-      ) : (
-        <Button
-          variant={isFeatured && !isButtonDisabled ? 'brand' : 'outline'}
-          size='plan'
-          disabled={isButtonDisabled}
-          onClick={onSubscribe}
-        >
-          {buttonLabel}
-        </Button>
-      )}
+      {buttonLabel &&
+        (isPaypal ? (
+          <Button
+            variant='paypal'
+            size='plan'
+            onClick={onSubscribe}
+            disabled={isButtonDisabled}
+            className='mt-8'
+          >
+            <img src={paypalIcon} alt='' className='w-4 h-4' />
+            {buttonLabel}
+          </Button>
+        ) : (
+          <Button
+            variant={isFeatured && !isButtonDisabled ? 'brand' : 'outline'}
+            size='plan'
+            disabled={isButtonDisabled}
+            onClick={onSubscribe}
+            className='mt-8'
+          >
+            {buttonLabel}
+          </Button>
+        ))}
     </div>
   );
 };

@@ -10,7 +10,7 @@ import {
   Crown,
 } from 'lucide-react';
 import { StringKey } from '@/consts/string-key.consts';
-import { SubscriptionStatus } from '@/types/subscription.types';
+import { PlanName, SubscriptionStatus } from '@/types/subscription.types';
 import { useTranslation } from 'react-i18next';
 import { Link, useLocation } from '@tanstack/react-router';
 import { cn } from '@/lib/utils';
@@ -46,7 +46,9 @@ const UserSidebar = () => {
 
   const { data: user } = useUserProfileQuery();
   const memberSinceYear = new Date(user?.createdAt ?? '').getFullYear();
-  const isPremium = user?.subscription?.status === SubscriptionStatus.ACTIVE;
+  const isPremium =
+    user?.subscription?.status === SubscriptionStatus.ACTIVE &&
+    user?.subscription?.planName !== PlanName.Free;
 
   return (
     <aside className='lg:sticky lg:top-4 w-full md:w-[300px]'>

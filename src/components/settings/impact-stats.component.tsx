@@ -1,7 +1,7 @@
 import { ShoppingBag, Leaf, Crown } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
 import { StringKey } from '@/consts/string-key.consts';
-import { SubscriptionStatus } from '@/types/subscription.types';
+import { PlanName, SubscriptionStatus } from '@/types/subscription.types';
 import { useEstablishmentProfileQuery } from '@/queries/establishment.queries';
 import { formatDate } from '@/utils/time.utils';
 import { UnlockPremiumButton } from '@/components/subscription/unlock-premium-button.component';
@@ -9,8 +9,9 @@ import { UnlockPremiumButton } from '@/components/subscription/unlock-premium-bu
 export const ImpactStats = () => {
   const { t } = useTranslation();
   const { data: profile } = useEstablishmentProfileQuery();
-  const isPremium = profile?.subscription?.status === SubscriptionStatus.ACTIVE;
-
+  const isPremium =
+    profile?.subscription?.status === SubscriptionStatus.ACTIVE &&
+    profile?.subscription?.planName !== PlanName.Free;
   return (
     <div className='bg-white rounded-3xl border-[1.5px] border-border p-6 shadow-sm'>
       <p className='text-[11px] font-bold tracking-[.18em] uppercase text-brand-green mb-2'>

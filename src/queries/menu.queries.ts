@@ -17,13 +17,13 @@ import type {
 import { QueryKey } from '@/consts/query-key.consts';
 
 export const menuKeys = {
-  all: () => ['menu'] as const,
-  byId: (id: string) => ['menu', id] as const,
+  all: () => [QueryKey.MENU] as const,
+  byId: (id: string) => [QueryKey.MENU, id] as const,
 };
 
 export const useMenuItemsQuery = () =>
   useQuery({
-    queryKey: [QueryKey.MENU],
+    queryKey: menuKeys.all(),
     queryFn: getMenuItems,
   });
 
