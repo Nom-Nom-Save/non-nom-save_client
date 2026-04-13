@@ -14,10 +14,28 @@ import { ApiError } from '@/api/client';
 import { useTranslation } from 'react-i18next';
 import { StringKey } from '@/consts/string-key.consts';
 import { DateTimePicker } from '@/components/date-time-picker.component';
+import { useEstablishmentProfileQuery } from '@/queries/establishment.queries';
+import type { WorkingHours } from '@/types/establishment.types';
 
 const toDatetimeLocal = (date: Date) => {
   const pad = (n: number) => String(n).padStart(2, '0');
   return `${date.getFullYear()}-${pad(date.getMonth() + 1)}-${pad(date.getDate())}T${pad(date.getHours())}:${pad(date.getMinutes())}`;
+};
+
+const DAY_NAMES = [
+  'sunday',
+  'monday',
+  'tuesday',
+  'wednesday',
+  'thursday',
+  'friday',
+  'saturday',
+] as const;
+
+const getTodaySchedule = (wh: WorkingHours | null): { open: string; close: string } | null => {
+  if (!wh) return null;
+  const schedule = wh[DAY_NAMES[new Date().getDay()]];
+  return schedule?.isOpen ? { open: schedule.open, close: schedule.close } : null;
 };
 
 interface PublishDialogProps {
@@ -39,9 +57,13 @@ export const PublishDialog = ({
 }: PublishDialogProps) => {
   const { t } = useTranslation();
   const { mutate: createMenuItem, isPending } = useCreateMenuItemMutation();
+  const { data: profile } = useEstablishmentProfileQuery();
 
-  const now = new Date();
-  const oneHourLater = new Date(now.getTime() + 60 * 60 * 1000);
+  const todayDateStr = toDatetimeLocal(new Date()).split('T')[0];
+  const schedule = getTodaySchedule(profile?.workingHours ?? null);
+  const isTodayClosed = !!profile && !schedule;
+  const minTime = schedule ? `${todayDateStr}T${schedule.open}` : `${todayDateStr}T00:00`;
+  const maxTime = schedule ? `${todayDateStr}T${schedule.close}` : `${todayDateStr}T23:55`;
 
   const {
     register,
@@ -54,8 +76,8 @@ export const PublishDialog = ({
     defaultValues: {
       originalPrice,
       totalQuantity: 1,
-      startTime: toDatetimeLocal(now),
-      endTime: toDatetimeLocal(oneHourLater),
+      startTime: minTime,
+      endTime: maxTime,
     },
   });
 
@@ -98,6 +120,12 @@ export const PublishDialog = ({
           {t(StringKey.PUBLISHING_ITEM)}:{' '}
           <span className='font-medium text-foreground'>{itemName}</span>
         </p>
+
+        {isTodayClosed && (
+          <div className='rounded-xl bg-destructive/8 border border-destructive/20 px-4 py-3 text-sm text-destructive'>
+            {t(StringKey.PUBLISH_UNAVAILABLE_CLOSED_DAY)}
+          </div>
+        )}
 
         <form
           onSubmit={e => void handleSubmit(handleFormSubmit)(e)}
@@ -162,6 +190,8 @@ export const PublishDialog = ({
                   value={field.value}
                   onChange={field.onChange}
                   hasError={!!errors.startTime}
+                  min={minTime}
+                  max={maxTime}
                 />
               )}
             />
@@ -181,13 +211,20 @@ export const PublishDialog = ({
                   onChange={field.onChange}
                   hasError={!!errors.endTime}
                   min={startTime}
+                  max={maxTime}
                 />
               )}
             />
             {errors.endTime && <p className='text-destructive text-xs'>{errors.endTime.message}</p>}
           </div>
 
-          <Button type='submit' variant='brand' size='dialog' disabled={isPending} className='mt-2'>
+          <Button
+            type='submit'
+            variant='brand'
+            size='dialog'
+            disabled={isPending || isTodayClosed}
+            className='mt-2'
+          >
             {isPending ? t(StringKey.PUBLISHING) : t(StringKey.PUBLISH_TO_MENU)}
           </Button>
         </form>

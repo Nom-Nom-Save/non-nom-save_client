@@ -1,5 +1,6 @@
 import { cn } from '@/lib/utils';
 import type { EstablishmentResponse } from '@/types/establishments.types';
+import { Link } from '@tanstack/react-router';
 import useEmblaCarousel from 'embla-carousel-react';
 import { Store } from 'lucide-react';
 import { useCallback, useEffect, useRef, useState, type FC } from 'react';
@@ -95,9 +96,11 @@ const EstablishmentsSlider: FC<EstablishmentsSliderProps> = ({ establishments })
       <div className='overflow-hidden' ref={emblaRef}>
         <div className='flex gap-4'>
           {establishments.map(establishment => (
-            <div
+            <Link
               key={establishment.id}
-              className={cn('min-w-0 bg-white rounded-[1.25rem] p-6', slideClass)}
+              to='/establishments/$establishmentId'
+              params={{ establishmentId: establishment.id }}
+              className={cn('min-w-0 bg-white rounded-[1.25rem] p-6 block', slideClass)}
             >
               {establishment.logo ? (
                 <img className='mx-auto w-32 h-32 mb-4' src={`${establishment.logo}`} />
@@ -107,7 +110,7 @@ const EstablishmentsSlider: FC<EstablishmentsSliderProps> = ({ establishments })
               <p className='font-bold text-xl font-playfair mb-2'>{establishment.name}</p>
               <p className='text-muted-foreground text-sm'>{establishment.address}</p>
               <p className='text-muted-foreground'>{establishment.description}</p>
-            </div>
+            </Link>
           ))}
         </div>
       </div>

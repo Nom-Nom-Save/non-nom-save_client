@@ -655,4 +655,8 @@ export const enMessages: Record<StringKey, string> = {
   [StringKey.SEARCH_TYPE]: 'Search type',
   [StringKey.VIEW_ALL]: 'View all',
   [StringKey.NO_TYPE_FOUND]: 'No type found.',
+  [StringKey.CLOSED_TODAY]: 'Closed today',
+  [StringKey.PUBLISH_UNAVAILABLE_CLOSED_DAY]:
+    'Publishing is unavailable — your establishment is closed today. Update your working hours in Settings to enable publishing.',
+  [StringKey.ITEMS_LEFT]: 'left',
 };

@@ -25,6 +25,7 @@ interface DateTimePickerProps {
   onChange: (value: string) => void;
   hasError?: boolean;
   min?: string;
+  max?: string;
 }
 
 const pad = (n: number) => String(n).padStart(2, '0');
@@ -51,7 +52,7 @@ const isSameDay = (a: Date, b: Date) =>
   a.getMonth() === b.getMonth() &&
   a.getDate() === b.getDate();
 
-export const DateTimePicker = ({ value, onChange, hasError, min }: DateTimePickerProps) => {
+export const DateTimePicker = ({ value, onChange, hasError, min, max }: DateTimePickerProps) => {
   const [isOpen, setIsOpen] = useState(false);
   const containerRef = useRef<HTMLDivElement>(null);
 
@@ -98,30 +99,70 @@ export const DateTimePicker = ({ value, onChange, hasError, min }: DateTimePicke
   const totalCells = Math.ceil((firstDow + daysInMonth) / 7) * 7;
 
   const minParsed = min ? parseValue(min) : null;
+  const maxParsed = max ? parseValue(max) : null;
 
   const isDayDisabled = (day: number) => {
-    if (!minParsed?.date) return false;
     const d = new Date(viewYear, viewMonth, day);
-    const minD = new Date(
-      minParsed.date.getFullYear(),
-      minParsed.date.getMonth(),
-      minParsed.date.getDate()
-    );
-    return d < minD;
+    if (minParsed?.date) {
+      const minD = new Date(
+        minParsed.date.getFullYear(),
+        minParsed.date.getMonth(),
+        minParsed.date.getDate()
+      );
+      if (d < minD) return true;
+    }
+    if (maxParsed?.date) {
+      const maxD = new Date(
+        maxParsed.date.getFullYear(),
+        maxParsed.date.getMonth(),
+        maxParsed.date.getDate()
+      );
+      if (d > maxD) return true;
+    }
+    return false;
   };
 
-  const isHourDisabled = (h: number) => {
-    if (!minParsed?.date || !selDate) return false;
-    if (!isSameDay(selDate, minParsed.date)) return false;
-    return h < minParsed.h;
+  const isHourValid = (h: number) => {
+    if (!selDate) return true;
+    if (minParsed?.date && isSameDay(selDate, minParsed.date) && h < minParsed.h) return false;
+    if (maxParsed?.date && isSameDay(selDate, maxParsed.date) && h > maxParsed.h) return false;
+    return true;
   };
 
-  const isMinuteDisabled = (m: number) => {
-    if (!minParsed?.date || !selDate) return false;
-    if (!isSameDay(selDate, minParsed.date)) return false;
-    if (selH > minParsed.h) return false;
-    return selH === minParsed.h && m <= minParsed.m;
+  const isMinuteValid = (m: number) => {
+    if (!selDate) return true;
+    if (minParsed?.date && isSameDay(selDate, minParsed.date)) {
+      if (selH < minParsed.h) return false;
+      if (selH === minParsed.h && m < minParsed.m) return false;
+    }
+    if (maxParsed?.date && isSameDay(selDate, maxParsed.date)) {
+      if (selH > maxParsed.h) return false;
+      if (selH === maxParsed.h && m > maxParsed.m) return false;
+    }
+    return true;
   };
+
+  useEffect(() => {
+    if (!selDate) return;
+    const hours = HOURS.filter(isHourValid);
+    if (hours.length && !hours.includes(selH)) {
+      const clamped = hours[0];
+      setSelH(clamped);
+      onChange(toValue(selDate, clamped, selM));
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [min, max, selDate]);
+
+  useEffect(() => {
+    if (!selDate) return;
+    const minutes = MINUTES.filter(isMinuteValid);
+    if (minutes.length && !minutes.includes(selM)) {
+      const clamped = minutes[0];
+      setSelM(clamped);
+      onChange(toValue(selDate, selH, clamped));
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [selH, min, max, selDate]);
 
   const handleDayClick = (day: number) => {
     const d = new Date(viewYear, viewMonth, day);
@@ -247,8 +288,8 @@ export const DateTimePicker = ({ value, onChange, hasError, min }: DateTimePicke
               onChange={e => handleHour(Number(e.target.value))}
               className='rounded-lg border border-border bg-white px-2 py-1.5 text-sm font-medium outline-none focus:border-brand-green cursor-pointer'
             >
-              {HOURS.map(h => (
-                <option key={h} value={h} disabled={isHourDisabled(h)}>
+              {HOURS.filter(isHourValid).map(h => (
+                <option key={h} value={h}>
                   {pad(h)}
                 </option>
               ))}
@@ -261,8 +302,8 @@ export const DateTimePicker = ({ value, onChange, hasError, min }: DateTimePicke
               onChange={e => handleMinute(Number(e.target.value))}
               className='rounded-lg border border-border bg-white px-2 py-1.5 text-sm font-medium outline-none focus:border-brand-green cursor-pointer'
             >
-              {MINUTES.map(m => (
-                <option key={m} value={m} disabled={isMinuteDisabled(m)}>
+              {MINUTES.filter(isMinuteValid).map(m => (
+                <option key={m} value={m}>
                   {pad(m)}
                 </option>
               ))}

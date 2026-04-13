@@ -74,20 +74,16 @@ export const parseWorkingHours = (raw: string | null): WorkingHours => {
 };
 
 export const isEstablishmentOpen = (
-  workingHoursRaw: string | null | undefined,
+  workingHours: WorkingHours | null | undefined,
   targetDate: Date = new Date()
 ): boolean => {
-  if (!workingHoursRaw) {
-    return false;
-  }
-
-  const parsedHours = parseWorkingHours(workingHoursRaw);
+  if (!workingHours) return false;
 
   const dayName = targetDate
     .toLocaleDateString('en-US', { weekday: 'long' })
     .toLowerCase() as (typeof DAYS)[number];
 
-  const todaySchedule = parsedHours[dayName];
+  const todaySchedule = workingHours[dayName];
 
   if (!todaySchedule || !todaySchedule.open || !todaySchedule.close) {
     return false;

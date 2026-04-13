@@ -16,11 +16,35 @@ import { ApiError } from '@/api/client';
 import { useTranslation } from 'react-i18next';
 import { StringKey } from '@/consts/string-key.consts';
 import { DateTimePicker } from '@/components/date-time-picker.component';
+import { useEstablishmentProfileQuery } from '@/queries/establishment.queries';
+import type { WorkingHours } from '@/types/establishment.types';
 
 const toLocalDatetime = (iso: string) => {
   const date = new Date(iso);
   const pad = (n: number) => String(n).padStart(2, '0');
   return `${date.getFullYear()}-${pad(date.getMonth() + 1)}-${pad(date.getDate())}T${pad(date.getHours())}:${pad(date.getMinutes())}`;
+};
+
+const pad = (n: number) => String(n).padStart(2, '0');
+
+const toDatetimeLocal = (date: Date) => {
+  return `${date.getFullYear()}-${pad(date.getMonth() + 1)}-${pad(date.getDate())}T${pad(date.getHours())}:${pad(date.getMinutes())}`;
+};
+
+const DAY_NAMES = [
+  'sunday',
+  'monday',
+  'tuesday',
+  'wednesday',
+  'thursday',
+  'friday',
+  'saturday',
+] as const;
+
+const getTodaySchedule = (wh: WorkingHours | null): { open: string; close: string } | null => {
+  if (!wh) return null;
+  const schedule = wh[DAY_NAMES[new Date().getDay()]];
+  return schedule?.isOpen ? { open: schedule.open, close: schedule.close } : null;
 };
 
 interface EditMenuItemDialogProps {
@@ -32,6 +56,13 @@ interface EditMenuItemDialogProps {
 export const EditMenuItemDialog = ({ open, onOpenChange, menuItem }: EditMenuItemDialogProps) => {
   const { t } = useTranslation();
   const { mutate: updateMenuItem, isPending } = useUpdateMenuItemMutation();
+  const { data: profile } = useEstablishmentProfileQuery();
+
+  const todayDateStr = toDatetimeLocal(new Date()).split('T')[0];
+  const schedule = getTodaySchedule(profile?.workingHours ?? null);
+  const isTodayClosed = !!profile && !schedule;
+  const minTime = schedule ? `${todayDateStr}T${schedule.open}` : `${todayDateStr}T00:00`;
+  const maxTime = schedule ? `${todayDateStr}T${schedule.close}` : `${todayDateStr}T23:55`;
 
   const isProduct = menuItem?.itemType === ItemType.PRODUCT;
 
@@ -49,14 +80,16 @@ export const EditMenuItemDialog = ({ open, onOpenChange, menuItem }: EditMenuIte
 
   useEffect(() => {
     if (!menuItem) return;
+    const startTimePart = toLocalDatetime(menuItem.priceData.startTime).split('T')[1];
+    const endTimePart = toLocalDatetime(menuItem.priceData.endTime).split('T')[1];
     reset({
       totalQuantity: menuItem.priceData.totalQuantity,
       originalPrice: menuItem.priceData.originalPrice,
       discountPrice: menuItem.priceData.discountPrice,
-      startTime: toLocalDatetime(menuItem.priceData.startTime),
-      endTime: toLocalDatetime(menuItem.priceData.endTime),
+      startTime: `${todayDateStr}T${startTimePart}`,
+      endTime: `${todayDateStr}T${endTimePart}`,
     });
-  }, [menuItem, reset]);
+  }, [menuItem, reset, todayDateStr]);
 
   const handleFormSubmit = (data: PublishMenuFormData) => {
     if (!menuItem) return;
@@ -96,6 +129,12 @@ export const EditMenuItemDialog = ({ open, onOpenChange, menuItem }: EditMenuIte
           <p className='text-sm text-muted-foreground'>
             <span className='font-medium text-foreground'>{menuItem.itemDetails.name}</span>
           </p>
+        )}
+
+        {isTodayClosed && (
+          <div className='rounded-xl bg-destructive/8 border border-destructive/20 px-4 py-3 text-sm text-destructive'>
+            {t(StringKey.PUBLISH_UNAVAILABLE_CLOSED_DAY)}
+          </div>
         )}
 
         <form
@@ -161,6 +200,8 @@ export const EditMenuItemDialog = ({ open, onOpenChange, menuItem }: EditMenuIte
                   value={field.value}
                   onChange={field.onChange}
                   hasError={!!errors.startTime}
+                  min={minTime}
+                  max={maxTime}
                 />
               )}
             />
@@ -180,6 +221,7 @@ export const EditMenuItemDialog = ({ open, onOpenChange, menuItem }: EditMenuIte
                   onChange={field.onChange}
                   hasError={!!errors.endTime}
                   min={startTime}
+                  max={maxTime}
                 />
               )}
             />
@@ -228,7 +270,13 @@ export const EditMenuItemDialog = ({ open, onOpenChange, menuItem }: EditMenuIte
             </div>
           </div>
 
-          <Button type='submit' variant='brand' size='dialog' disabled={isPending} className='mt-2'>
+          <Button
+            type='submit'
+            variant='brand'
+            size='dialog'
+            disabled={isPending || isTodayClosed}
+            className='mt-2'
+          >
             {isPending ? t(StringKey.UPDATING) : t(StringKey.SAVE_CHANGES)}
           </Button>
         </form>

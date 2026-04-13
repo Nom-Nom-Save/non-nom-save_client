@@ -1,5 +1,6 @@
 import { StringKey } from '@/consts/string-key.consts';
 import type { SortOrder } from './common.types';
+import type { WorkingHours } from './establishment.types';
 
 export interface EstablishmentResponse {
   id: string;
@@ -11,7 +12,7 @@ export interface EstablishmentResponse {
   address: string | null;
   latitude: string | null;
   longitude: string | null;
-  workingHours: string | null;
+  workingHours: WorkingHours;
   logo: string | null;
   banner: string | null;
   rating: string | null;

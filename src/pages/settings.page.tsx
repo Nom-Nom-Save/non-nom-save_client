@@ -4,7 +4,6 @@ import { WorkingHoursEditor } from '@/components/settings/working-hours-editor.c
 import { ImpactStats } from '@/components/settings/impact-stats.component';
 import { EstablishmentPreview } from '@/components/settings/establishment-preview.component';
 import { useEstablishmentProfileQuery } from '@/queries/establishment.queries';
-import { parseWorkingHours } from '@/utils/working-hours.utils';
 import { useTranslation } from 'react-i18next';
 import { StringKey } from '@/consts/string-key.consts';
 
@@ -49,10 +48,7 @@ const SettingsPage = () => {
               {t(StringKey.SCHEDULE)}
             </p>
             <h2 className='text-xl font-bold font-playfair mb-6'>{t(StringKey.WORKING_HOURS)}</h2>
-            <WorkingHoursEditor
-              key={profile?.id}
-              initialHours={parseWorkingHours(profile?.workingHours ?? null)}
-            />
+            {profile && <WorkingHoursEditor key={profile.id} initialHours={profile.workingHours} />}
           </div>
 
           {/* <div className='bg-white rounded-3xl border-[1.5px] border-border p-8 shadow-sm'>

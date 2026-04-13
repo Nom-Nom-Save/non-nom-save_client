@@ -1,4 +1,5 @@
 import { StringKey } from '@/consts/string-key.consts';
+import { cn } from '@/lib/utils';
 import type { MenuItemResponse } from '@/types/menu.types';
 import type { FC } from 'react';
 import { useTranslation } from 'react-i18next';
@@ -14,6 +15,10 @@ const EstablishmentMenuItem: FC<EstablishmentMenuItemProps> = ({ menuItem }) => 
   const displayPrice = hasDiscount
     ? menuItem.priceData.discountPrice
     : menuItem.priceData.originalPrice;
+
+  const qty = menuItem.priceData.availableQuantity;
+  const isSoldOut = qty === 0;
+  const isLow = qty > 0 && qty <= 5;
 
   return (
     <li className='bg-white rounded-2xl p-8 shadow-sm'>
@@ -56,16 +61,28 @@ const EstablishmentMenuItem: FC<EstablishmentMenuItemProps> = ({ menuItem }) => 
         </div>
       )}
 
-      <div className='flex flex-col gap-3'>
-        <div className='flex flex-col items-baseline'>
+      <div className='flex items-end justify-between gap-3'>
+        <div className='flex flex-col gap-1'>
           {hasDiscount && (
             <p className='text-sm text-muted-foreground line-through'>
               ${menuItem.priceData.originalPrice.toFixed(2)}
             </p>
           )}
           <p className='text-brand-green font-bold text-xl'>${displayPrice.toFixed(2)}</p>
+          <span
+            className={cn(
+              'text-xs font-semibold px-2.5 py-1 rounded-full w-fit',
+              isSoldOut
+                ? 'bg-destructive/10 text-destructive'
+                : isLow
+                  ? 'bg-orange-50 text-orange-600'
+                  : 'bg-brand-green-muted text-brand-green'
+            )}
+          >
+            {isSoldOut ? t(StringKey.STATUS_SOLD_OUT) : `${qty} ${t(StringKey.ITEMS_LEFT)}`}
+          </span>
         </div>
-        <button className='self-end bg-brand-green text-white text-sm font-semibold rounded-full px-4 py-2.5 hover:bg-brand-green/90 transition-colors cursor-pointer'>
+        <button className='shrink-0 bg-brand-green text-white text-sm font-semibold rounded-full px-4 py-2.5 hover:bg-brand-green/90 transition-colors cursor-pointer'>
           {t(StringKey.ADD_TO_CART)}
         </button>
       </div>

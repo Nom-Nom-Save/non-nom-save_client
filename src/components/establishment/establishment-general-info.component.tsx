@@ -1,7 +1,6 @@
 import { StringKey } from '@/consts/string-key.consts';
 import { cn } from '@/lib/utils';
 import type { EstablishmentProfile, WorkingHours } from '@/types/establishment.types';
-import { parseWorkingHours } from '@/utils/working-hours.utils';
 import { useEffect, useState, type FC } from 'react';
 import { useTranslation } from 'react-i18next';
 import EstablishmentReviews from './establishment-reviews.component';
@@ -43,7 +42,7 @@ const EstablishmentGeneralInfo: FC<EstablishmentGeneralInfoProps> = ({ establish
   const isLoadingMore = isMenuLoading && menuPage > 1;
   const isEmpty = !isInitialMenuLoading && allMenuItems.length === 0;
 
-  const [hours] = useState<WorkingHours>(parseWorkingHours(establishment.workingHours ?? null));
+  const [hours] = useState<WorkingHours>(establishment.workingHours);
 
   const today = new Date()
     .toLocaleDateString('en-US', { weekday: 'long' })

@@ -4,15 +4,27 @@ import type {
   EstablishmentResponse,
   GetEstabslishmentsListParams,
 } from '@/types/establishments.types';
+import { parseWorkingHours } from '@/utils/working-hours.utils';
 
-export interface NearbyEstablishmentsResponse {
-  establishments: EstablishmentResponse[];
+type RawEstablishmentResponse = Omit<EstablishmentResponse, 'workingHours'> & {
+  workingHours: string | null;
+};
+
+const parseEstablishmentResponse = (raw: RawEstablishmentResponse): EstablishmentResponse => ({
+  ...raw,
+  workingHours: parseWorkingHours(raw.workingHours),
+});
+
+interface RawNearbyEstablishmentsResponse {
+  establishments: RawEstablishmentResponse[];
 }
 
-export const getNearbyEstablishments = (lon: number, lat: number, radius: number) =>
-  apiRequest<NearbyEstablishmentsResponse>(
+export const getNearbyEstablishments = async (lon: number, lat: number, radius: number) => {
+  const data = await apiRequest<RawNearbyEstablishmentsResponse>(
     `/establishments/nearby?lat=${lat}&lon=${lon}&radius=${radius}`
   );
+  return { establishments: data.establishments.map(parseEstablishmentResponse) };
+};
 
 export const getEstablishmentsList = async ({
   city,
@@ -52,9 +64,12 @@ export const getEstablishmentsList = async ({
 
   const response = await apiRequest<{
     message: string;
-    establishments: EstablishmentResponse[];
+    establishments: RawEstablishmentResponse[];
     meta: PaginationMeta;
   }>(`/establishments?${params.toString()}`);
 
-  return response;
+  return {
+    ...response,
+    establishments: response.establishments.map(parseEstablishmentResponse),
+  };
 };

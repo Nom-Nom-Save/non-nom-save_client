@@ -2,9 +2,11 @@ import { apiRequest } from '@/api/client';
 import type { UpdateEstablishmentRequest, EstablishmentProfile } from '@/types/establishment.types';
 import type { RawSubscription } from '@/types/subscription.types';
 import { parseSubscription } from '@/utils/subscription.utils';
+import { parseWorkingHours } from '@/utils/working-hours.utils';
 
-type RawEstablishmentProfile = Omit<EstablishmentProfile, 'subscription'> & {
+type RawEstablishmentProfile = Omit<EstablishmentProfile, 'subscription' | 'workingHours'> & {
   subscription: RawSubscription | null;
+  workingHours: string | null;
 };
 
 interface RawEstablishmentProfileResponse {
@@ -15,6 +17,7 @@ interface RawEstablishmentProfileResponse {
 const parseEstablishment = (raw: RawEstablishmentProfile): EstablishmentProfile => ({
   ...raw,
   subscription: parseSubscription(raw.subscription),
+  workingHours: parseWorkingHours(raw.workingHours),
 });
 
 export const getEstablishmentProfile = async (): Promise<EstablishmentProfile> => {

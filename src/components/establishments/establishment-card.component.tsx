@@ -6,7 +6,7 @@ import { useAddToFavoritesQuery, useRemoveFromFavoritesQuery } from '@/queries/f
 import { toast } from 'sonner';
 import { formatEstablishmentToastMessage } from '@/utils/format-establishment-toast.utils';
 import { ApiError } from '@/api/client';
-import { isEstablishmentOpen, parseWorkingHours } from '@/utils/working-hours.utils';
+import { isEstablishmentOpen } from '@/utils/working-hours.utils';
 import { useGetEstablishmentMenu } from '@/queries/menu.queries';
 import type { EstablishmentResponse } from '@/types/establishments.types';
 import EstablishmentMenuItem from '../establishment/establishment-menu-item';
@@ -27,13 +27,11 @@ const EstablishmentCard: FC<EstablishmentCardProps> = ({ establishment, isFavori
   const { data: menuData, isLoading: isMenuLoading } = useGetEstablishmentMenu(establishment.id);
 
   const now = new Date();
-  const parsedHours = parseWorkingHours(establishment.workingHours);
-
   const dayName = now
     .toLocaleDateString('en-US', { weekday: 'long' })
     .toLowerCase() as (typeof DAYS)[number];
 
-  const todaySchedule = parsedHours[dayName];
+  const todaySchedule = establishment.workingHours[dayName];
   const isOpenNow = isEstablishmentOpen(establishment.workingHours);
 
   const handleFavoriteToggle = () => {
