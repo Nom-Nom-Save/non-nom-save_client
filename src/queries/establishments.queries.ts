@@ -1,5 +1,5 @@
 import { getEstablishmentsCities } from '@/api/establishment.api';
-import { getEstablishmentsList } from '@/api/establishments.api';
+import { getEstablishmentsByIds, getEstablishmentsList } from '@/api/establishments.api';
 import { QueryKey } from '@/consts/query-key.consts';
 import type { GetEstabslishmentsListParams } from '@/types/establishments.types';
 import { useQuery } from '@tanstack/react-query';
@@ -50,5 +50,13 @@ export const useGetEstablishmentsCitiesQuery = () => {
   return useQuery({
     queryKey: [QueryKey.ESTABLISHMENTS_CITIES],
     queryFn: () => getEstablishmentsCities(),
+  });
+};
+
+export const useGetEstablishmentsByIdsQuery = (ids: string[]) => {
+  return useQuery({
+    queryKey: [QueryKey.ESTABLISHMENTS, 'by-ids', ids],
+    queryFn: () => getEstablishmentsByIds(ids),
+    enabled: ids.length > 0,
   });
 };

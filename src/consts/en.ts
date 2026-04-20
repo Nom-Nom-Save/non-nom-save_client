@@ -659,4 +659,25 @@ export const enMessages: Record<StringKey, string> = {
   [StringKey.PUBLISH_UNAVAILABLE_CLOSED_DAY]:
     'Publishing is unavailable — your establishment is closed today. Update your working hours in Settings to enable publishing.',
   [StringKey.ITEMS_LEFT]: 'left',
+
+  // Cart
+  [StringKey.HOW_MANY]: 'How many?',
+  [StringKey.MY_CART]: 'My Cart',
+  [StringKey.CART_EMPTY]: 'Your cart is empty.',
+  [StringKey.CART_ESTABLISHMENTS_COUNT]: 'You have items from {{count}} establishments',
+  [StringKey.GO_TO_ORDER]: 'Go to order',
+  [StringKey.BACK_TO_CART]: 'Back to cart',
+  [StringKey.ORDER_SUMMARY]: 'Order Summary',
+  [StringKey.PLACE_ORDER]: 'Place Order',
+  [StringKey.REMOVE_FROM_CART]: 'Remove from cart',
+  [StringKey.SURE_YOU_WANT_TO_REMOVE_FROM_CART]: 'Are you sure you want to remove from cart?',
+  [StringKey.ORDER_PLACED_SUCCESS]: 'Your order has been placed successfully!',
+  [StringKey.ORDER_PLACED_ERROR]: 'Failed to place order. Please try again.',
+  [StringKey.PLACING_ORDER]: 'Placing order...',
+  [StringKey.TOTAL]: 'Total',
+  [StringKey.ORDER_NOT_ENOUGH_QUANTITY]: 'Not enough quantity for item',
+  [StringKey.MAX_QUANTITY_REACHED]: 'Maximum quantity reached',
+  [StringKey.ALREADY_MAX_IN_CART]: 'You already have the maximum available quantity in your cart',
+  [StringKey.ADDED_TO_CART]: 'Added to cart',
+  [StringKey.NO_MORE_AVAILABLE]: 'No more items available',
 };

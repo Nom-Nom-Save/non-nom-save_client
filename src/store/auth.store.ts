@@ -40,3 +40,5 @@ export const useAuthStore = create<AuthState>(set => ({
     queryClient.clear();
   },
 }));
+
+export const { setAuth, clearAuth } = useAuthStore.getState();
