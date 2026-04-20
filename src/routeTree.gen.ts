@@ -9,6 +9,7 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
+import { Route as MyCartRouteImport } from './routes/my-cart'
 import { Route as CompleteSubscriptionRouteImport } from './routes/complete-subscription'
 import { Route as CancelSubscriptionRouteImport } from './routes/cancel-subscription'
 import { Route as AboutRouteImport } from './routes/about'
@@ -18,6 +19,7 @@ import { Route as AuthRouteImport } from './routes/_auth'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as SubscriptionsPlansRouteImport } from './routes/subscriptions.plans'
 import { Route as EstablishmentsEstablishmentIdRouteImport } from './routes/establishments.$establishmentId'
+import { Route as CartEstablishmentIdRouteImport } from './routes/cart.$establishmentId'
 import { Route as UserProfileRouteImport } from './routes/_user.profile'
 import { Route as UserMapRouteImport } from './routes/_user.map'
 import { Route as UserHowItWorksRouteImport } from './routes/_user.how-it-works'
@@ -36,6 +38,11 @@ import { Route as UserProfilePaymentMethodsRouteImport } from './routes/_user.pr
 import { Route as UserProfileOrdersRouteImport } from './routes/_user.profile.orders'
 import { Route as UserProfileFavoritesRouteImport } from './routes/_user.profile.favorites'
 
+const MyCartRoute = MyCartRouteImport.update({
+  id: '/my-cart',
+  path: '/my-cart',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const CompleteSubscriptionRoute = CompleteSubscriptionRouteImport.update({
   id: '/complete-subscription',
   path: '/complete-subscription',
@@ -79,6 +86,11 @@ const EstablishmentsEstablishmentIdRoute =
     path: '/establishments/$establishmentId',
     getParentRoute: () => rootRouteImport,
   } as any)
+const CartEstablishmentIdRoute = CartEstablishmentIdRouteImport.update({
+  id: '/cart/$establishmentId',
+  path: '/cart/$establishmentId',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const UserProfileRoute = UserProfileRouteImport.update({
   id: '/profile',
   path: '/profile',
@@ -171,6 +183,7 @@ export interface FileRoutesByFullPath {
   '/about': typeof AboutRoute
   '/cancel-subscription': typeof CancelSubscriptionRoute
   '/complete-subscription': typeof CompleteSubscriptionRoute
+  '/my-cart': typeof MyCartRoute
   '/forgot-password': typeof AuthForgotPasswordRoute
   '/login': typeof AuthLoginRoute
   '/register': typeof AuthRegisterRoute
@@ -184,6 +197,7 @@ export interface FileRoutesByFullPath {
   '/how-it-works': typeof UserHowItWorksRoute
   '/map': typeof UserMapRoute
   '/profile': typeof UserProfileRouteWithChildren
+  '/cart/$establishmentId': typeof CartEstablishmentIdRoute
   '/establishments/$establishmentId': typeof EstablishmentsEstablishmentIdRoute
   '/subscriptions/plans': typeof SubscriptionsPlansRoute
   '/profile/favorites': typeof UserProfileFavoritesRoute
@@ -196,6 +210,7 @@ export interface FileRoutesByTo {
   '/about': typeof AboutRoute
   '/cancel-subscription': typeof CancelSubscriptionRoute
   '/complete-subscription': typeof CompleteSubscriptionRoute
+  '/my-cart': typeof MyCartRoute
   '/forgot-password': typeof AuthForgotPasswordRoute
   '/login': typeof AuthLoginRoute
   '/register': typeof AuthRegisterRoute
@@ -209,6 +224,7 @@ export interface FileRoutesByTo {
   '/how-it-works': typeof UserHowItWorksRoute
   '/map': typeof UserMapRoute
   '/profile': typeof UserProfileRouteWithChildren
+  '/cart/$establishmentId': typeof CartEstablishmentIdRoute
   '/establishments/$establishmentId': typeof EstablishmentsEstablishmentIdRoute
   '/subscriptions/plans': typeof SubscriptionsPlansRoute
   '/profile/favorites': typeof UserProfileFavoritesRoute
@@ -225,6 +241,7 @@ export interface FileRoutesById {
   '/about': typeof AboutRoute
   '/cancel-subscription': typeof CancelSubscriptionRoute
   '/complete-subscription': typeof CompleteSubscriptionRoute
+  '/my-cart': typeof MyCartRoute
   '/_auth/forgot-password': typeof AuthForgotPasswordRoute
   '/_auth/login': typeof AuthLoginRoute
   '/_auth/register': typeof AuthRegisterRoute
@@ -238,6 +255,7 @@ export interface FileRoutesById {
   '/_user/how-it-works': typeof UserHowItWorksRoute
   '/_user/map': typeof UserMapRoute
   '/_user/profile': typeof UserProfileRouteWithChildren
+  '/cart/$establishmentId': typeof CartEstablishmentIdRoute
   '/establishments/$establishmentId': typeof EstablishmentsEstablishmentIdRoute
   '/subscriptions/plans': typeof SubscriptionsPlansRoute
   '/_user/profile/favorites': typeof UserProfileFavoritesRoute
@@ -252,6 +270,7 @@ export interface FileRouteTypes {
     | '/about'
     | '/cancel-subscription'
     | '/complete-subscription'
+    | '/my-cart'
     | '/forgot-password'
     | '/login'
     | '/register'
@@ -265,6 +284,7 @@ export interface FileRouteTypes {
     | '/how-it-works'
     | '/map'
     | '/profile'
+    | '/cart/$establishmentId'
     | '/establishments/$establishmentId'
     | '/subscriptions/plans'
     | '/profile/favorites'
@@ -277,6 +297,7 @@ export interface FileRouteTypes {
     | '/about'
     | '/cancel-subscription'
     | '/complete-subscription'
+    | '/my-cart'
     | '/forgot-password'
     | '/login'
     | '/register'
@@ -290,6 +311,7 @@ export interface FileRouteTypes {
     | '/how-it-works'
     | '/map'
     | '/profile'
+    | '/cart/$establishmentId'
     | '/establishments/$establishmentId'
     | '/subscriptions/plans'
     | '/profile/favorites'
@@ -305,6 +327,7 @@ export interface FileRouteTypes {
     | '/about'
     | '/cancel-subscription'
     | '/complete-subscription'
+    | '/my-cart'
     | '/_auth/forgot-password'
     | '/_auth/login'
     | '/_auth/register'
@@ -318,6 +341,7 @@ export interface FileRouteTypes {
     | '/_user/how-it-works'
     | '/_user/map'
     | '/_user/profile'
+    | '/cart/$establishmentId'
     | '/establishments/$establishmentId'
     | '/subscriptions/plans'
     | '/_user/profile/favorites'
@@ -334,12 +358,21 @@ export interface RootRouteChildren {
   AboutRoute: typeof AboutRoute
   CancelSubscriptionRoute: typeof CancelSubscriptionRoute
   CompleteSubscriptionRoute: typeof CompleteSubscriptionRoute
+  MyCartRoute: typeof MyCartRoute
+  CartEstablishmentIdRoute: typeof CartEstablishmentIdRoute
   EstablishmentsEstablishmentIdRoute: typeof EstablishmentsEstablishmentIdRoute
   SubscriptionsPlansRoute: typeof SubscriptionsPlansRoute
 }
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
+    '/my-cart': {
+      id: '/my-cart'
+      path: '/my-cart'
+      fullPath: '/my-cart'
+      preLoaderRoute: typeof MyCartRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/complete-subscription': {
       id: '/complete-subscription'
       path: '/complete-subscription'
@@ -401,6 +434,13 @@ declare module '@tanstack/react-router' {
       path: '/establishments/$establishmentId'
       fullPath: '/establishments/$establishmentId'
       preLoaderRoute: typeof EstablishmentsEstablishmentIdRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/cart/$establishmentId': {
+      id: '/cart/$establishmentId'
+      path: '/cart/$establishmentId'
+      fullPath: '/cart/$establishmentId'
+      preLoaderRoute: typeof CartEstablishmentIdRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/_user/profile': {
@@ -603,6 +643,8 @@ const rootRouteChildren: RootRouteChildren = {
   AboutRoute: AboutRoute,
   CancelSubscriptionRoute: CancelSubscriptionRoute,
   CompleteSubscriptionRoute: CompleteSubscriptionRoute,
+  MyCartRoute: MyCartRoute,
+  CartEstablishmentIdRoute: CartEstablishmentIdRoute,
   EstablishmentsEstablishmentIdRoute: EstablishmentsEstablishmentIdRoute,
   SubscriptionsPlansRoute: SubscriptionsPlansRoute,
 }

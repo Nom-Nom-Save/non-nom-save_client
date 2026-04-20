@@ -1,4 +1,4 @@
-import type { Order } from '@/types/orders.types';
+import type { Order, OrderItem } from '@/types/orders.types';
 import { apiRequest } from './client';
 
 export const getUserOrders = async () => {
@@ -13,4 +13,13 @@ export const cancelOrder = async (orderId: string) => {
   });
 
   return response.order;
+};
+
+export const createOrder = async (items: OrderItem[]) => {
+  return await apiRequest('/orders', {
+    method: 'POST',
+    body: JSON.stringify({
+      items: items,
+    }),
+  });
 };

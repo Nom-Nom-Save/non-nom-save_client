@@ -1,7 +1,7 @@
 import { StringKey } from '@/consts/string-key.consts';
 import { Link, useNavigate, useRouterState } from '@tanstack/react-router';
 import { useTranslation } from 'react-i18next';
-import { LogOut, Crown, Menu, X } from 'lucide-react';
+import { LogOut, Crown, Menu, X, ShoppingCart } from 'lucide-react';
 import { PlanName, SubscriptionStatus } from '@/types/subscription.types';
 import { cn } from '@/lib/utils';
 import { Button } from '@/components/ui/button';
@@ -12,6 +12,7 @@ import { useState, type FC } from 'react';
 import { USER_NAV } from '@/types/user.types';
 import { ESTABLISHMENT_NAV } from '@/types/establishments.types';
 import { useUserProfileQuery } from '@/queries/user.queries';
+import CartBadge from './cart/cart-badge.component';
 
 const Header = () => {
   const { t } = useTranslation();
@@ -108,6 +109,18 @@ const UserHeader: FC<UserHeaderProps> = ({ t, location, handleLogout }) => {
         </div>
 
         <div className='flex items-center gap-2 sm:gap-4'>
+          <Link to='/my-cart' className='relative hidden md:flex'>
+            <Button
+              type='button'
+              variant='ghost-circle'
+              className='w-9 h-9 rounded-full'
+              title={t(StringKey.MY_CART)}
+            >
+              <ShoppingCart size={18} className='text-foreground/50' />
+            </Button>
+            <CartBadge />
+          </Link>
+
           <Button
             type='button'
             variant='ghost-circle'
@@ -280,6 +293,16 @@ const EstablishmentHeader = ({ t, location, handleLogout }: EstablishmentHeaderP
             );
           })}
           <div className='border-t border-border mt-2 pt-3'>
+            <Link
+              to='/my-cart'
+              onClick={() => setMobileOpen(false)}
+              className='flex items-center gap-2 text-sm font-semibold text-foreground/60 py-2.5 px-3 rounded-lg hover:text-foreground hover:bg-border transition-colors'
+            >
+              <ShoppingCart size={16} />
+              {t(StringKey.MY_CART)}
+              <CartBadge inline />
+            </Link>
+
             <button
               type='button'
               onClick={() => {

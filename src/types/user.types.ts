@@ -16,7 +16,6 @@ export interface User {
 }
 
 export const USER_NAV = [
-  { to: '/how-it-works' as const, labelKey: StringKey.HOW_IT_WORKS },
   { to: '/dashboard' as const, labelKey: StringKey.DASHBOARD },
   { to: '/map' as const, labelKey: StringKey.MAP },
 ];

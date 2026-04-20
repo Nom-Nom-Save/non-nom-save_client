@@ -4,7 +4,7 @@ import ordersBag from '@/assets/orders-bag.svg';
 import money from '@/assets/money.svg';
 import recycle from '@/assets/recycle.svg';
 import { CheckCircle2, CircleX, Clock, QrCode as QrCodeIcon, Timer } from 'lucide-react';
-import { useCancelOrder, useOrdersQuery } from '@/queries/order.queries';
+import { useCancelOrderMutation, useOrdersQuery } from '@/queries/order.queries';
 import { useUserProfileQuery } from '@/queries/user.queries';
 import { Loading } from '../loading.component';
 import { formatTime, getTimeUntilExpiry } from '@/utils/time.utils';
@@ -28,7 +28,7 @@ const UserOrders = () => {
   const { t } = useTranslation();
   const { data: orders, isLoading } = useOrdersQuery();
   const { data: user } = useUserProfileQuery();
-  const { mutate: cancelOrder, isPending } = useCancelOrder();
+  const { mutate: cancelOrder, isPending } = useCancelOrderMutation();
 
   const [cancelDialogOrderId, setCancelDialogOrderId] = useState<string | null>(null);
   const [qrDialogOrderId, setQrDialogOrderId] = useState<string | null>(null);
