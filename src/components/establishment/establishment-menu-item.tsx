@@ -1,8 +1,11 @@
 import { StringKey } from '@/consts/string-key.consts';
 import { cn } from '@/lib/utils';
 import type { MenuItemResponse } from '@/types/menu.types';
-import type { FC } from 'react';
+import { useState, type FC } from 'react';
 import { useTranslation } from 'react-i18next';
+import AddToCartModal from '../cart/add-to-cart-modal.component';
+import { useCartStore } from '@/store/cart.store';
+import { toast } from 'sonner';
 
 interface EstablishmentMenuItemProps {
   menuItem: MenuItemResponse;
@@ -10,15 +13,32 @@ interface EstablishmentMenuItemProps {
 
 const EstablishmentMenuItem: FC<EstablishmentMenuItemProps> = ({ menuItem }) => {
   const { t } = useTranslation();
+  const [showModal, setShowModal] = useState<boolean>(false);
+  const { items } = useCartStore();
 
   const hasDiscount = menuItem.priceData.discountPrice > 0;
   const displayPrice = hasDiscount
     ? menuItem.priceData.discountPrice
     : menuItem.priceData.originalPrice;
 
-  const qty = menuItem.priceData.availableQuantity;
-  const isSoldOut = qty === 0;
-  const isLow = qty > 0 && qty <= 5;
+  const quantity = menuItem.priceData.availableQuantity;
+  const isSoldOut = quantity === 0;
+  const isLow = quantity > 0 && quantity <= 5;
+
+  const handleOpenModal = () => {
+    const existingItem = items.find(item => item.id === menuItem.id);
+    const alreadyInCart = existingItem?.quantity ?? 0;
+    const remainingQuantity = quantity > 0 ? quantity - alreadyInCart : 99;
+
+    if (remainingQuantity <= 0) {
+      toast.warning(t(StringKey.MAX_QUANTITY_REACHED), {
+        description: t(StringKey.ALREADY_MAX_IN_CART),
+      });
+      return;
+    }
+
+    setShowModal(true);
+  };
 
   return (
     <li className='bg-white rounded-2xl p-8 shadow-sm'>
@@ -79,13 +99,18 @@ const EstablishmentMenuItem: FC<EstablishmentMenuItemProps> = ({ menuItem }) => 
                   : 'bg-brand-green-muted text-brand-green'
             )}
           >
-            {isSoldOut ? t(StringKey.STATUS_SOLD_OUT) : `${qty} ${t(StringKey.ITEMS_LEFT)}`}
+            {isSoldOut ? t(StringKey.STATUS_SOLD_OUT) : `${quantity} ${t(StringKey.ITEMS_LEFT)}`}
           </span>
         </div>
-        <button className='shrink-0 bg-brand-green text-white text-sm font-semibold rounded-full px-4 py-2.5 hover:bg-brand-green/90 transition-colors cursor-pointer'>
+        <button
+          onClick={handleOpenModal}
+          className='shrink-0 bg-brand-green text-white text-sm font-semibold rounded-full px-4 py-2.5 hover:bg-brand-green/90 transition-colors cursor-pointer'
+        >
           {t(StringKey.ADD_TO_CART)}
         </button>
       </div>
+
+      {showModal && <AddToCartModal menuItem={menuItem} onClose={() => setShowModal(false)} />}
     </li>
   );
 };

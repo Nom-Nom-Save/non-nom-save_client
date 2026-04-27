@@ -5,6 +5,7 @@ import type {
   GetEstabslishmentsListParams,
 } from '@/types/establishments.types';
 import { parseWorkingHours } from '@/utils/working-hours.utils';
+import type { EstablishmentProfile } from '@/types/establishment.types';
 
 type RawEstablishmentResponse = Omit<EstablishmentResponse, 'workingHours'> & {
   workingHours: string | null;
@@ -72,4 +73,10 @@ export const getEstablishmentsList = async ({
     ...response,
     establishments: response.establishments.map(parseEstablishmentResponse),
   };
+};
+
+export const getEstablishmentsByIds = async (ids: string[]) => {
+  return await apiRequest<{ establishments: EstablishmentProfile[] }>(
+    `/establishments/by-ids?ids=${ids.join(',')}`
+  );
 };

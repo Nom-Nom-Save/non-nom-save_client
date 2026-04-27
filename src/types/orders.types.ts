@@ -39,3 +39,8 @@ export interface Order {
   allergens: string[];
   totalOrderWeight: number;
 }
+
+export interface OrderItem {
+  menuPriceId: string;
+  quantity: number;
+}
