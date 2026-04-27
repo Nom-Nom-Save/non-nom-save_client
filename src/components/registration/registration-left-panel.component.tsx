@@ -48,7 +48,7 @@ export const RegistrationLeftPanel = ({ accountType }: RegistrationLeftPanelProp
         />
       </div>
 
-      <div className='flex-1 flex flex-col  px-14 py-16 relative z-10'>
+      <div className='flex-1 flex flex-col justify-center px-14 py-16 relative z-10'>
         <div className='flex flex-col gap-10 '>
           <img src={logoUrl} alt='NomNomSave' className='w-72 h-auto -ml-15' />
 

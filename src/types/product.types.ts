@@ -1,6 +1,7 @@
 export interface CreateProductRequest {
   name: string;
   picture?: string;
+  boundTo?: string;
   weight?: number;
   description: string;
   recommendedPrice: number;

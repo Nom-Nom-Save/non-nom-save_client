@@ -1,6 +1,7 @@
 export interface CreateBoxRequest {
   name: string;
   picture?: string;
+  boundTo?: string;
   description: string;
   recommendedPrice: number;
   quantityOfItems?: number;

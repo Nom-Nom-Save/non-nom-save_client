@@ -1,4 +1,4 @@
-import { useEffect, useMemo } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { useForm, useWatch, Controller } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { AlertCircle } from 'lucide-react';
@@ -26,6 +26,7 @@ interface CreateBoxDialogProps {
 export const CreateBoxDialog = ({ open, onOpenChange, editingBox }: CreateBoxDialogProps) => {
   const { t } = useTranslation();
   const isEditing = !!editingBox;
+  const [isPublic, setIsPublic] = useState(false);
   const { mutate: createBox, isPending: isCreating } = useCreateBoxMutation();
   const { mutate: updateBox, isPending: isUpdating } = useUpdateBoxMutation();
   const isPending = isCreating || isUpdating;
@@ -110,18 +111,21 @@ export const CreateBoxDialog = ({ open, onOpenChange, editingBox }: CreateBoxDia
         }
       );
     } else {
-      createBox(data, {
-        onSuccess: () => {
-          toast.success(t(StringKey.BOX_CREATED));
-          reset();
-          onOpenChange(false);
-        },
-        onError: (error: Error) => {
-          if (error instanceof ApiError) {
-            toast.error(t(StringKey.FAILED_TO_CREATE_BOX), { id: 'box-error' });
-          }
-        },
-      });
+      createBox(
+        { ...data, boundTo: isPublic ? '0' : undefined },
+        {
+          onSuccess: () => {
+            toast.success(t(StringKey.BOX_CREATED));
+            reset();
+            onOpenChange(false);
+          },
+          onError: (error: Error) => {
+            if (error instanceof ApiError) {
+              toast.error(t(StringKey.FAILED_TO_CREATE_BOX), { id: 'box-error' });
+            }
+          },
+        }
+      );
     }
   };
 
@@ -271,6 +275,30 @@ export const CreateBoxDialog = ({ open, onOpenChange, editingBox }: CreateBoxDia
                 ))}
               </div>
             </div>
+          )}
+
+          {isEditing ? (
+            <div className='flex flex-col gap-1 px-3 py-2.5 rounded-xl bg-muted border border-border'>
+              <span className='text-xs font-semibold text-foreground/50 uppercase tracking-wider'>
+                {t(StringKey.ACCESS_KEY_LABEL)}
+              </span>
+              <span className='text-sm font-mono text-foreground break-all'>
+                {editingBox.boundTo ?? '—'}
+              </span>
+            </div>
+          ) : (
+            <label className='flex items-start gap-3 cursor-pointer select-none'>
+              <input
+                type='checkbox'
+                checked={isPublic}
+                onChange={e => setIsPublic(e.target.checked)}
+                className='mt-0.5 h-4 w-4 shrink-0 cursor-pointer accent-brand-green'
+              />
+              <div>
+                <p className='text-sm font-semibold text-foreground'>{t(StringKey.MAKE_PUBLIC)}</p>
+                <p className='text-xs text-foreground/50'>{t(StringKey.MAKE_PUBLIC_DESCRIPTION)}</p>
+              </div>
+            </label>
           )}
 
           <Button type='submit' variant='brand' size='dialog' disabled={isPending} className='mt-2'>

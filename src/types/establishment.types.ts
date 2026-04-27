@@ -16,6 +16,7 @@ export interface EstablishmentProfile {
   name: string;
   description: string | null;
   address: string;
+  boundTo: string | null;
   latitude: string | null;
   longitude: string | null;
   workingHours: WorkingHours;

@@ -307,6 +307,17 @@ export const enMessages: Record<StringKey, string> = {
   [StringKey.OPEN]: 'Open',
   [StringKey.TODAY]: 'Today',
 
+  // Shared Access Key
+  [StringKey.SHARED_ACCESS_KEY]: 'Shared Access Key',
+  [StringKey.SHARED_ACCESS_KEY_DESCRIPTION]:
+    'Other establishments with this key can access your products and boxes. Set to "0" to make them fully public.',
+  [StringKey.MAKE_PUBLIC]: 'Make publicly available',
+  [StringKey.MAKE_PUBLIC_DESCRIPTION]: 'Any establishment can access this item (key set to "0")',
+  [StringKey.ACCESS_KEY_LABEL]: 'Access Key',
+  [StringKey.KEY_UPDATED]: 'Access key updated',
+  [StringKey.FAILED_TO_UPDATE_KEY]: 'Failed to update access key',
+  [StringKey.EDIT_KEY]: 'Edit key',
+
   // Multi-select
   [StringKey.ALL_SELECTED]: 'All selected',
 
