@@ -58,6 +58,13 @@ const CompleteSubscriptionPage = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
+  // TEMP: redirect to cancel page after 10s for screenshots
+  useEffect(() => {
+    if (captureOrderMutation.isPending) return;
+    const id = setTimeout(() => void navigate({ to: '/cancel-subscription' }), 10_000);
+    return () => clearTimeout(id);
+  }, [captureOrderMutation.isPending, navigate]);
+
   const nextBillingDate = format(addDays(new Date(), 30), 'MMMM d, yyyy');
 
   if (captureOrderMutation.isPending) {

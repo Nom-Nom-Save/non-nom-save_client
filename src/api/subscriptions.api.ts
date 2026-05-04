@@ -20,3 +20,6 @@ export const captureSubscriptionOrder = (data: CaptureOrderRequest) =>
     method: 'POST',
     body: JSON.stringify(data),
   });
+
+export const cancelSubscription = () =>
+  apiRequest<{ message: string }>('/subscriptions/cancel', { method: 'POST' });

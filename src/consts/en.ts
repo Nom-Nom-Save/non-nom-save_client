@@ -431,6 +431,13 @@ export const enMessages: Record<StringKey, string> = {
   [StringKey.PLAN_PRO_NAME]: 'Pro',
   [StringKey.SUBSCRIBE_WITH_PAYPAL]: 'Subscribe with PayPal',
   [StringKey.CURRENT_PLAN_BTN]: 'Current Plan',
+  [StringKey.MANAGE_SUBSCRIPTION]: 'Manage Subscription',
+  [StringKey.CANCEL_SUBSCRIPTION]: 'Cancel Subscription',
+  [StringKey.CANCEL_SUBSCRIPTION_CONFIRM_TITLE]: 'Cancel your subscription?',
+  [StringKey.CANCEL_SUBSCRIPTION_CONFIRM_DESC]:
+    'Your plan will be cancelled immediately. You will lose access to premium features.',
+  [StringKey.SUBSCRIPTION_CANCELLED]: 'Subscription cancelled',
+  [StringKey.FAILED_TO_CANCEL_SUBSCRIPTION]: 'Failed to cancel subscription',
   [StringKey.CURRENT_PLAN_BADGE]: 'Current plan',
   [StringKey.FREE_FOREVER]: '$0 / forever',
   [StringKey.PER_MONTH]: '/ month',

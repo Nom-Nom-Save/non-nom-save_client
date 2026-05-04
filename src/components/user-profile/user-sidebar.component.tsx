@@ -12,10 +12,11 @@ import {
 import { StringKey } from '@/consts/string-key.consts';
 import { PlanName, SubscriptionStatus } from '@/types/subscription.types';
 import { useTranslation } from 'react-i18next';
-import { Link, useLocation } from '@tanstack/react-router';
+import { Link, useLocation, useNavigate } from '@tanstack/react-router';
 import { cn } from '@/lib/utils';
 import { formatDate } from '@/utils/time.utils';
 import { UnlockPremiumButton } from '@/components/subscription/unlock-premium-button.component';
+import { Button } from '@/components/ui/button';
 
 const UserSidebarNavigationItems = [
   {
@@ -43,6 +44,7 @@ const UserSidebarNavigationItems = [
 const UserSidebar = () => {
   const { t } = useTranslation();
   const location = useLocation();
+  const navigate = useNavigate();
 
   const { data: user } = useUserProfileQuery();
   const memberSinceYear = new Date(user?.createdAt ?? '').getFullYear();
@@ -96,14 +98,25 @@ const UserSidebar = () => {
           </div>
 
           {isPremium && user?.subscription ? (
-            <div className='flex items-center justify-between bg-brand-green/8 border border-brand-green/20 rounded-[1.25rem] px-4 py-3'>
-              <div className='flex items-center gap-2 text-foreground/50 text-sm'>
-                <Crown size={16} className='text-brand-green' />
-                {user.subscription.planName}
+            <div className='flex flex-col gap-2'>
+              <div className='flex items-center justify-between bg-brand-green/8 border border-brand-green/20 rounded-[1.25rem] px-4 py-3'>
+                <div className='flex items-center gap-2 text-foreground/50 text-sm'>
+                  <Crown size={16} className='text-brand-green' />
+                  {user.subscription.planName}
+                </div>
+                <span className='text-brand-green text-xs font-semibold'>
+                  {t(StringKey.PLAN_EXPIRES)} {formatDate(user.subscription.endDate)}
+                </span>
               </div>
-              <span className='text-brand-green text-xs font-semibold'>
-                {t(StringKey.PLAN_EXPIRES)} {formatDate(user.subscription.endDate)}
-              </span>
+              <Button
+                variant='brand-outline'
+                size='settings'
+                className='w-full'
+                onClick={() => void navigate({ to: '/subscriptions/plans' })}
+              >
+                <Crown size={15} />
+                {t(StringKey.MANAGE_SUBSCRIPTION)}
+              </Button>
             </div>
           ) : (
             <UnlockPremiumButton />

@@ -1,10 +1,15 @@
+import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { StringKey } from '@/consts/string-key.consts';
 import { useAuthStore } from '@/store/auth.store';
 import {
   useSubscriptionPlansQuery,
   useCreateSubscriptionOrderMutation,
+  useCancelSubscriptionMutation,
 } from '@/queries/subscription.queries';
+import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
+import { Button } from '@/components/ui/button';
+import { toast } from 'sonner';
 import { PlanCard } from '@/components/subscription/plan-card.component';
 import { SubscriptionTrust } from '@/components/subscription/subscription-trust.component';
 import { SubscriptionFaq } from '@/components/subscription/subscription-faq.component';
@@ -24,6 +29,8 @@ const SubscriptionsPlansPage = () => {
   const isEstablishment = loginType === 'establishment';
   const { data: plans } = useSubscriptionPlansQuery();
   const createOrderMutation = useCreateSubscriptionOrderMutation();
+  const cancelMutation = useCancelSubscriptionMutation();
+  const [showCancelConfirm, setShowCancelConfirm] = useState(false);
 
   const { data: user } = useQuery<User>({
     queryKey: userKeys.profile(),
@@ -71,6 +78,18 @@ const SubscriptionsPlansPage = () => {
   };
 
   const isSubscribing = createOrderMutation.isPending;
+
+  const handleCancelConfirm = () => {
+    cancelMutation.mutate(undefined, {
+      onSuccess: () => {
+        toast.success(t(StringKey.SUBSCRIPTION_CANCELLED));
+        setShowCancelConfirm(false);
+      },
+      onError: () => {
+        toast.error(t(StringKey.FAILED_TO_CANCEL_SUBSCRIPTION));
+      },
+    });
+  };
 
   const buyerFreeFeatures: PlanFeature[] = [
     { label: t(StringKey.BUYER_FREE_FEAT_1) },
@@ -266,6 +285,46 @@ const SubscriptionsPlansPage = () => {
             </>
           )}
         </div>
+
+        {isSubscriptionActive && (
+          <div className='flex justify-center mt-10'>
+            <Button
+              variant='danger-outline'
+              size='settings'
+              onClick={() => setShowCancelConfirm(true)}
+            >
+              {t(StringKey.CANCEL_SUBSCRIPTION)}
+            </Button>
+          </div>
+        )}
+
+        <Dialog open={showCancelConfirm} onOpenChange={setShowCancelConfirm}>
+          <DialogContent className='sm:max-w-[420px] bg-brand-cream'>
+            <DialogHeader>
+              <DialogTitle>{t(StringKey.CANCEL_SUBSCRIPTION_CONFIRM_TITLE)}</DialogTitle>
+            </DialogHeader>
+            <p className='text-sm text-muted-foreground'>
+              {t(StringKey.CANCEL_SUBSCRIPTION_CONFIRM_DESC)}
+            </p>
+            <div className='flex gap-3 justify-end mt-2'>
+              <Button
+                variant='outline'
+                size='settings'
+                onClick={() => setShowCancelConfirm(false)}
+              >
+                {t(StringKey.BACK)}
+              </Button>
+              <Button
+                variant='destructive'
+                size='settings'
+                disabled={cancelMutation.isPending}
+                onClick={handleCancelConfirm}
+              >
+                {cancelMutation.isPending ? t(StringKey.SAVING) : t(StringKey.CANCEL_SUBSCRIPTION)}
+              </Button>
+            </div>
+          </DialogContent>
+        </Dialog>
 
         <SubscriptionTrust />
         <SubscriptionFaq />

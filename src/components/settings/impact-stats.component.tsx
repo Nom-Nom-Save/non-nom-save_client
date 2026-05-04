@@ -1,13 +1,16 @@
 import { ShoppingBag, Leaf, Crown } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
+import { useNavigate } from '@tanstack/react-router';
 import { StringKey } from '@/consts/string-key.consts';
 import { PlanName, SubscriptionStatus } from '@/types/subscription.types';
 import { useEstablishmentProfileQuery } from '@/queries/establishment.queries';
 import { formatDate } from '@/utils/time.utils';
 import { UnlockPremiumButton } from '@/components/subscription/unlock-premium-button.component';
+import { Button } from '@/components/ui/button';
 
 export const ImpactStats = () => {
   const { t } = useTranslation();
+  const navigate = useNavigate();
   const { data: profile } = useEstablishmentProfileQuery();
   const isPremium =
     profile?.subscription?.status === SubscriptionStatus.ACTIVE &&
@@ -38,19 +41,30 @@ export const ImpactStats = () => {
       </div>
 
       {isPremium && profile?.subscription ? (
-        <div className='flex items-start gap-3 bg-brand-green/8 border border-brand-green/20 rounded-[14px] px-4 py-3'>
-          <Crown size={18} className='text-brand-green shrink-0 mt-0.5' />
-          <div className='min-w-0'>
-            <p className='text-sm font-semibold text-brand-green'>
-              {profile.subscription.planName}
-            </p>
-            <p className='text-xs text-foreground/50 mt-0.5'>
-              {t(StringKey.SUBSCRIPTION_ACTIVE_THANK_YOU)}
-            </p>
-            <p className='text-xs text-foreground/40 mt-0.5'>
-              {t(StringKey.PLAN_EXPIRES)} {formatDate(profile.subscription.endDate)}
-            </p>
+        <div className='flex flex-col gap-2'>
+          <div className='flex items-start gap-3 bg-brand-green/8 border border-brand-green/20 rounded-[14px] px-4 py-3'>
+            <Crown size={18} className='text-brand-green shrink-0 mt-0.5' />
+            <div className='min-w-0'>
+              <p className='text-sm font-semibold text-brand-green'>
+                {profile.subscription.planName}
+              </p>
+              <p className='text-xs text-foreground/50 mt-0.5'>
+                {t(StringKey.SUBSCRIPTION_ACTIVE_THANK_YOU)}
+              </p>
+              <p className='text-xs text-foreground/40 mt-0.5'>
+                {t(StringKey.PLAN_EXPIRES)} {formatDate(profile.subscription.endDate)}
+              </p>
+            </div>
           </div>
+          <Button
+            variant='brand-outline'
+            size='settings'
+            className='w-full'
+            onClick={() => void navigate({ to: '/subscriptions/plans' })}
+          >
+            <Crown size={15} />
+            {t(StringKey.MANAGE_SUBSCRIPTION)}
+          </Button>
         </div>
       ) : (
         <UnlockPremiumButton />
