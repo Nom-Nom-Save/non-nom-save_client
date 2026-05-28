@@ -14,6 +14,8 @@ import type {
   VerifyEmailRequest,
   VerifyEmailResponse,
   RefreshResponse,
+  GoogleAuthRequest,
+  GoogleAuthResponse,
 } from '@/types/auth.types';
 
 export const registerUser = (data: RegisterUserRequest) =>
@@ -61,4 +63,10 @@ export const resetPassword = (data: ResetPasswordRequest) =>
 export const refreshToken = () =>
   apiRequest<RefreshResponse>('/auth/refresh', {
     method: 'POST',
+  });
+
+export const googleAuth = (data: GoogleAuthRequest) =>
+  apiRequest<GoogleAuthResponse>('/auth/google', {
+    method: 'POST',
+    body: JSON.stringify(data),
   });

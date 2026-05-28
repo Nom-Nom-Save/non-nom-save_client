@@ -7,6 +7,7 @@ import {
   forgotPassword,
   verifyCode,
   resetPassword,
+  googleAuth,
 } from '@/api/auth.api';
 import type {
   RegisterUserRequest,
@@ -16,6 +17,7 @@ import type {
   ForgotPasswordRequest,
   VerifyCodeRequest,
   ResetPasswordRequest,
+  GoogleAuthRequest,
 } from '@/types/auth.types';
 
 export const useRegisterUserMutation = () =>
@@ -51,4 +53,9 @@ export const useVerifyCodeMutation = () =>
 export const useResetPasswordMutation = () =>
   useMutation({
     mutationFn: (data: ResetPasswordRequest) => resetPassword(data),
+  });
+
+export const useGoogleAuthMutation = () =>
+  useMutation({
+    mutationFn: (data: GoogleAuthRequest) => googleAuth(data),
   });

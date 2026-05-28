@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useRef } from 'react';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { AlertCircle, Eye, EyeOff } from 'lucide-react';
@@ -6,14 +6,15 @@ import { Link, useNavigate } from '@tanstack/react-router';
 import { toast } from 'sonner';
 import { cn } from '@/lib/utils';
 import { loginSchema, type LoginFormData } from '@/utils/validations-auth/login.utils';
-import { useLoginMutation } from '@/queries/auth.queries';
+import { useLoginMutation, useGoogleAuthMutation } from '@/queries/auth.queries';
 import { useAuthStore } from '@/store/auth.store';
 import { ApiError } from '@/api/client';
-import googleIcon from '@/assets/google-icon.svg';
 import { StringKey } from '@/consts/string-key.consts';
 import { useTranslation } from 'react-i18next';
 import { Button } from '@/components/ui/button';
 import { FormInput } from '@/components/ui/form-input';
+import { GoogleLogin } from '@react-oauth/google';
+import googleIcon from '@/assets/google-icon.svg';
 
 export const LoginForm = () => {
   const { t } = useTranslation();
@@ -21,6 +22,14 @@ export const LoginForm = () => {
   const navigate = useNavigate();
   const setAuth = useAuthStore(s => s.setAuth);
   const { mutate: loginUser, isPending } = useLoginMutation();
+  const { mutate: googleLogin } = useGoogleAuthMutation();
+  const googleButtonRef = useRef<HTMLDivElement>(null);
+
+  const handleGoogleClick = () => {
+    googleButtonRef.current?.querySelector('div[role="button"]')?.dispatchEvent(
+      new MouseEvent('click', { bubbles: true, cancelable: true })
+    );
+  };
 
   const {
     register,
@@ -155,10 +164,48 @@ export const LoginForm = () => {
         <div className='flex-1 h-px bg-border' />
       </div>
 
-      <Button type='button' variant='outline' size='auth' className='gap-3'>
+      <div ref={googleButtonRef} className='hidden'>
+        <GoogleLogin
+          onSuccess={credentialResponse => {
+            if (!credentialResponse.credential) return;
+            googleLogin(
+              { idToken: credentialResponse.credential, loginType: 'user' },
+              {
+                onSuccess: response => {
+                  setAuth(response.accessToken, 'user');
+                  void navigate({ to: '/' });
+                },
+                onError: error => {
+                  if (error instanceof ApiError && error.status === 401) {
+                    googleLogin(
+                      { idToken: credentialResponse.credential!, loginType: 'establishment' },
+                      {
+                        onSuccess: response => {
+                          setAuth(response.accessToken, 'establishment');
+                          void navigate({ to: '/' });
+                        },
+                        onError: () => toast.error(t(StringKey.GOOGLE_AUTH_FAILED)),
+                      }
+                    );
+                  } else {
+                    toast.error(t(StringKey.GOOGLE_AUTH_FAILED));
+                  }
+                },
+              }
+            );
+          }}
+          onError={() => toast.error(t(StringKey.GOOGLE_AUTH_FAILED))}
+        />
+      </div>
+
+      <button
+        type='button'
+        onClick={handleGoogleClick}
+        className='w-full flex items-center justify-center gap-3 rounded-xl border border-border bg-white py-4.5 text-lg font-semibold text-foreground hover:bg-muted transition-colors cursor-pointer'
+      >
         <img src={googleIcon} alt='Google' />
         {t(StringKey.CONTINUE_WITH_GOOGLE)}
-      </Button>
+      </button>
     </form>
   );
 };

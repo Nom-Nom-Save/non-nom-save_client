@@ -13,6 +13,7 @@ export const enMessages: Record<StringKey, string> = {
   [StringKey.BUSINESS]: 'Business',
   [StringKey.OR]: 'or',
   [StringKey.CONTINUE_WITH_GOOGLE]: 'Continue with Google',
+  [StringKey.GOOGLE_AUTH_FAILED]: 'Google sign-in failed. Please try again.',
   [StringKey.ALREADY_HAVE_AN_ACCOUNT]: 'Already have an account?',
   [StringKey.SIGN_IN]: 'Sign In',
   [StringKey.ENTER_FOUR_DIGIT_CODE]: 'Enter the 4-digit code sent to',

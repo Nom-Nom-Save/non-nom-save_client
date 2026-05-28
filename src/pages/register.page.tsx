@@ -1,5 +1,5 @@
-import { useState } from 'react';
-import { Link } from '@tanstack/react-router';
+import { useState, useRef } from 'react';
+import { Link, useNavigate } from '@tanstack/react-router';
 import { ArrowLeft, Store, User } from 'lucide-react';
 import { RegistrationLeftPanel } from '@/components/registration/registration-left-panel.component';
 import { BuyerForm } from '@/components/registration/buyer-form.component';
@@ -7,6 +7,10 @@ import { BusinessForm } from '@/components/registration/business-form.component'
 import { cn } from '@/lib/utils';
 import { useTranslation } from 'react-i18next';
 import { StringKey } from '@/consts/string-key.consts';
+import { GoogleLogin } from '@react-oauth/google';
+import { useGoogleAuthMutation } from '@/queries/auth.queries';
+import { useAuthStore } from '@/store/auth.store';
+import { toast } from 'sonner';
 import googleIcon from '@/assets/google-icon.svg';
 
 enum AccountType {
@@ -16,7 +20,17 @@ enum AccountType {
 
 const RegisterPage = () => {
   const { t } = useTranslation();
+  const navigate = useNavigate();
+  const setAuth = useAuthStore(s => s.setAuth);
+  const { mutate: googleLogin } = useGoogleAuthMutation();
   const [accountType, setAccountType] = useState<AccountType>(AccountType.BUYER);
+  const googleButtonRef = useRef<HTMLDivElement>(null);
+
+  const handleGoogleClick = () => {
+    googleButtonRef.current?.querySelector('div[role="button"]')?.dispatchEvent(
+      new MouseEvent('click', { bubbles: true, cancelable: true })
+    );
+  };
 
   return (
     <div className='flex min-h-screen bg-brand-cream'>
@@ -79,8 +93,29 @@ const RegisterPage = () => {
               <div className='flex-1 h-px bg-border' />
             </div>
 
+            <div ref={googleButtonRef} className='hidden'>
+              <GoogleLogin
+                onSuccess={credentialResponse => {
+                  if (!credentialResponse.credential) return;
+                  const loginType = accountType === AccountType.BUSINESS ? 'establishment' : 'user';
+                  googleLogin(
+                    { idToken: credentialResponse.credential, loginType },
+                    {
+                      onSuccess: response => {
+                        setAuth(response.accessToken, loginType);
+                        void navigate({ to: '/' });
+                      },
+                      onError: () => toast.error(t(StringKey.GOOGLE_AUTH_FAILED)),
+                    }
+                  );
+                }}
+                onError={() => toast.error(t(StringKey.GOOGLE_AUTH_FAILED))}
+              />
+            </div>
+
             <button
               type='button'
+              onClick={handleGoogleClick}
               className='w-full flex items-center justify-center gap-3 rounded-xl border border-border bg-white py-4.5 text-lg font-semibold text-foreground hover:bg-muted transition-colors cursor-pointer'
             >
               <img src={googleIcon} alt='Google' />

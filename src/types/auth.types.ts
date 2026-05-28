@@ -61,6 +61,16 @@ export interface RefreshResponse {
   accessToken: string;
 }
 
+export interface GoogleAuthRequest {
+  idToken: string;
+  loginType: LoginType;
+}
+
+export interface GoogleAuthResponse {
+  message: string;
+  accessToken: string;
+}
+
 export interface VerifyEmailRequest {
   email: string;
   code: string;
